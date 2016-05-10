@@ -2,7 +2,11 @@ var http    = require('http'),
     express = require('express'),
     fs      = require('fs'),
     angoose = require("angoose"),
+    cors = require('cors'),
     bodyParser = require('body-parser');
+
+var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
+    settings = require('./settings.js')[settingsKey];
 
 
 var app = express();
@@ -14,6 +18,7 @@ app.get('/', function(req, res){
         res.end();
     });
 });
+app.use(cors());
 angoose.init(app, {
     'module-dirs': './models',
     'mongo-opts': 'localhost/calcute',
@@ -21,4 +26,16 @@ angoose.init(app, {
 });
 app.set('port', 8080);
 app.use(express.static(__dirname + '/../'));
-http.createServer(app).listen(8080);
+
+//---------run the server---------
+(function(){
+    var socketFile = settings.SERVER.socket;
+    if(socketFile) {
+        if(fs.existsSync(socketFile))
+            fs.unlinkSync(socketFile);
+        http.createServer(app).listen(socketFile);
+        fs.writeFile(settings.SERVER.pidFile, process.pid);
+    } else {
+        http.createServer(app).listen(settings.SERVER.port, settings.SERVER.host);
+    }
+})();
