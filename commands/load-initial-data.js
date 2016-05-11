@@ -1,10 +1,11 @@
-var models = require('../models/feedback.js'),
-    fs     = require('fs'),
-    terminate = false,
-    angoose = require('angoose'),
-    promise = require('mpromise');
+var fs      = require('fs'),
+    angoose = require('angoose');
 
-var data = fs.readFileSync('fixtures/legacy.json'),
+angoose.mongoose.connect('localhost/calcute');
+
+(function loadCars() {
+var models = require('../models/public/feedback.js'),
+    data = fs.readFileSync('fixtures/legacy.json'),
     jsonData = JSON.parse(data),
     icons = {
         BMW: '/assets/build/images/brand-1.png',
@@ -14,16 +15,16 @@ var data = fs.readFileSync('fixtures/legacy.json'),
         Hyundai: '/assets/build/images/brand-5.png',
         Mazda: '/assets/build/images/brand-6.png'
     };
-angoose.mongoose.connect('localhost/calcute');
-jsonData.brands.forEach(function(brand) {
-    models.CarBrand.findOneAndUpdate({label: brand.text}, {label: brand.text, icon: icons[brand.text]||null}, {upsert: true}, function(err, brandDoc) {
+
+    jsonData.brands.forEach(function(brand) {
         console.log('Adding brand ' + brand.text + '\n');
-        if(err) {
-            throw err;
-        }
-        brand.values.forEach(function(carLabel) {
-            console.log('\tAdding car ' + carLabel);
-            models.Car.findOneAndUpdate({
+        models.CarBrand.findOneAndUpdate({label: brand.text}, {label: brand.text, icon: icons[brand.text]||null}, {upsert: true}, function(err, brandDoc) {
+            if(err) {
+                throw err;
+            }
+            brand.values.forEach(function(carLabel) {
+                console.log('\tAdding car ' + carLabel);
+                models.Car.findOneAndUpdate({
                     label: carLabel,
                     brand: brandDoc
                 }, 
@@ -33,8 +34,24 @@ jsonData.brands.forEach(function(brand) {
                     if(err) {
                         throw err;
                     }
-                }
-            );
+                });
+            });
         });
     });
-});
+})();
+
+(function loadModules() {
+    var Module = require('../models/protected/module.js'),
+        data = fs.readFileSync('fixtures/modules.json'),
+        jsonData = JSON.parse(data);
+
+    jsonData.modules.forEach(function(module) {
+        console.log('Adding module ' + module.name);
+        Module.findOneAndUpdate({name: module.name}, module, {upsert: true}, function(err, moduleDoc) {
+            if(err) {
+                throw err;
+            }
+        });
+    });
+})();
+

@@ -3,6 +3,7 @@ var http    = require('http'),
     fs      = require('fs'),
     angoose = require("angoose"),
     cors = require('cors'),
+    Module = require('./models/protected/module.js'), 
     bodyParser = require('body-parser');
 
 var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
@@ -10,6 +11,25 @@ var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
 
 
 var app = express();
+
+app.use(cors({
+    origin: function(origin, callback) {
+        if(origin) {
+            Module.findOne({ domains: { $all: [origin]} }, function(err, doc) {
+                if(err) {
+                    callback(null, false);
+                }
+                else {
+                    callback(null, true);
+                }
+            });
+        }
+        else {
+            callback(null, false);
+        }
+    }
+}));
+
 app.use(bodyParser());
 app.get('/', function(req, res){
     fs.readFile('../demo/index.html', function(err, page) {
@@ -18,9 +38,8 @@ app.get('/', function(req, res){
         res.end();
     });
 });
-app.use(cors());
 angoose.init(app, {
-    'module-dirs': './models',
+    'module-dirs': './models/public',
     'mongo-opts': 'localhost/calcute',
     'logging': 'TRACE'
 });
