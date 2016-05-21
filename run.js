@@ -15,8 +15,10 @@ var app = express();
 app.use(cors({
     origin: function(origin, callback) {
         if(origin) {
-            Module.findOne({ domains: { $all: [origin]} }, function(err, doc) {
-                if(err) {
+            var domain = origin.replace(/http(s|):\/\//, '');
+            Module.findOne({ domains: { $all: [domain]} }, function(err, doc) {
+                console.log(err, doc);
+                if(err||!doc) {
                     callback(null, false);
                 }
                 else {
