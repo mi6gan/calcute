@@ -25,14 +25,15 @@ var carBrandSchema = new mongoose.Schema({
         capacity: {
             type: String,
             min: 1,
-            max: 999999,
+            max: 1000,
             label: 'Двигатель, л.с',
             helpText: 'Если не помните точное число, укажите примерное',
             inputAttrs: {
                 placeholder: '275,00',
                 size: 4
             },
-            mask: '999,99',
+            masker: ['999', '99'],
+            maskerSeparator: ',', 
             inputSuffix: 'лошадиных сил',
             template: '/templates/fields/input.html'
         },
@@ -62,6 +63,27 @@ var carBrandSchema = new mongoose.Schema({
                 return val in this.choices;
             },
             label: 'Город',
+            template: '/templates/fields/select.html'
+        },
+        /*
+        drivers: {
+            type: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Driver'
+            }],
+            label: 'Водители',
+            template: '/templates/fields/drivers.html'
+        },
+        */
+        driversCount: {
+            type: Object,
+            label: 'Количество водителей',
+            choices: [
+                {label: '1'},
+                {label: '2'},
+                {label: '3'},
+                {label: 'Неограниченно'}
+            ],    
             template: '/templates/fields/select.html'
         },
         type: {
@@ -97,6 +119,7 @@ var carBrandSchema = new mongoose.Schema({
             inputAttrs: {
                 size: 8
             },
+            mask: '9999999',
             inputSuffix: 'рублей',
             label: 'Размер франшизы',
             template: '/templates/fields/input.html'
@@ -108,38 +131,44 @@ var carBrandSchema = new mongoose.Schema({
             },
             label: 'Полное имя',
             template: '/templates/fields/input.html',
-            validate: [{
-                validator: function(schema, v, cb) { 
-                    return schema.statics[ngValidator](v, cb);
-                }.bind(feedbackSchema),
-                ngValidator: 'validateFullName',
-                message: 'Укажите корректное полное имя' 
-            }],
+            masker: ['AAAAAAAAAAAAAAAAAAAAAAAAAA', 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAA'], 
+            maskerSeparator: 'space'
         },
         phoneNumber: {
             type: String,
+            default: '+7',
             inputAttrs: {
                 size: 20,
                 minLength: 9,
-                maxLength: 20
+                maxLength: 20,
+                placeholder: '+7',
             },
+            masker: '+9 (999) 999 99 99',
             label: 'Номер телефона',
             template: '/templates/fields/input.html'
+        }
+    }),
+    driverSchema = new mongoose.Schema({
+        gender: {
+            type: Object,
+            choices: [
+                {'label': 'Муж'},
+                {'label': 'Жен'}
+            ],
+            template: '/templates/fields/simpleSelect.html'
         },
-            /*
-            validatePath: function remote(path, value) {
-                var errorMessage, validators = (path.validate instanceof Function) ? [path.validate] || path.validate;
-                validators.forEach(function(validate) {
-                    if(validate instanceof String) {
-                        this.statics[validate]();
-                    }
-                    errorMessage = validate();
-                    if(errorMessage) {
-                        return false;
-                    }
-                }.bind(this));
-                return errorMessage;
-            }*/
+        age: {
+            type: Number,
+            masker: '99',
+            template: '/templates/fields/simpleInput.html',
+            default: 25
+        },
+        experience: {
+            type: Number,
+            masker: '99',
+            template: '/templates/fields/simpleInput.html',
+            default: 2
+        }
     });
 var findSorted = function (query, fields, options) {
     return this.find(query, fields, options).sort('label');
@@ -165,12 +194,11 @@ feedbackSchema.statics.getPriceChoices = function remote($callback) {
     }
     $callback(null, years);
 };
-feedbackSchema.statics.validateFullName = function remote(value, $callback) {
-    $callback( ( !value || !value.length || value.match(/^\s*?[\W\w]+?\s+?[\W\w]+\s*?$/) ) ? null : true);
-};
 var Car = mongoose.model('Car', carSchema),
     CarBrand = mongoose.model('CarBrand', carBrandSchema),
-    Feedback = mongoose.model('Feedback', feedbackSchema);
+    Feedback = mongoose.model('Feedback', feedbackSchema),
+    Driver = mongoose.model('Driver', driverSchema);
 exports.Car = Car;
 exports.CarBrand = CarBrand;
 exports.Feedback = Feedback;
+exports.Driver = Driver;
