@@ -6,7 +6,10 @@ exports.prod = {
     SERVER: {
         socket: path.join(__dirname, '..', '..', '..', 'tmp', 'fcgi.sock'),
         pidFile: path.join(__dirname, '..', '..', '..', 'tmp', 'fcgi.pid')
-    }
+    },
+    GATEWAY_URL: 'http://debuggw.cube-group.ru',
+    GATEWAY_USERNAME: 'cubegroup',
+    GATEWAY_PASSWORD: 'mieSh2ut'
 }
 
 exports.local = {
@@ -14,5 +17,8 @@ exports.local = {
     SERVER: {
         port: 8080,
         host: '0.0.0.0'
-    }
+    },
+    GATEWAY_URL: 'http://debuggw.cube-group.ru',
+    GATEWAY_USERNAME: 'cubegroup',
+    GATEWAY_PASSWORD: 'mieSh2ut'
 }

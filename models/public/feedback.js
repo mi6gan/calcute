@@ -18,9 +18,24 @@ var carBrandSchema = new mongoose.Schema({
             label: 'Автомобиль'
         },
         year: {
-            type: Number,
+            type: Object,
             min: 2000,
-            label: 'Год выпуска'
+            choices: (function() {
+                var arr = [];
+                for(var i = 0; i < 17; i++) {
+                    if(i == 16) {
+                        arr.push({
+                            label: '2000 и старше'
+                        });
+                    }
+                    else {
+                        arr.push(2016 - i);
+                    }
+                }
+                return arr;
+            })(),
+            label: 'Год выпуска',
+            template: '/templates/fields/select.html'
         },
         capacity: {
             type: String,
@@ -46,9 +61,6 @@ var carBrandSchema = new mongoose.Schema({
                 {label: 'от 1,5 млн – 2 млн'},
                 {label: 'от 2 млн'}
             ],
-            validate: function(val){ 
-                return val in this.choices;
-            },
             label: 'Стоимость авто',
             template: '/templates/fields/select.html'
         },
@@ -59,9 +71,6 @@ var carBrandSchema = new mongoose.Schema({
                 {label: 'Спб'},
                 {label: 'Екатеринбург'},
             ],
-            validate: function(val){ 
-                return val in this.choices;
-            },
             label: 'Город',
             template: '/templates/fields/select.html'
         },
@@ -93,9 +102,6 @@ var carBrandSchema = new mongoose.Schema({
                 {label: 'ОСАГО'},
                 {label: 'ДАГО (расширение ОСАГО)'},
             ],
-            validate: function(val){ 
-                return val in this.choices;
-            },
             label: 'Что считаем?',
             template: '/templates/fields/select.html'
         },
@@ -106,9 +112,6 @@ var carBrandSchema = new mongoose.Schema({
                 {label: 'Нет'},
                 {label: 'Возможно'}
             ],
-            validate: function(val){ 
-                return val in this.choices;
-            },
             label: 'Франшиза',
             template: '/templates/fields/select.html'
         },
@@ -170,10 +173,10 @@ var carBrandSchema = new mongoose.Schema({
             default: 2
         }
     });
+//========= add statics to schemas ==========
 var findSorted = function (query, fields, options) {
     return this.find(query, fields, options).sort('label');
 };
-
 carBrandSchema.statics.findSorted = findSorted;
 carSchema.statics.findSorted = findSorted;
 feedbackSchema.statics.getYearsRange = function remote($callback) {
@@ -194,6 +197,7 @@ feedbackSchema.statics.getPriceChoices = function remote($callback) {
     }
     $callback(null, years);
 };
+//========= initialize models ==========
 var Car = mongoose.model('Car', carSchema),
     CarBrand = mongoose.model('CarBrand', carBrandSchema),
     Feedback = mongoose.model('Feedback', feedbackSchema),
