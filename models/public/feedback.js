@@ -44,11 +44,9 @@ var carBrandSchema = new mongoose.Schema({
             label: 'Двигатель, л.с',
             helpText: 'Если не помните точное число, укажите примерное',
             inputAttrs: {
-                placeholder: '275,00',
                 size: 4
             },
-            masker: ['999', '99'],
-            maskerSeparator: ',', 
+            masker: 'C',
             inputSuffix: 'лошадиных сил',
             template: '/templates/fields/input.html'
         },
@@ -122,7 +120,7 @@ var carBrandSchema = new mongoose.Schema({
             inputAttrs: {
                 size: 8
             },
-            mask: '9999999',
+            masker: 'R',
             inputSuffix: 'рублей',
             label: 'Размер франшизы',
             template: '/templates/fields/input.html'
@@ -134,8 +132,7 @@ var carBrandSchema = new mongoose.Schema({
             },
             label: 'Полное имя',
             template: '/templates/fields/input.html',
-            masker: ['AAAAAAAAAAAAAAAAAAAAAAAAAA', 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAA'], 
-            maskerSeparator: 'space'
+            masker: 'N N'
         },
         phoneNumber: {
             type: String,
@@ -197,6 +194,22 @@ feedbackSchema.statics.getPriceChoices = function remote($callback) {
     }
     $callback(null, years);
 };
+feedbackSchema.statics.getPathErrorMessage = function portable(pathName, errorKey) {
+    var messages = {
+            $: {
+                $: "введите правильное значение" ,
+                required: "данное поле не может быть пустым"
+            },
+            capacity: {
+                masker: "не более 5 знаков"
+            }
+        },
+        pathMessages = ( messages[pathName] || messages.$ );
+    return pathMessages[errorKey] ||
+           messages.$[errorKey] ||
+           pathMessages.$ ||
+           messages.$.$;
+}
 //========= initialize models ==========
 var Car = mongoose.model('Car', carSchema),
     CarBrand = mongoose.model('CarBrand', carBrandSchema),
