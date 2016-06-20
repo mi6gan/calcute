@@ -1,17 +1,18 @@
 var angoose = require("angoose");
 var mongoose = angoose.getMongoose();
-var carBrandSchema = new mongoose.Schema({
+var schemas = {
+    CarBrand: new mongoose.Schema({
         icon: {type: String},
         label: {type: String},
     }),
-    carSchema = new mongoose.Schema({
+    Car: new mongoose.Schema({
         label: {type: String},
         brand: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'CarBrand'
         }
     }),
-    feedbackSchema = new mongoose.Schema({
+    Feedback: new mongoose.Schema({
         car: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Car',
@@ -20,16 +21,20 @@ var carBrandSchema = new mongoose.Schema({
         year: {
             type: Object,
             min: 2000,
-            choices: (function() {
+            enum: (function() {
                 var arr = [];
                 for(var i = 0; i < 17; i++) {
                     if(i == 16) {
                         arr.push({
+                            id: i,
                             label: '2000 и старше'
                         });
                     }
                     else {
-                        arr.push(2016 - i);
+                        arr.push({
+                            id: i,
+                            label: 2016 - i
+                        });
                     }
                 }
                 return arr;
@@ -52,22 +57,22 @@ var carBrandSchema = new mongoose.Schema({
         },
         price: {
             type: Object,
-            choices: [
-                {label: 'до 500 тыс'},
-                {label: 'от 500 тыс – 1 млн'},
-                {label: 'от 1 млн – 1,5 млн'},
-                {label: 'от 1,5 млн – 2 млн'},
-                {label: 'от 2 млн'}
+            enum: [
+                {id: 0, label: 'до 500 тыс'},
+                {id: 1, label: 'от 500 тыс – 1 млн'},
+                {id: 2, label: 'от 1 млн – 1,5 млн'},
+                {id: 3, label: 'от 1,5 млн – 2 млн'},
+                {id: 4, label: 'от 2 млн'}
             ],
             label: 'Стоимость авто',
             template: '/templates/fields/select.html'
         },
         city: {
             type: Object,
-            choices: [
-                {label: 'Москва и МО'},
-                {label: 'Спб'},
-                {label: 'Екатеринбург'},
+            enum: [
+                {id: 0, label: 'Москва и МО'},
+                {id: 1, label: 'Спб'},
+                {id: 2, label: 'Екатеринбург'},
             ],
             label: 'Город',
             template: '/templates/fields/select.html'
@@ -85,30 +90,30 @@ var carBrandSchema = new mongoose.Schema({
         driversCount: {
             type: Object,
             label: 'Количество водителей',
-            choices: [
-                {label: '1'},
-                {label: '2'},
-                {label: '3'},
-                {label: 'Неограниченно'}
+            enum: [
+                {id: 0, label: '1'},
+                {id: 1, label: '2'},
+                {id: 2, label: '3'},
+                {id: 3, label: 'Неограниченно'}
             ],    
             template: '/templates/fields/select.html'
         },
         type: {
             type: Object,
-            choices: [
-                {label: 'КАСКО'},
-                {label: 'ОСАГО'},
-                {label: 'ДАГО (расширение ОСАГО)'},
+            enum: [
+                {id: 0, label: 'КАСКО'},
+                {id: 1, label: 'ОСАГО'},
+                {id: 2, label: 'ДАГО (расширение ОСАГО)'},
             ],
             label: 'Что считаем?',
             template: '/templates/fields/select.html'
         },
         franchise: {
             type: Object,
-            choices: [
-                {label: 'Да'},
-                {label: 'Нет'},
-                {label: 'Возможно'}
+            enum: [
+                {id: 0, label: 'Да'},
+                {id: 1, label: 'Нет'},
+                {id: 2, label: 'Возможно'}
             ],
             label: 'Франшиза',
             template: '/templates/fields/select.html'
@@ -136,7 +141,6 @@ var carBrandSchema = new mongoose.Schema({
         },
         phoneNumber: {
             type: String,
-            default: '+7',
             inputAttrs: {
                 size: 20,
                 minLength: 9,
@@ -148,12 +152,12 @@ var carBrandSchema = new mongoose.Schema({
             template: '/templates/fields/input.html'
         }
     }),
-    driverSchema = new mongoose.Schema({
+    Driver: new mongoose.Schema({
         gender: {
             type: Object,
-            choices: [
-                {'label': 'Муж'},
-                {'label': 'Жен'}
+            enum: [
+                {id: 0, 'label': 'Муж'},
+                {id: 1, 'label': 'Жен'}
             ],
             template: '/templates/fields/simpleSelect.html'
         },
@@ -169,53 +173,83 @@ var carBrandSchema = new mongoose.Schema({
             template: '/templates/fields/simpleInput.html',
             default: 2
         }
-    });
-//========= add statics to schemas ==========
-var findSorted = function (query, fields, options) {
-    return this.find(query, fields, options).sort('label');
+    })
 };
-carBrandSchema.statics.findSorted = findSorted;
-carSchema.statics.findSorted = findSorted;
-feedbackSchema.statics.getYearsRange = function remote($callback) {
-    var min = feedbackSchema.paths.year.options.min,
-        max = (new Date()).getFullYear(),
-        years = Array();
-    for(var i = max; i >= min; i--) {
-        years.push(i);
-    }
-    $callback(null, years);
-};
-feedbackSchema.statics.getPriceChoices = function remote($callback) {
-    var min = feedbackSchema.paths.year.options.min,
-        max = (new Date()).getFullYear(),
-        years = Array();
-    for(var i = max; i >= min; i--) {
-        years.push(i);
-    }
-    $callback(null, years);
-};
-feedbackSchema.statics.getPathErrorMessage = function portable(pathName, errorKey) {
-    var messages = {
-            $: {
-                $: "введите правильное значение" ,
-                required: "данное поле не может быть пустым"
-            },
-            capacity: {
-                masker: "не более 5 знаков"
+schemas.Feedback.methods.display = function portable ( pathName ) {
+    var value = this[pathName];
+    switch( pathName ) {
+        case 'car':
+            if( typeof( value ) == 'object' ) {
+                if ( typeof( value.brand ) == 'object' ) {
+                    return value.label + ' ' + value.brand.label;
+                }
             }
-        },
-        pathMessages = ( messages[pathName] || messages.$ );
-    return pathMessages[errorKey] ||
-           messages.$[errorKey] ||
-           pathMessages.$ ||
-           messages.$.$;
+            break;
+        case 'capacity':
+            return value + ' лс';
+        case 'franchise':
+            return ( ( value.id == 0) || ( value.id == 2 ) ) ? value.label : '';
+        case 'franchiseSum':
+            return value + ' руб';
+        case 'driversCount':
+            return value.label + ( ( value.id == 0 ) ? " водитель" : ( value.id == 3 ) ? "" : " водителя" );
+        default:
+            if ( ( typeof(value) == 'object' ) && ( 'label' in value ) ) {
+                return value.label;
+            }
+    }
+    return (typeof( value ) == 'object') ? value.label : String( value );
 }
-//========= initialize models ==========
-var Car = mongoose.model('Car', carSchema),
-    CarBrand = mongoose.model('CarBrand', carBrandSchema),
-    Feedback = mongoose.model('Feedback', feedbackSchema),
-    Driver = mongoose.model('Driver', driverSchema);
-exports.Car = Car;
-exports.CarBrand = CarBrand;
-exports.Feedback = Feedback;
-exports.Driver = Driver;
+//========= initialize models and methods ==========
+for( var schemaName in schemas ) {
+    ( function initSchemaBase ( schemaName ) {
+        this.statics.getPathErrorMessage = function portable (pathName, errorKey) {
+            var messages = {
+                $: {
+                    $: "введите правильное значение" ,
+                    required: "данное поле не может быть пустым"
+                },
+                capacity: {
+                    masker: "не более 5 знаков"
+                }
+            },
+            pathMessages = ( messages[pathName] || messages.$ );
+            return pathMessages[errorKey] ||
+               messages.$[errorKey] ||
+               pathMessages.$ ||
+               messages.$.$;
+        };
+        this.methods.setValidity = function portable (pathName, valid) {
+            if( pathName.length && pathName[0] == '_' ) {
+                return;
+            }
+            if( ! ( '$valid' in this ) ) {
+                this.$valid = [];
+            }
+            if( ! ( '$invalid' in this ) ) {
+                this.$invalid = [];
+            }
+            var validIndex = this.$valid.indexOf( pathName ),
+                invalidIndex = this.$invalid.indexOf( pathName );
+            if( valid) {
+                if ( validIndex == -1 ) {
+                    this.$valid.push( pathName );
+                }
+                if ( invalidIndex != -1 ) {
+                    this.$invalid.splice( invalidIndex, 1 );
+                }
+            }
+            else {
+                if ( invalidIndex == -1 ) {
+                    this.$invalid.push( pathName );
+                }
+                if ( validIndex != -1 ) {
+                    this.$valid.splice( validIndex, 1 );
+                }
+            }
+        };
+        exports[schemaName] = mongoose.model(schemaName, this);
+    } ).call(schemas[schemaName], schemaName);
+}
+var f = new mongoose.models.Feedback();
+f.car = 32423434;
