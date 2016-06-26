@@ -1,6 +1,6 @@
-var angoose = require("angoose");
-var mongoose = angoose.getMongoose();
-var schemas = {
+var angoose = require("angoose"),
+    mongoose = angoose.getMongoose(),
+    schemas = {
     CarBrand: new mongoose.Schema({
         icon: {type: String},
         label: {type: String},
@@ -99,14 +99,14 @@ var schemas = {
             template: '/templates/fields/select.html'
         },
         type: {
-            type: Object,
+            type: [Object],
             enum: [
-                {id: 0, label: 'КАСКО'},
-                {id: 1, label: 'ОСАГО'},
-                {id: 2, label: 'ДАГО (расширение ОСАГО)'},
+                    {id: 0, label: 'КАСКО'},
+                    {id: 1, label: 'ОСАГО'},
+                    {id: 2, label: 'ДАГО (расширение ОСАГО)'},
             ],
             label: 'Что считаем?',
-            template: '/templates/fields/select.html'
+            template: '/templates/fields/multiselect.html'
         },
         franchise: {
             type: Object,
@@ -181,18 +181,27 @@ schemas.Feedback.methods.display = function portable ( pathName ) {
         case 'car':
             if( typeof( value ) == 'object' ) {
                 if ( typeof( value.brand ) == 'object' ) {
-                    return value.label + ' ' + value.brand.label;
+                    return value.brand.label + ' ' + value.label;
                 }
             }
             break;
         case 'capacity':
             return value + ' лс';
         case 'franchise':
-            return ( ( value.id == 0) || ( value.id == 2 ) ) ? value.label : '';
+            return ( ( value.id == 0) || ( value.id == 2 ) ) ? 'Франшиза' : '';
         case 'franchiseSum':
             return value + ' руб';
         case 'driversCount':
             return value.label + ( ( value.id == 0 ) ? " водитель" : ( value.id == 3 ) ? "" : " водителя" );
+        case 'type':
+            if( typeof( value ) == 'object' && value.length ) {
+                return value.map( function ( v ) {
+                    return v.label;
+                } ).join(', ');
+            }
+            else {
+                return;
+            }
         default:
             if ( ( typeof(value) == 'object' ) && ( 'label' in value ) ) {
                 return value.label;
@@ -208,9 +217,6 @@ for( var schemaName in schemas ) {
                 $: {
                     $: "введите правильное значение" ,
                     required: "данное поле не может быть пустым"
-                },
-                capacity: {
-                    masker: "не более 5 знаков"
                 }
             },
             pathMessages = ( messages[pathName] || messages.$ );
@@ -252,4 +258,3 @@ for( var schemaName in schemas ) {
     } ).call(schemas[schemaName], schemaName);
 }
 var f = new mongoose.models.Feedback();
-f.car = 32423434;
