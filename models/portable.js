@@ -1,17 +1,18 @@
-var angoose = require("angoose"),
-    mongoose = angoose.getMongoose(),
-    schemas = {
+var mongoose = require('mongoose');
+
+module.exports.schemas = {
     CarBrand: new mongoose.Schema({
-        icon: {type: String},
-        label: {type: String},
+        icon: String,
+        label: String,
     }),
     Car: new mongoose.Schema({
-        label: {type: String},
+        label: String,
         brand: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'CarBrand'
         }
     }),
+    //
     Feedback: new mongoose.Schema({
         car: {
             type: mongoose.Schema.Types.ObjectId,
@@ -19,22 +20,16 @@ var angoose = require("angoose"),
             label: 'Автомобиль'
         },
         year: {
-            type: Object,
+            type: String,
             min: 2000,
             enum: (function() {
                 var arr = [];
                 for(var i = 0; i < 17; i++) {
                     if(i == 16) {
-                        arr.push({
-                            id: i,
-                            label: '2000 и старше'
-                        });
+                        arr.push('2000 и старше');
                     }
                     else {
-                        arr.push({
-                            id: i,
-                            label: 2016 - i
-                        });
+                        arr.push((2016 - i).toString());
                     }
                 }
                 return arr;
@@ -56,23 +51,23 @@ var angoose = require("angoose"),
             template: '/templates/fields/input.html'
         },
         price: {
-            type: Object,
+            type: String,
             enum: [
-                {id: 0, label: 'до 500 тыс'},
-                {id: 1, label: 'от 500 тыс – 1 млн'},
-                {id: 2, label: 'от 1 млн – 1,5 млн'},
-                {id: 3, label: 'от 1,5 млн – 2 млн'},
-                {id: 4, label: 'от 2 млн'}
+                'до 500 тыс',
+                'от 500 тыс – 1 млн',
+                'от 1 млн – 1,5 млн',
+                'от 1,5 млн – 2 млн',
+                'от 2 млн'
             ],
             label: 'Стоимость авто',
             template: '/templates/fields/select.html'
         },
         city: {
-            type: Object,
+            type: String,
             enum: [
-                {id: 0, label: 'Москва и МО'},
-                {id: 1, label: 'Спб'},
-                {id: 2, label: 'Екатеринбург'},
+                'Москва и МО',
+                'Спб',
+                'Екатеринбург',
             ],
             label: 'Город',
             template: '/templates/fields/select.html'
@@ -88,40 +83,25 @@ var angoose = require("angoose"),
         },
         */
         driversCount: {
-            type: Object,
+            type: String,
             label: 'Количество водителей',
-            enum: [
-                {id: 0, label: '1'},
-                {id: 1, label: '2'},
-                {id: 2, label: '3'},
-                {id: 3, label: 'Неограниченно'}
-            ],    
+            enum: ["1", "2", "3", "Неограниченно"],
             template: '/templates/fields/select.html'
         },
         type: {
-            type: [Object],
-            enum: [
-                    {id: 0, label: 'КАСКО'},
-                    {id: 1, label: 'ОСАГО'},
-                    {id: 2, label: 'ДАГО (расширение ОСАГО)'},
-            ],
+            type: [String],
+            enum: ['КАСКО', 'ОСАГО', 'ДАГО (расширение ОСАГО)'],
             label: 'Что считаем?',
             template: '/templates/fields/multiselect.html'
         },
         franchise: {
-            type: Object,
-            enum: [
-                {id: 0, label: 'Да'},
-                {id: 1, label: 'Нет'},
-                {id: 2, label: 'Возможно'}
-            ],
+            type: String,
+            enum: ['Да', 'Нет', 'Возможно'],
             label: 'Франшиза',
             template: '/templates/fields/select.html'
         },
         franchiseSum: {
             type: Number,
-            min: 1000,
-            max: 9999999,
             inputAttrs: {
                 size: 8
             },
@@ -154,11 +134,8 @@ var angoose = require("angoose"),
     }),
     Driver: new mongoose.Schema({
         gender: {
-            type: Object,
-            enum: [
-                {id: 0, 'label': 'Муж'},
-                {id: 1, 'label': 'Жен'}
-            ],
+            type: String,
+            enum: ['Муж', 'Жен'],
             template: '/templates/fields/simpleSelect.html'
         },
         age: {
@@ -175,44 +152,9 @@ var angoose = require("angoose"),
         }
     })
 };
-schemas.Feedback.methods.display = function portable ( pathName ) {
-    var value = this[pathName];
-    switch( pathName ) {
-        case 'car':
-            if( typeof( value ) == 'object' ) {
-                if ( typeof( value.brand ) == 'object' ) {
-                    return value.brand.label + ' ' + value.label;
-                }
-            }
-            break;
-        case 'capacity':
-            return value + ' лс';
-        case 'franchise':
-            return ( ( value.id == 0) || ( value.id == 2 ) ) ? 'Франшиза' : '';
-        case 'franchiseSum':
-            return value + ' руб';
-        case 'driversCount':
-            return value.label + ( ( value.id == 0 ) ? " водитель" : ( value.id == 3 ) ? "" : " водителя" );
-        case 'type':
-            if( typeof( value ) == 'object' && value.length ) {
-                return value.map( function ( v ) {
-                    return v.label;
-                } ).join(', ');
-            }
-            else {
-                return;
-            }
-        default:
-            if ( ( typeof(value) == 'object' ) && ( 'label' in value ) ) {
-                return value.label;
-            }
-    }
-    return (typeof( value ) == 'object') ? value.label : String( value );
-}
-//========= initialize models and methods ==========
-for( var schemaName in schemas ) {
-    ( function initSchemaBase ( schemaName ) {
-        this.statics.getPathErrorMessage = function portable (pathName, errorKey) {
+
+for( var schemaName in module.exports.schemas ) {
+    module.exports.schemas[schemaName].statics.getPathErrorMessage = function portable (pathName, errorKey) {
             var messages = {
                 $: {
                     $: "введите правильное значение" ,
@@ -224,8 +166,8 @@ for( var schemaName in schemas ) {
                messages.$[errorKey] ||
                pathMessages.$ ||
                messages.$.$;
-        };
-        this.methods.setValidity = function portable (pathName, valid) {
+    };
+    module.exports.schemas[schemaName].methods.setValidity = function portable (pathName, valid) {
             if( pathName.length && pathName[0] == '_' ) {
                 return;
             }
@@ -253,8 +195,45 @@ for( var schemaName in schemas ) {
                     this.$valid.splice( validIndex, 1 );
                 }
             }
-        };
-        exports[schemaName] = mongoose.model(schemaName, this);
-    } ).call(schemas[schemaName], schemaName);
+    };
 }
-var f = new mongoose.models.Feedback();
+
+module.exports.schemas.Feedback.methods.display = function portable ( pathName ) {
+    var value = this[pathName],
+        path = this.__proto__.model.schema.paths[pathName],
+        index = -1;
+    if( path.options.enum ) {
+        index = path.options.enum.indexOf(value);
+    }
+    switch( pathName ) {
+        case 'car':
+            if( typeof( value ) == 'object' ) {
+                if ( typeof( value.brand ) == 'object' ) {
+                    return value.brand.label + ' ' + value.label;
+                }
+            }
+            break;
+        case 'capacity':
+            return value + ' лс';
+        case 'franchise':
+            return ( ( index == 0) || ( index == 2 ) ) ? 'Франшиза' : '';
+        case 'franchiseSum':
+            return value + ' руб';
+        case 'driversCount':
+            return value + ( ( index == 0 ) ? " водитель" : ( ( index == 3 ) ? "" : " водителя" ) );
+        case 'type':
+            if( typeof( value ) == 'object' && value.length ) {
+                return value.map( function ( v ) {
+                    return v.label;
+                } ).join(', ');
+            }
+            else {
+                return;
+            }
+        default:
+            if ( ( typeof(value) == 'object' ) && ( 'label' in value ) ) {
+                return value.label;
+            }
+    }
+    return (typeof( value ) == 'object') ? value.label : String( value );
+}

@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "dependencies": {
     "angoose": "~0.3.21",
+    "body-parser": "^1.15.2",
+    "cors": "~2.7.1",
     "express": "~4.13.4",
-    "body-parser": "~1.15.0",
     "mpromise": "~0.5.5",
-    "wait.for": "~0.6.6",
-    "cors": "~2.7.1"
+    "wait.for": "~0.6.6"
   }
 }

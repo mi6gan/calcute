@@ -2,25 +2,25 @@ var http    = require('http'),
     request = require('request'),
     express = require('express'),
     fs      = require('fs'),
-    angoose = require("angoose"),
-    mongoose = angoose.getMongoose(),
-    feedbackModule = require("./models/public/feedback.js"),
-    Feedback = mongoose.models.Feedback, 
+    models = require("./models/local.js"),
+    remote = require("./models/remote.js"),
+    mongoose = require('mongoose'),
     cors = require('cors'),
-    Module = require('./models/protected/module.js'), 
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    browserify = require('browserify'),
+    angularBridge = require('angular-bridge'),
+    _ = require('angular-bridge/node_modules/underscore');
 
 var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
     settings = require('./settings.js')[settingsKey];
 
 //====== initialize express app =======
 var app = express();
-
 app.use(cors({
     origin: function(origin, callback) {
         if(origin) {
             var domain = origin.replace(/http(s|):\/\//, '');
-            Module.findOne({ domains: { $all: [domain]} }, function(err, doc) {
+            models.Module.findOne({ domains: { $all: [domain]} }, function(err, doc) {
                 if(err||!doc) {
                     callback(null, false);
                 }
@@ -35,7 +35,11 @@ app.use(cors({
     }
 }));
 
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({
+      extended: true
+}));
+app.use(bodyParser.json());
+
 app.get('/', function(req, res){
     fs.readFile('../demo/index.html', function(err, page) {
         res.writeHead(200, {'Content-Type': 'text/html'});
@@ -43,23 +47,55 @@ app.get('/', function(req, res){
         res.end();
     });
 });
-angoose.init(app, {
-    'module-dirs': './models/public',
-    'mongo-opts': 'localhost/calcute',
-    'logging': 'TRACE'
-});
 app.set('port', 8080);
 app.use(express.static(__dirname + '/../'));
+
+angularBridge.prototype.collectionGet = function() {
+    return _.bind(function(req, res, next) {
+      if (!req.resource) {
+        return next();
+      }
+
+      var self = this, extraArgs = req.query.args || {};
+      if(typeof(extraArgs) == 'string') {
+          extraArgs = JSON.parse(extraArgs);
+      }
+
+      var query = ( req.resource.model.find(extraArgs.$query).sort(extraArgs.$orderby) );
+  
+      query.exec(function(err, docs) {
+        if (err) {
+  	        return self.renderError(err, null, req, res, next);
+        } 
+        else {
+  	        if(req.resource.model.schema.methods.query) {
+                req.resource.model.schema.methods.query(docs);
+            }
+  	        res.send(docs);
+        }
+        return false;
+      });
+      return false;
+    }, this);
+};
+
+var bridge = new angularBridge(app, {
+    urlPrefix : '/models/'
+});
+        
+for( var name in remote.schemas ) {
+    var schema = remote.schemas[name];
+    bridge.addResource(name.toLowerCase(), models[name]);
+}
 //====== db events =======
-Feedback.schema.post('save', function(doc) {
-    console.log(doc);
-    doc.populate('car', function(err, doc) {
-     doc.car.populate('brand', function(err, car) {
+remote.schemas.Feedback.post('save', function(doc) {
+    doc.populate('car', function(err, car) {
+     car.populate('brand', function(err, brand) {
 	    var username = settings.GATEWAY_USERNAME,
 	        password = settings.GATEWAY_PASSWORD,
 	        url = settings.GATEWAY_URL.replace(/[\/]+$/g, '') + '/crm/kk/seo/feedback',
 	        legacyData = {
-	            mk: car.brand.label + ' ' + car.label,
+	            mk: brand.label + ' ' + car.label,
 	            phone: doc.phoneNumber,
 	            name: doc.fullName,
 	            year: doc.year,
@@ -74,20 +110,22 @@ Feedback.schema.post('save', function(doc) {
 	        };
             if( doc.type ) {
 	            doc.type.forEach( function (v) {
-                    if( v.id == 0 ) {
-                        legacyData.is_kasko = true;
-                    }
-                    else if( v.id == 1 ) {
-                        legacyData.is_osago = true;
-                    }
-                    else if( v.id == 2 ) {
-                        legacyData.is_osago_extension = true;
-                        legacyData.is_accident = true;
+                    switch(remote.schemas.Feedback.paths.type.options.enum.indexOf(v)) {
+                        case 0:
+                            legacyData.is_kasko = true;
+                            break;
+                        case 1:
+                            legacyData.is_osago = true;
+                            break;
+                        case 2:
+                            legacyData.is_osago_extension = true;
+                            legacyData.is_accident = true;
+                            break;
                     }
                 } );
             }
 	        var data = {
-	            number: 999999 + parseInt(doc._id.str.substring(9*2), 16),
+	            number: 999999 + parseInt(doc._id.toString().substring(9*2), 16),
 	            excerpt: (function() {
 	                var s = [];
 	                if(legacyData.is_osago) {
@@ -122,13 +160,27 @@ Feedback.schema.post('save', function(doc) {
 
 //====== run the server =========
 (function(){
-    var socketFile = settings.SERVER.socket;
+    var socketFile = settings.SERVER.socket,
+        server,
+        browserifier = browserify(),
+        socketFile = settings.SERVER.socket,
+        jsStream = fs.createWriteStream('./static/calcute.js');
     if(socketFile) {
-        if(fs.existsSync(socketFile))
+        if(fs.existsSync(socketFile)) {
             fs.unlinkSync(socketFile);
-        http.createServer(app).listen(socketFile);
+        }
+        server = http.createServer(app).listen(socketFile);
         fs.writeFile(settings.SERVER.pidFile, process.pid);
     } else {
-        http.createServer(app).listen(settings.SERVER.port, settings.SERVER.host);
+        server = http.createServer(app);
     }
+    jsStream.on('finish', function () {
+        console.log('frontend module successfuly created');
+        mongoose.connect(settings.MONGO_CONSTRING);
+        server.listen(settings.SERVER.port, settings.SERVER.host);
+    });
+    browserifier.add('node_modules/mongoose/lib/browser.js', {'expose': 'mongoose'});
+    browserifier.add('./lib/angular-models.js');
+    console.log('generating frontend module');
+    browserifier.bundle().pipe(jsStream);
 })();
