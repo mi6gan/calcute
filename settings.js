@@ -7,9 +7,7 @@ exports.prod = {
         socket: path.join(__dirname, '..', '..', '..', 'tmp', 'fcgi.sock'),
         pidFile: path.join(__dirname, '..', '..', '..', 'tmp', 'fcgi.pid')
     },
-    GATEWAY_URL: 'http://debuggw.cube-group.ru',
-    GATEWAY_USERNAME: 'cubegroup',
-    GATEWAY_PASSWORD: 'mieSh2ut'
+    GATEWAY_URL: 'http://localhost:8080/local/crm'
 }
 
 exports.local = {

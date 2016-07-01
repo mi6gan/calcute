@@ -40,12 +40,18 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.get('/', function(req, res){
+app.get('/demo', function(req, res){
     fs.readFile('../demo/index.html', function(err, page) {
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write(page);
         res.end();
     });
+});
+app.post('/local/crm', function(req, res){
+    var body = {result: 'ok'};
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.write(JSON.strinfigy(body));
+    res.end();
 });
 app.set('port', 8080);
 app.use(express.static(__dirname + '/../'));
@@ -180,6 +186,7 @@ remote.schemas.Feedback.post('save', function(doc) {
         server.listen(settings.SERVER.port, settings.SERVER.host);
     });
     browserifier.add('node_modules/mongoose/lib/browser.js', {'expose': 'mongoose'});
+    browserifier.add('./lib/settings/' + settingsKey + '.js', {'expose': 'settings'});
     browserifier.add('./lib/angular-models.js');
     console.log('generating frontend module');
     browserifier.bundle().pipe(jsStream);

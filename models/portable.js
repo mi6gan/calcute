@@ -46,9 +46,9 @@ module.exports.schemas = {
             inputAttrs: {
                 size: 4
             },
-            masker: 'C',
+            mask: 'C',
             inputSuffix: 'лошадиных сил',
-            template: '/templates/fields/input.html'
+            template: '/templates/fields/text.html'
         },
         price: {
             type: String,
@@ -105,10 +105,10 @@ module.exports.schemas = {
             inputAttrs: {
                 size: 8
             },
-            masker: 'R',
+            mask: 'R',
             inputSuffix: 'рублей',
             label: 'Размер франшизы',
-            template: '/templates/fields/input.html'
+            template: '/templates/fields/text.html'
         },
         fullName: {
             type: String,
@@ -116,8 +116,8 @@ module.exports.schemas = {
                 size: 50
             },
             label: 'Полное имя',
-            template: '/templates/fields/input.html',
-            masker: 'N N'
+            template: '/templates/fields/text.html',
+            mask: 'N N'
         },
         phoneNumber: {
             type: String,
@@ -127,9 +127,9 @@ module.exports.schemas = {
                 maxLength: 20,
                 placeholder: '+7',
             },
-            masker: '+9 (999) 999 99 99',
+            mask: '+9 (999) 999 99 99',
             label: 'Номер телефона',
-            template: '/templates/fields/input.html'
+            template: '/templates/fields/text.html'
         }
     }),
     Driver: new mongoose.Schema({
@@ -140,15 +140,122 @@ module.exports.schemas = {
         },
         age: {
             type: Number,
-            masker: '99',
+            mask: '99',
             template: '/templates/fields/simpleInput.html',
             default: 25
         },
         experience: {
             type: Number,
-            masker: '99',
+            mask: '99',
             template: '/templates/fields/simpleInput.html',
             default: 2
+        }
+    }),
+    DiscountInfo: new mongoose.Schema({
+        feedback: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Feedback'
+        },
+        fullName: {
+            label: 'Полное имя',
+            type: String,
+            template: '/templates/fields/splittext.html',
+            mask: 'N N N',
+            rowClass: 'grid-12',
+            inputAttrs: [{
+                size: 10, 
+                minLength: 9,
+                maxLength: 20,
+                placeholder: 'Имя'
+            },
+            {
+                size: 10, 
+                minLength: 9,
+                maxLength: 20,
+                placeholder: 'Отчество'
+            },
+            {
+                size: 10, 
+                minLength: 9,
+                maxLength: 20,
+                placeholder: 'Фамилия'
+            }]
+        },
+        birthDate: {
+            label: 'Дата рождения',
+            type: String,
+            template: '/templates/fields/splittext.html',
+            mask: 'D M Y',
+            rowClass: 'grid-24',
+            inputAttrs: [{
+                size: 2, 
+                minLength: 2,
+                maxLength: 2,
+                placeholder: 'ДД'
+            },
+            {
+                size: 2, 
+                minLength: 2,
+                maxLength: 2,
+                placeholder: 'ММ'
+            },
+            {
+                size: 4, 
+                minLength: 2,
+                maxLength: 4,
+                placeholder: 'ГГГГ'
+            }]
+        },
+        licenceId: {
+            label: 'Водительское удостоверение',
+            type: String,
+            template: '/templates/fields/splittext.html',
+            mask: 'L L',
+            rowClass: 'grid-16',
+            inputAttrs: [{
+                size: 15,
+                minLength: 9,
+                maxLength: 10,
+                placeholder: 'Серия'
+            },
+            {
+                size: 15,
+                minLength: 9,
+                maxLength: 10,
+                placeholder: 'Номер'
+            }]
+        },
+        company: {
+            type: String,
+            enum: ['Ингос', 'РГС', 'Другая'],
+            label: 'В какой страховой заканчивается полис',
+            template: '/templates/fields/select.html'
+        },
+        isNotFirst: {
+            type: String,
+            label: 'Были ли страховые случаи',
+            enum: ['Да', 'Нет'],
+            template: '/templates/fields/select.html'
+        },
+        withConsult: {
+            type: String,
+            label: 'Нужна консультация',
+            enum: ['Да', 'Нет'],
+            template: '/templates/fields/select.html'
+        },
+        tarif: {
+            type: String,
+            label: 'Какой тариф вам интересен',
+            enum: ['Цена/Качество', 'Самый дешевый', 'Самый надежный'],
+            template: '/templates/fields/select.html'
+        },
+        comment: {
+            type: String,
+            mask: 'S',
+            label: 'Комментарий',
+            template: '/templates/fields/text.html',
+            helpText: '(при желании)',
+            placeholder: 'Оставьте ваш комментарий'
         }
     })
 };
