@@ -20,6 +20,7 @@ module.exports.schemas = {
             label: 'Автомобиль'
         },
         year: {
+            required: true,
             type: String,
             min: 2000,
             enum: (function() {
@@ -38,6 +39,7 @@ module.exports.schemas = {
             template: '/templates/fields/select.html'
         },
         capacity: {
+            required: true,
             type: String,
             min: 1,
             max: 1000,
@@ -51,6 +53,7 @@ module.exports.schemas = {
             template: '/templates/fields/text.html'
         },
         price: {
+            required: true,
             type: String,
             enum: [
                 'до 500 тыс',
@@ -63,6 +66,7 @@ module.exports.schemas = {
             template: '/templates/fields/select.html'
         },
         city: {
+            required: true,
             type: String,
             enum: [
                 'Москва и МО',
@@ -83,18 +87,21 @@ module.exports.schemas = {
         },
         */
         driversCount: {
+            required: true,
             type: String,
             label: 'Количество водителей',
             enum: ["1", "2", "3", "Неограниченно"],
             template: '/templates/fields/select.html'
         },
         type: {
+            required: true,
             type: [String],
             enum: ['КАСКО', 'ОСАГО', 'ДАГО (расширение ОСАГО)'],
             label: 'Что считаем?',
             template: '/templates/fields/multiselect.html'
         },
         franchise: {
+            required: true,
             type: String,
             enum: ['Да', 'Нет', 'Возможно'],
             label: 'Франшиза',
@@ -111,15 +118,18 @@ module.exports.schemas = {
             template: '/templates/fields/text.html'
         },
         fullName: {
+            required: true,
             type: String,
             inputAttrs: {
                 size: 50
             },
             label: 'Полное имя',
             template: '/templates/fields/text.html',
-            mask: 'N N'
+            mask: 'n n',
+            required: true
         },
         phoneNumber: {
+            required: true,
             type: String,
             inputAttrs: {
                 size: 20,
@@ -134,17 +144,20 @@ module.exports.schemas = {
     }),
     Driver: new mongoose.Schema({
         gender: {
+            required: true,
             type: String,
             enum: ['Муж', 'Жен'],
             template: '/templates/fields/simpleSelect.html'
         },
         age: {
+            required: true,
             type: Number,
             mask: '99',
             template: '/templates/fields/simpleInput.html',
             default: 25
         },
         experience: {
+            required: true,
             type: Number,
             mask: '99',
             template: '/templates/fields/simpleInput.html',
@@ -153,10 +166,12 @@ module.exports.schemas = {
     }),
     DiscountInfo: new mongoose.Schema({
         feedback: {
+            required: true,
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Feedback'
         },
         fullName: {
+            required: true,
             label: 'Полное имя',
             type: String,
             template: '/templates/fields/splittext.html',
@@ -182,6 +197,7 @@ module.exports.schemas = {
             }]
         },
         birthDate: {
+            required: true,
             label: 'Дата рождения',
             type: String,
             template: '/templates/fields/splittext.html',
@@ -207,6 +223,7 @@ module.exports.schemas = {
             }]
         },
         licenceId: {
+            required: true,
             label: 'Водительское удостоверение',
             type: String,
             template: '/templates/fields/splittext.html',
@@ -226,24 +243,28 @@ module.exports.schemas = {
             }]
         },
         company: {
+            required: true,
             type: String,
             enum: ['Ингос', 'РГС', 'Другая'],
             label: 'В какой страховой заканчивается полис',
             template: '/templates/fields/select.html'
         },
         isNotFirst: {
+            required: true,
             type: String,
             label: 'Были ли страховые случаи',
             enum: ['Да', 'Нет'],
             template: '/templates/fields/select.html'
         },
         withConsult: {
+            required: true,
             type: String,
             label: 'Нужна консультация',
             enum: ['Да', 'Нет'],
             template: '/templates/fields/select.html'
         },
         tarif: {
+            required: true,
             type: String,
             label: 'Какой тариф вам интересен',
             enum: ['Цена/Качество', 'Самый дешевый', 'Самый надежный'],
@@ -305,6 +326,17 @@ for( var schemaName in module.exports.schemas ) {
     };
 }
 
+module.exports.schemas.Feedback.methods.isVisible = function portable ( pathName ) {
+    switch(pathName) {
+        case 'franchiseSum':
+            var schema = this.__proto__.model.schema,
+                fEnum = schema.paths.franchise.options.enum,
+                fValue = this.franchise;
+            return (fEnum.indexOf(fValue) == 0);
+        default:
+            return true;
+    }
+}
 module.exports.schemas.Feedback.methods.display = function portable ( pathName ) {
     var value = this[pathName],
         path = this.__proto__.model.schema.paths[pathName],
@@ -331,7 +363,7 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
         case 'type':
             if( typeof( value ) == 'object' && value.length ) {
                 return value.map( function ( v ) {
-                    return v.label;
+                    return v;
                 } ).join(', ');
             }
             else {
@@ -343,4 +375,8 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
             }
     }
     return (typeof( value ) == 'object') ? value.label : String( value );
-}
+};
+
+module.exports.schemas.Feedback.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
+    return 'Введите правильное значение';
+};
