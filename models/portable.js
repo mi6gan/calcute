@@ -136,6 +136,7 @@ module.exports.schemas = {
                 minLength: 9,
                 maxLength: 20,
                 placeholder: '+7',
+                includePlaceholder: 'true'
             },
             mask: '+9 (999) 999 99 99',
             label: 'Номер телефона',
