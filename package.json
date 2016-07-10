@@ -5,6 +5,7 @@
     "angoose": "~0.3.21",
     "body-parser": "^1.15.2",
     "cors": "~2.7.1",
+    "easyimage": "^2.1.0",
     "express": "~4.13.4",
     "mpromise": "~0.5.5",
     "wait.for": "~0.6.6"

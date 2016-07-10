@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 module.exports.schemas = {
     CarBrand: new mongoose.Schema({
         icon: String,
-        label: String,
+        label: String
     }),
     Car: new mongoose.Schema({
         label: String,

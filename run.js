@@ -84,6 +84,7 @@ angularBridge.prototype.collectionGet = function() {
       return false;
     }, this);
 };
+angularBridge.addResource('f'
 
 var bridge = new angularBridge(app, {
     urlPrefix : '/models/'
