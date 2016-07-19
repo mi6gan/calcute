@@ -12,7 +12,6 @@ module.exports.schemas = {
             ref: 'CarBrand'
         }
     }),
-    //
     Feedback: new mongoose.Schema({
         car: {
             type: mongoose.Schema.Types.ObjectId,

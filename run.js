@@ -8,8 +8,7 @@ var http    = require('http'),
     cors = require('cors'),
     bodyParser = require('body-parser'),
     browserify = require('browserify'),
-    angularBridge = require('angular-bridge'),
-    _ = require('angular-bridge/node_modules/underscore');
+    Bridge = require('./lib/bridge.js');
 
 var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
     settings = require('./settings.js')[settingsKey];
@@ -56,44 +55,11 @@ app.post('/local/crm', function(req, res){
 app.set('port', 8080);
 app.use(express.static(__dirname + '/../'));
 
-angularBridge.prototype.collectionGet = function() {
-    return _.bind(function(req, res, next) {
-      if (!req.resource) {
-        return next();
-      }
 
-      var self = this, extraArgs = req.query.args || {};
-      if(typeof(extraArgs) == 'string') {
-          extraArgs = JSON.parse(extraArgs);
-      }
-
-      var query = ( req.resource.model.find(extraArgs.$query).sort(extraArgs.$orderby) );
-  
-      query.exec(function(err, docs) {
-        if (err) {
-  	        return self.renderError(err, null, req, res, next);
-        } 
-        else {
-  	        if(req.resource.model.schema.methods.query) {
-                req.resource.model.schema.methods.query(docs);
-            }
-  	        res.send(docs);
-        }
-        return false;
-      });
-      return false;
-    }, this);
-};
-angularBridge.addResource('f'
-
-var bridge = new angularBridge(app, {
+var bridge = new Bridge(app, {
     urlPrefix : '/models/'
 });
         
-for( var name in remote.schemas ) {
-    var schema = remote.schemas[name];
-    bridge.addResource(name.toLowerCase(), models[name]);
-}
 //====== db events =======
 remote.schemas.Feedback.post('save', function(doc) {
     doc.populate('car', function(err, car) {
