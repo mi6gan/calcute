@@ -1,10 +1,10 @@
 var fs      = require('fs'),
+    models = require('../models/local.js'),
     angoose = require('angoose');
 
 angoose.mongoose.connect('localhost/calcute');
 
 (function loadCars() {
-var models = require('../models/public/feedback.js'),
     data = fs.readFileSync('fixtures/legacy.json'),
     jsonData = JSON.parse(data),
     icons = {
@@ -28,7 +28,7 @@ var models = require('../models/public/feedback.js'),
                     label: carLabel,
                     brand: brandDoc
                 }, 
-                {label: carLabel, brand: brandDoc},
+                {label: carLabel, brand: brandDoc._id},
                 {upsert: true}, 
                 function(err, doc) {
                     if(err) {
@@ -41,7 +41,7 @@ var models = require('../models/public/feedback.js'),
 })();
 
 (function loadModules() {
-    var Module = require('../models/protected/module.js'),
+    var Module = models.Module,
         data = fs.readFileSync('fixtures/modules.json'),
         jsonData = JSON.parse(data);
 

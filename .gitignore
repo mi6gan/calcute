@@ -1,2 +1,4 @@
 /angoose-client-generated.js
 /node_modules
+/static
+/lib/settings/localnet.js
