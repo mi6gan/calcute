@@ -75,22 +75,14 @@ module.exports.schemas = {
             label: 'Город',
             template: '/templates/fields/select.html'
         },
-        /*
         drivers: {
             type: [{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Driver'
             }],
+            countEnum: ['Неограниченно', '1', '2', '3'],
             label: 'Водители',
-            template: '/templates/fields/drivers.html'
-        },
-        */
-        driversCount: {
-            required: true,
-            type: String,
-            label: 'Количество водителей',
-            enum: ["1", "2", "3", "Неограниченно"],
-            template: '/templates/fields/select.html'
+            template: '/templates/fields/complex/drivers.html'
         },
         type: {
             required: true,
@@ -146,21 +138,18 @@ module.exports.schemas = {
         gender: {
             required: true,
             type: String,
-            enum: ['Муж', 'Жен'],
-            template: '/templates/fields/simpleSelect.html'
+            enum: ['Муж', 'Жен']
         },
         age: {
             required: true,
             type: Number,
             mask: '99',
-            template: '/templates/fields/simpleInput.html',
             default: 25
         },
         experience: {
             required: true,
             type: Number,
             mask: '99',
-            template: '/templates/fields/simpleInput.html',
             default: 2
         }
     }),
