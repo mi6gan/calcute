@@ -138,19 +138,22 @@ module.exports.schemas = {
         gender: {
             required: true,
             type: String,
-            enum: ['Муж', 'Жен']
+            enum: ['Муж', 'Жен'],
+            template: '/templates/fields/select.html'
         },
         age: {
             required: true,
             type: Number,
             mask: '99',
-            default: 25
+            default: 25,
+            template: '/templates/fields/text.html'
         },
         experience: {
             required: true,
             type: Number,
             mask: '99',
-            default: 2
+            default: 2,
+            template: '/templates/fields/text.html'
         }
     }),
     DiscountInfo: new mongoose.Schema({
