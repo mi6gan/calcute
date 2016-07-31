@@ -139,21 +139,21 @@ module.exports.schemas = {
             required: true,
             type: String,
             enum: ['Муж', 'Жен'],
-            template: '/templates/fields/select.html'
+            template: '/templates/fields/generic/select.html'
         },
         age: {
             required: true,
             type: Number,
             mask: '99',
             default: 25,
-            template: '/templates/fields/text.html'
+            template: '/templates/fields/generic/text.html'
         },
         experience: {
             required: true,
             type: Number,
             mask: '99',
             default: 2,
-            template: '/templates/fields/text.html'
+            template: '/templates/fields/generic/text.html'
         }
     }),
     DiscountInfo: new mongoose.Schema({
