@@ -166,7 +166,7 @@ module.exports.schemas = {
             required: true,
             label: 'Полное имя',
             type: String,
-            template: '/templates/fields/splittext.html',
+            template: '/templates/fields/text.html',
             mask: 'N N N',
             rowClass: 'grid-12',
             inputAttrs: [{
@@ -192,7 +192,7 @@ module.exports.schemas = {
             required: true,
             label: 'Дата рождения',
             type: String,
-            template: '/templates/fields/splittext.html',
+            template: '/templates/fields/text.html',
             mask: 'D M Y',
             rowClass: 'grid-24',
             inputAttrs: [{
@@ -218,7 +218,7 @@ module.exports.schemas = {
             required: true,
             label: 'Водительское удостоверение',
             type: String,
-            template: '/templates/fields/splittext.html',
+            template: '/templates/fields/text.html',
             mask: 'L L',
             rowClass: 'grid-16',
             inputAttrs: [{
