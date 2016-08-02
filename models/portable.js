@@ -263,6 +263,7 @@ module.exports.schemas = {
             template: '/templates/fields/select.html'
         },
         comment: {
+            required: false,
             type: String,
             mask: 'S',
             label: 'Комментарий',
@@ -329,6 +330,48 @@ module.exports.schemas.Feedback.methods.isVisible = function portable ( pathName
             return true;
     }
 }
+
+// next shitty display methods are need to be refactored somehow but I don't give a fuck for awhile
+module.exports.schemas.DiscountInfo.methods.display = function portable ( pathName ) {
+    var value = this[pathName],
+        path = this.__proto__.model.schema.paths[pathName],
+        index = -1;
+    if( path.options.enum ) {
+        index = path.options.enum.indexOf(value);
+    }
+    /*
+    switch( pathName ) {
+        case 'car':
+            if( typeof( value ) == 'object' ) {
+                if ( typeof( value.brand ) == 'object' ) {
+                    return value.brand.label + ' ' + value.label;
+                }
+            }
+            break;
+        case 'capacity':
+            return value + ' лс';
+        case 'franchise':
+            return ( ( index == 0) || ( index == 2 ) ) ? 'Франшиза' : '';
+        case 'franchiseSum':
+            return value + ' руб';
+        case 'driversCount':
+            return value + ( ( index == 0 ) ? " водитель" : ( ( index == 3 ) ? "" : " водителя" ) );
+        case 'type':
+            if( typeof( value ) == 'object' && value.length ) {
+                return value.map( function ( v ) {
+                    return v;
+                } ).join(', ');
+            }
+            else {
+                return;
+            }
+        default:
+            if ( ( typeof(value) == 'object' ) && ( 'label' in value ) ) {
+                return value.label;
+            }
+    }*/
+    return (typeof( value ) == 'object') ? value.label : String( value );
+};
 module.exports.schemas.Feedback.methods.display = function portable ( pathName ) {
     var value = this[pathName],
         path = this.__proto__.model.schema.paths[pathName],
@@ -369,6 +412,7 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
     return (typeof( value ) == 'object') ? value.label : String( value );
 };
 
+// ok, I'm really not gonna remind what this method actually for. But it's used at frontend I believe, lol  
 module.exports.schemas.Feedback.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
     return 'Введите правильное значение';
 };
