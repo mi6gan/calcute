@@ -412,7 +412,13 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
     return (typeof( value ) == 'object') ? value.label : String( value );
 };
 
-// ok, I'm really not gonna remind what this method actually for. But it's used at frontend I believe, lol  
 module.exports.schemas.Feedback.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
+    switch( pathName ) {
+        case 'drivers':
+            return 'Заполните все поля (эти сообщения улучшим перед релизом, пока не стал убивать на это время)'; 
+    }    
     return 'Введите правильное значение';
+};
+module.exports.schemas.Driver.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
+    return 'Заполните все поля';
 };
