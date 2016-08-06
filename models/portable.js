@@ -73,11 +73,9 @@ module.exports.schemas = {
         city: {
             required: true,
             type: String,
-            enum: [
-                'Москва и МО',
-                'Спб',
-                'Екатеринбург',
-            ],
+            enum: ["Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург",  "Казань",
+                   "Нижний Новгород", "Челябинск", "Омск", "Самара", "Ростов-на-Дону",
+                   "Красноярск", "Уфа", "Пермь", "Воронеж", "Другой"],
             label: 'Город',
             template: '/templates/fields/select.html'
         },
@@ -145,20 +143,19 @@ module.exports.schemas = {
             required: true,
             type: String,
             enum: ['Муж', 'Жен'],
+            default: 'Муж',
             template: '/templates/fields/generic/select.html'
         },
         age: {
             required: true,
             type: Number,
             mask: '99',
-            default: 25,
             template: '/templates/fields/generic/text.html'
         },
         experience: {
             required: true,
             type: Number,
             mask: '99',
-            default: 2,
             template: '/templates/fields/generic/text.html'
         }
     }),
@@ -396,11 +393,17 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
         case 'capacity':
             return value + ' лс';
         case 'franchise':
-            return ( ( index == 0) || ( index == 2 ) ) ? 'Франшиза' : '';
+            return ( ( index == 0) || ( index == 2 ) ) ? 'Франшиза' : 'Без франшизы';
         case 'franchiseSum':
             return value + ' руб';
-        case 'driversCount':
-            return value + ( ( index == 0 ) ? " водитель" : ( ( index == 3 ) ? "" : " водителя" ) );
+        case 'drivers':
+            var count = (typeof(value) == 'object') ? value.length : 0;
+            if(count) {
+                return count + ((count == 1) ? " водитель" : " водителя");
+            }
+            else {
+                return 'Без ограничений';
+            }
         case 'type':
             if( typeof( value ) == 'object' && value.length ) {
                 return value.map( function ( v ) {
