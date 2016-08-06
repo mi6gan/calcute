@@ -3,10 +3,16 @@ var mongoose = require('mongoose');
 module.exports.schemas = {
     CarBrand: new mongoose.Schema({
         icon: String,
-        label: String
+        label: {
+            type: String,
+            template: '/templates/fields/generic/text.html'
+        }
     }),
     Car: new mongoose.Schema({
-        label: String,
+        label: {
+            type: String,
+            template: '/templates/fields/generic/text.html'
+        },
         brand: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'CarBrand'
@@ -421,4 +427,10 @@ module.exports.schemas.Feedback.methods.getPathErrorMessage = function portable 
 };
 module.exports.schemas.Driver.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
     return 'Заполните все поля';
+};
+module.exports.schemas.Car.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
+    return 'Введите правильное значение';
+};
+module.exports.schemas.CarBrand.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
+    return 'Введите правильное значение';
 };
