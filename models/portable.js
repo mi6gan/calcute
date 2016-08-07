@@ -70,6 +70,26 @@ module.exports.schemas = {
             label: 'Стоимость авто',
             template: '/templates/fields/select.html'
         },
+        credit: {
+            required: true,
+            type: String,
+            enum: ["Кредитное", "Не кредитное"],
+            default: "Кредитное",
+            label: 'Авто кредитное?',
+            template: '/templates/fields/select.html'
+        },
+        bank: {
+            required: true,
+            type: String,
+            enum: ["Сбербанк России", "Совкомбанк", "Газпромбанк", "Бинбанк", 
+                   "Россельхозбанк", "ВТБ 24", "Промсвязьбанк", "Рост банк",
+                   "СМП банк", "Югра", "Ханты-Мансийский банк", "Открытие", 
+                   "Россия", "Центр-инвест", "Московский индустриальный банк", 
+                   "Таврический", "Авангард", "РГС банк", "Транскапиталбанк",
+                   "Тинькофф банк", "Московский кредитный банк"],
+            label: 'Банк',
+            template: '/templates/fields/select.html'
+        },
         city: {
             required: true,
             type: String,
@@ -329,6 +349,11 @@ module.exports.schemas.Feedback.methods.isVisible = function portable ( pathName
                 fEnum = schema.paths.franchise.options.enum,
                 fValue = this.franchise;
             return (fEnum.indexOf(fValue) == 0);
+        case 'bank':
+            var schema = this.__proto__.model.schema,
+                cEnum = schema.paths.credit.options.enum,
+                cValue = this.credit;
+            return (cEnum.indexOf(cValue) == 0);
         default:
             return true;
     }
