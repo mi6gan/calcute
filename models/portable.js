@@ -162,6 +162,7 @@ module.exports.schemas = {
         gender: {
             required: true,
             type: String,
+            label: "Пол",
             enum: ['Муж', 'Жен'],
             default: 'Муж',
             template: '/templates/fields/generic/select.html'
@@ -169,12 +170,14 @@ module.exports.schemas = {
         age: {
             required: true,
             type: Number,
+            label: "Возраст",
             mask: '99',
             template: '/templates/fields/generic/text.html'
         },
         experience: {
             required: true,
             type: Number,
+            label: "Стаж",
             mask: '99',
             template: '/templates/fields/generic/text.html'
         }
@@ -358,6 +361,18 @@ module.exports.schemas.Feedback.methods.isVisible = function portable ( pathName
             return true;
     }
 }
+
+module.exports.schemas.Driver.methods.display = function portable ( pathName ) {
+    var value = this[pathName],
+        path = this.__proto__.model.schema.paths[pathName];
+    if(undefined !== value) {
+        var n = parseInt(value),
+            plural = (n%10==1 && n%100!=11 ? 0 : n%10>=2 && n %10<=4 && (n%100<10 || n%100>=20) ? 1 : 2),
+            years = ['год', 'года', 'лет'];
+        return (path.options.label + ' ' + n + ' ' + years[plural]);
+    }
+    return;
+};
 
 // next shitty display methods are need to be refactored somehow but I don't give a fuck for awhile
 module.exports.schemas.DiscountInfo.methods.display = function portable ( pathName ) {
