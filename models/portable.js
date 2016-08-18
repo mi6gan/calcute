@@ -5,13 +5,13 @@ module.exports.schemas = {
         icon: String,
         label: {
             type: String,
-            template: '/templates/fields/generic/text.html'
+            template: '/templates/fields/textbutton.html'
         }
     }),
     Car: new mongoose.Schema({
         label: {
             type: String,
-            template: '/templates/fields/generic/text.html'
+            template: '/templates/fields/textbutton.html'
         },
         brand: {
             type: mongoose.Schema.Types.ObjectId,
@@ -74,7 +74,6 @@ module.exports.schemas = {
             required: true,
             type: String,
             enum: ["Кредитное", "Не кредитное"],
-            default: "Кредитное",
             label: 'Авто кредитное?',
             template: '/templates/fields/select.html'
         },
@@ -104,8 +103,8 @@ module.exports.schemas = {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Driver'
             }],
-            countEnum: ['Неограниченно', '1', '2', '3'],
             label: 'Водители',
+            countLabels: [[1, '1'], [2, '2'], [3, '3'], [0, 'Неограниченно']],
             template: '/templates/fields/complex/drivers.html'
         },
         type: {
