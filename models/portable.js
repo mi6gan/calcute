@@ -3,15 +3,270 @@ var mongoose = require('mongoose');
 module.exports.schemas = {
     CarBrand: new mongoose.Schema({
         icon: String,
+        isDraft: {
+            type: Boolean,
+            default: true
+        },
         label: {
             type: String,
-            template: '/templates/fields/textbutton.html'
+            required: true,
+            template: '/templates/fields/textbutton.html',
+            mask: 'S',
+            inputAttrs: {
+                placeholder: 'Введите название марки'
+            }
         }
     }),
     Car: new mongoose.Schema({
         label: {
             type: String,
-            template: '/templates/fields/textbutton.html'
+            template: '/templates/fields/textbutton.html',
+            required: true
+        },
+        brand: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'CarBrand',
+            required: true
+        },
+        isDraft: {
+            type: Boolean,
+            default: true
+        },
+    }),
+    Feedback: new mongoose.Schema({
+        car: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Car',
+            label: 'Автомобиль'
+        },
+        year: {
+            required: true,
+            type: String,
+            min: 2000,
+            enum: (function() {
+                var arr = [];
+                for(var i = 0; i < 17; i++) {
+                    if(i == 16) {
+                        arr.push('2000 и старше');
+                    }
+                    else {
+                        arr.push((2016 - i).toString());
+                    }
+                }
+                return arr;
+            })(),
+            label: 'Год выпуска',
+            template: '/templates/fields/select.html'
+        },
+        capacity: {
+            required: true,
+            type: String,
+            min: 1,
+            max: 1000,
+            label: 'Двигатель, л.с',
+            helpText: 'Если не помните точное число, укажите примерное',
+            inputAttrs: {
+                size: 4
+            },
+            mask: 'C',
+            inputSuffix: 'лошадиных сил',
+            template: '/templates/fields/text.html'
+        },
+        price: {
+            required: true,
+            type: String,
+            enum: [
+                'до 500 тыс',
+                'от 500 тыс – 1 млн',
+                'от 1 млн – 1,5 млн',
+                'от 1,5 млн – 2 млн',
+                'от 2 млн'
+            ],
+            label: 'Стоимость авто',
+            template: '/templates/fields/select.html'
+        },
+        credit: {
+            required: true,
+            type: String,
+            enum: ["Кредитное", "Не кредитное"],
+            label: 'Авто кредитное?',
+            template: '/templates/fields/select.html'
+        },
+        bank: {
+            required: true,
+            type: String,
+            enum: ["Сбербанк России", "Совкомбанк", "Газпромбанк", "Бинбанк", 
+                   "Россельхозбанк", "ВТБ 24", "Промсвязьбанк", "Рост банк",
+                   "СМП банк", "Югра", "Ханты-Мансийский банк", "Открытие", 
+                   "Россия", "Центр-инвест", "Московский индустриальный банк", 
+                   "Таврический", "Авангард", "РГС банк", "Транскапиталбанк",
+                   "Тинькофф банк", "Московский кредитный банк"],
+            label: 'Банк',
+            template: '/templates/fields/select.html'
+        },
+        city: {
+            required: true,
+            type: String,
+            enum: ["Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург",  "Казань",
+                   "Нижний Новгород", "Челябинск", "Омск", "Самара", "Ростов-на-Дону",
+                   "Красноярск", "Уфа", "Пермь", "Воронеж", "Другой"],
+            label: 'Город',
+            template: '/templates/fields/select.html'
+        },
+        drivers: {
+            type: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Driver'
+            }],
+            label: 'Водители',
+            countLabels: [[1, '1'], [2, '2'], [3, '3'], [0, 'Неограниченно']],
+            template: '/templates/fields/complex/drivers.html'
+        },
+        type: {
+            required: true,
+            type: [String],
+            enum: ['КАСКО', 'ОСАГО', 'ДАГО (расширение ОСАГО)'],
+            label: 'Что считаем?',
+            template: '/templates/fields/multiselect.html'
+        },
+        franchise: {
+            required: true,
+            type: String,
+            enum: ['Да', 'Нет', 'Возможно'],
+            label: 'Франшиза',
+            template: '/templates/fields/select.html'
+        },
+        franchiseSum: {
+            type: Number,
+            inputAttrs: {
+                size: 8
+            },
+            mask: 'R',
+            inputSuffix: 'рублей',
+            label: 'Размер франшизы',
+            template: '/templates/fields/text.html'
+        },
+        fullName: {
+            required: true,
+            type: String,
+            inputAttrs: {
+                size: 50
+            },
+            label: 'Полное имя',
+            template: '/templates/fields/text.html',
+            mask: 'n n',
+            required: true
+        },
+        phoneNumber: {
+            required: true,
+            type: String,
+            inputAttrs: {
+                size: 20,
+                minLength: 9,
+                maxLength: 20,
+                placeholder: '+7',
+                includePlaceholder: 'true'
+            },
+            mask: '+9 (999) 999 99 99',
+            label: 'Номер телефона',
+            template: '/templates/fields/text.html'
+        }
+    }),
+    Driver: new mongoose.Schema({
+        gender: {
+            required: true,
+            type: String,
+            label: "Пол",
+            enum: ['Муж', 'Жен'],
+            default: 'Муж',
+            template: '/templates/fields/generic/select.html'
+        },
+        age: {
+            required: true,
+            type: Number,
+            label: "Возраст",
+            mask: '99',
+            template: '/templates/fields/generic/text.html'
+        },
+        experience: {
+            required: true,
+            type: Number,
+            label: "Стаж",
+            mask: '99',
+            template: '/templates/fields/generic/text.html'
+        }
+    }),
+    DiscountInfo: new mongoose.Schema({
+        feedback: {
+            required: true,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Feedback'
+        },
+        fullName: {
+            required: true,
+            label: 'Полное имя',
+            type: String,
+            template: '/templates/fields/text.html',
+            mask: 'N N N',
+            rowClass: 'grid-12',
+            inputAttrs: [{
+                size: 10, 
+                minLength: 9,
+                maxLength: 20,
+                placeholder: 'Имя'
+            },
+            {
+                size: 10, 
+                minLength: 9,
+                maxLength: 20,
+                placeholder: 'Отчество'
+            },
+            {
+                size: 10, 
+                minLength: 9,
+                maxLength: 20,
+                placeholder: 'Фамилия'
+            }]
+        },
+        birthDate: {
+            required: true,
+            label: 'Дата рождения',
+            type: String,
+            template: '/templates/fields/text.html',
+            mask: 'D M Y',
+            rowClass: 'grid-24',
+            inputAttrs: [{
+                size: 2, 
+                minLength: 2,
+                maxLength: 2,
+                placeholder: 'ДД'
+            },
+            {
+                size: 2, 
+                minLength: 2,
+                maxLength: 2,
+                placeholder: 'ММ'
+            },
+            {
+                size: 4, 
+                minLength: 2,
+                maxLength: 4,
+                placeholder: 'ГГГГ'
+            }]
+        },
+        licenceId: {
+            required: true,
+            label: 'Водительское удостоверение',
+            type: String,
+            template: '/templates/fields/text.html',
+            mask: 'L L',
+            rowClass: 'grid-16',
+            inputAttrs: [{
+                size: 15,
+                minLength: 9,
+                maxLength: 10,
+                placeholder: 'Серия'
+            }],
         },
         brand: {
             type: mongoose.Schema.Types.ObjectId,

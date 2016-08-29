@@ -31,3 +31,6 @@ exports.localnet = {
     GATEWAY_USERNAME: 'cubegroup',
     GATEWAY_PASSWORD: 'mieSh2ut'
 }
+exports.test = {
+	MONGO_CONSTRING: "mongodb://localhost/calcutetest"
+}
