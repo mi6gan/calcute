@@ -9,9 +9,8 @@ module.exports.schemas = {
         },
         label: {
             type: String,
-            required: true,
             template: '/templates/fields/textbutton.html',
-            mask: 'S',
+            required: true,
             inputAttrs: {
                 placeholder: 'Введите название марки'
             }
@@ -21,7 +20,10 @@ module.exports.schemas = {
         label: {
             type: String,
             template: '/templates/fields/textbutton.html',
-            required: true
+            required: true,
+            inputAttrs: {
+                placeholder: 'Введите название модели'
+            }
         },
         brand: {
             type: mongoose.Schema.Types.ObjectId,
@@ -32,107 +34,6 @@ module.exports.schemas = {
             type: Boolean,
             default: true
         },
-    }),
-    Driver: new mongoose.Schema({
-        gender: {
-            required: true,
-            type: String,
-            label: "Пол",
-            enum: ['Муж', 'Жен'],
-            default: 'Муж',
-            template: '/templates/fields/generic/select.html'
-        },
-        age: {
-            required: true,
-            type: Number,
-            label: "Возраст",
-            mask: '99',
-            template: '/templates/fields/generic/text.html'
-        },
-        experience: {
-            required: true,
-            type: Number,
-            label: "Стаж",
-            mask: '99',
-            template: '/templates/fields/generic/text.html'
-        }
-    }),
-    DiscountInfo: new mongoose.Schema({
-        feedback: {
-            required: true,
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Feedback'
-        },
-        fullName: {
-            required: true,
-            label: 'Полное имя',
-            type: String,
-            template: '/templates/fields/text.html',
-            mask: 'N N N',
-            rowClass: 'grid-12',
-            inputAttrs: [{
-                size: 10, 
-                minLength: 9,
-                maxLength: 20,
-                placeholder: 'Имя'
-            },
-            {
-                size: 10, 
-                minLength: 9,
-                maxLength: 20,
-                placeholder: 'Отчество'
-            },
-            {
-                size: 10, 
-                minLength: 9,
-                maxLength: 20,
-                placeholder: 'Фамилия'
-            }]
-        },
-        birthDate: {
-            required: true,
-            label: 'Дата рождения',
-            type: String,
-            template: '/templates/fields/text.html',
-            mask: 'D M Y',
-            rowClass: 'grid-24',
-            inputAttrs: [{
-                size: 2, 
-                minLength: 2,
-                maxLength: 2,
-                placeholder: 'ДД'
-            },
-            {
-                size: 2, 
-                minLength: 2,
-                maxLength: 2,
-                placeholder: 'ММ'
-            },
-            {
-                size: 4, 
-                minLength: 2,
-                maxLength: 4,
-                placeholder: 'ГГГГ'
-            }]
-        },
-        licenceId: {
-            required: true,
-            label: 'Водительское удостоверение',
-            type: String,
-            template: '/templates/fields/text.html',
-            mask: 'L L',
-            rowClass: 'grid-16',
-            inputAttrs: [{
-                size: 15,
-                minLength: 9,
-                maxLength: 10,
-                placeholder: 'Серия'
-            }],
-        },
-        brand: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'CarBrand'
-        }
     }),
     Feedback: new mongoose.Schema({
         car: {
@@ -164,13 +65,12 @@ module.exports.schemas = {
             type: String,
             min: 1,
             max: 1000,
-            label: 'Двигатель, л.с',
+            label: 'Двигатель, л.с.',
             helpText: 'Если не помните точное число, укажите примерное',
             inputAttrs: {
                 size: 4
             },
             mask: 'C',
-            inputSuffix: 'лошадиных сил',
             template: '/templates/fields/text.html'
         },
         price: {
@@ -200,7 +100,7 @@ module.exports.schemas = {
                    "СМП банк", "Югра", "Ханты-Мансийский банк", "Открытие", 
                    "Россия", "Центр-инвест", "Московский индустриальный банк", 
                    "Таврический", "Авангард", "РГС банк", "Транскапиталбанк",
-                   "Тинькофф банк", "Московский кредитный банк"],
+                   "Тинькофф банк", "Московский кредитный банк", "Другой"],
             label: 'Банк',
             template: '/templates/fields/select.html'
         },
@@ -286,14 +186,33 @@ module.exports.schemas = {
             type: Number,
             label: "Возраст",
             mask: '99',
-            template: '/templates/fields/generic/text.html'
+            template: '/templates/fields/generic/text.html',
+            validate: [
+                function (v) {
+                    var val = parseInt(v); 
+                    return (val>=18);
+                },
+                'Возраст не может быть меньше 18 лет',
+                'too small'
+            ]
         },
         experience: {
             required: true,
             type: Number,
             label: "Стаж",
-            mask: '99',
-            template: '/templates/fields/generic/text.html'
+            mask: 'D',
+            template: '/templates/fields/generic/text.html',
+            validate: [
+                function (v) {
+                    var val = parseInt(v); 
+                    if(this.age) {
+                        return ((this.age-val)>=18);
+                    }
+                    return true;
+                },
+                'Введенный стаж не соответствует возрасту',
+                'not fits the age'
+            ]
         }
     }),
     DiscountInfo: new mongoose.Schema({
@@ -309,77 +228,43 @@ module.exports.schemas = {
             template: '/templates/fields/text.html',
             mask: 'N N N',
             rowClass: 'grid-12',
-            inputAttrs: [{
-                size: 10, 
-                minLength: 9,
-                maxLength: 20,
-                placeholder: 'Имя'
-            },
-            {
-                size: 10, 
-                minLength: 9,
-                maxLength: 20,
-                placeholder: 'Отчество'
-            },
-            {
-                size: 10, 
-                minLength: 9,
-                maxLength: 20,
-                placeholder: 'Фамилия'
-            }]
+            inputAttrs: {
+                size: 50, 
+                minLength: 6,
+                maxLength: 40,
+                placeholder: "Фамилия Имя Отчество"
+            }
         },
         birthDate: {
             required: true,
             label: 'Дата рождения',
             type: String,
             template: '/templates/fields/text.html',
-            mask: 'D M Y',
+            mask: 'D.M.Y',
             rowClass: 'grid-24',
-            inputAttrs: [{
-                size: 2, 
-                minLength: 2,
-                maxLength: 2,
-                placeholder: 'ДД'
-            },
-            {
-                size: 2, 
-                minLength: 2,
-                maxLength: 2,
-                placeholder: 'ММ'
-            },
-            {
-                size: 4, 
-                minLength: 2,
-                maxLength: 4,
-                placeholder: 'ГГГГ'
-            }]
+            inputAttrs: {
+                size: 8, 
+                placeholder: "ДД.ММ.ГГГГ"
+            }
         },
         licenceId: {
             required: true,
             label: 'Водительское удостоверение',
             type: String,
             template: '/templates/fields/text.html',
-            mask: 'L L',
+            mask: 'dddd dddddd',
             rowClass: 'grid-16',
-            inputAttrs: [{
+            inputAttrs: {
                 size: 15,
-                minLength: 9,
-                maxLength: 10,
-                placeholder: 'Серия'
+                placeholder: 'Серия Номер'
             },
-            {
-                size: 15,
-                minLength: 9,
-                maxLength: 10,
-                placeholder: 'Номер'
-            }]
         },
         company: {
             required: true,
-            type: String,
-            enum: ['Ингос', 'РГС', 'Другая'],
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Company',
             label: 'В какой страховой заканчивается полис',
-            template: '/templates/fields/select.html'
+            template: '/templates/fields/refselect.html'
         },
         isNotFirst: {
             required: true,
@@ -410,6 +295,12 @@ module.exports.schemas = {
             template: '/templates/fields/text.html',
             helpText: '(при желании)',
             placeholder: 'Оставьте ваш комментарий'
+        }
+    }),
+    Company: new mongoose.Schema({
+        title: {
+            required: true,
+            type: String
         }
     })
 };
@@ -496,37 +387,17 @@ module.exports.schemas.DiscountInfo.methods.display = function portable ( pathNa
     if( path.options.enum ) {
         index = path.options.enum.indexOf(value);
     }
-    /*
     switch( pathName ) {
-        case 'car':
-            if( typeof( value ) == 'object' ) {
-                if ( typeof( value.brand ) == 'object' ) {
-                    return value.brand.label + ' ' + value.label;
-                }
+        case 'company':
+            if ( ( typeof(value) == 'object' ) && ( 'title' in value ) ) {
+                return value.title;
             }
             break;
-        case 'capacity':
-            return value + ' лс';
-        case 'franchise':
-            return ( ( index == 0) || ( index == 2 ) ) ? 'Франшиза' : '';
-        case 'franchiseSum':
-            return value + ' руб';
-        case 'driversCount':
-            return value + ( ( index == 0 ) ? " водитель" : ( ( index == 3 ) ? "" : " водителя" ) );
-        case 'type':
-            if( typeof( value ) == 'object' && value.length ) {
-                return value.map( function ( v ) {
-                    return v;
-                } ).join(', ');
-            }
-            else {
-                return;
-            }
         default:
             if ( ( typeof(value) == 'object' ) && ( 'label' in value ) ) {
                 return value.label;
             }
-    }*/
+    }
     return (typeof( value ) == 'object') ? value.label : String( value );
 };
 module.exports.schemas.Feedback.methods.display = function portable ( pathName ) {
@@ -545,11 +416,11 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
             }
             break;
         case 'capacity':
-            return value + ' лс';
+            return value + ' л.с.';
         case 'franchise':
             return ( ( index == 0) || ( index == 2 ) ) ? 'Франшиза' : 'Без франшизы';
         case 'franchiseSum':
-            return value + ' руб';
+            return value + ' руб.';
         case 'drivers':
             var count = (typeof(value) == 'object') ? value.length : 0;
             if(count) {
@@ -574,6 +445,7 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
     }
     return (typeof( value ) == 'object') ? value.label : String( value );
 };
+
 
 module.exports.schemas.Feedback.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
     switch( pathName ) {

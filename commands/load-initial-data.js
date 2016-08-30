@@ -44,7 +44,6 @@ angoose.mongoose.connect('localhost/calcute');
     var Module = models.Module,
         data = fs.readFileSync('fixtures/modules.json'),
         jsonData = JSON.parse(data);
-
     jsonData.modules.forEach(function(module) {
         console.log('Adding module ' + module.name);
         Module.findOneAndUpdate({name: module.name}, module, {upsert: true}, function(err, moduleDoc) {
@@ -55,3 +54,16 @@ angoose.mongoose.connect('localhost/calcute');
     });
 })();
 
+(function loadCompanies() {
+    var Company = models.Company,
+        data = fs.readFileSync('fixtures/companies.json'),
+        jsonData = JSON.parse(data);
+    jsonData.companies.forEach(function(company) {
+        console.log('Adding company ' + company.title);
+        Company.findOneAndUpdate(company, module, {upsert: true}, function(err, companyDoc) {
+            if(err) {
+                throw err;
+            }
+        });
+    });
+})();

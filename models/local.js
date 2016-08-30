@@ -15,36 +15,38 @@
             switch(name) {
                 case 'Feedback':
                     schema.statics.parseInitOpts = function parseInitOpts(opts, cb) {
-                        var promises = [];
+                        var promises = [],
+                            schema = this.schema;
                         for(var pathName in opts) {
                             var pathOpts = opts[pathName],
                                 path = schema.paths[pathName];
                             if(path instanceof Object && path.options.type instanceof Array && path.options.type.length) { 
                                 var modelName = path.options.type[0].ref,
-                                    model = mongoose.model(modelName, schemas[modelName]),
                                     refList = [];
-                                if(model) {
-                                    for(var k in pathOpts) {
-                                        var i = parseInt(k);
-                                        if(!isNaN(i)) {
-                                            if(i >= refList.length) {
-                                                for(var j=0; j<=i; j++) {
-                                                    refList.push(null);
-                                                }
+                                if(!modelName) {
+                                    continue;
+                                }
+                                var model = mongoose.model(modelName, schemas[modelName]);
+                                for(var k in pathOpts) {
+                                    var i = parseInt(k);
+                                    if(!isNaN(i)) {
+                                        if(i >= refList.length) {
+                                            for(var j=refList.length; j<=i; j++) {
+                                                refList.push(null);
                                             }
-                                            var refInstance = new model(pathOpts[k]);
-                                            promises.push(new Promise(function (resolve, reject) {
-                                                refInstance.save(function(err, doc) {
-                                                    if(err) {
-                                                        reject(err);
-                                                    }
-                                                    else {
-                                                        resolve(doc);
-                                                    }
-                                                });
-                                            }));
                                         }
-                                        refList[refList.length-1] = refInstance._id;
+                                        var refInstance = new model(pathOpts[k]);
+                                        promises.push(new Promise(function (resolve, reject) {
+                                            refInstance.save(function(err, doc) {
+                                                if(err) {
+                                                    reject(err);
+                                                }
+                                                else {
+                                                    resolve(doc);
+                                                }
+                                            });
+                                        }));
+                                        refList[i] = refInstance._id;
                                     }
                                 }
                                 opts[pathName] = refList;
@@ -83,6 +85,7 @@
                         Promise.all(promises).then(function (doc) {
                             cb(null, doc);
                         }, function (err) {
+                            console.log(err);
                             cb(err, null);
                         });
                     };
@@ -137,6 +140,18 @@
                             }, 0);
                             cb(err, docs);
                         });
+                    };
+                    break;
+                case 'Company':
+                    schema.statics.queryPub = function(query, cb) {
+                        this.aggregate([
+                            {$match: {
+                                $or: [{isDraft: {$in: [null, false, '']}}, {isDraft: {$exists: false}}]
+                            }},
+                            {$sort: {
+                                title: 1
+                            }}
+                        ]).exec(cb);
                     };
                     break;
                 default:
