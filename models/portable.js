@@ -154,7 +154,7 @@ module.exports.schemas = {
             },
             label: 'Полное имя',
             template: '/templates/fields/text.html',
-            mask: 'n n',
+            mask: 'n n n',
             required: true
         },
         phoneNumber: {
