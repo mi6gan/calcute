@@ -55,7 +55,7 @@
                         if(opts.car&&typeof(opts.car)=='object') {
                             var Car = mongoose.model('Car', schemas.Car),
                                 onBrandReady = function (cb){cb(null, opts.car.brand);};
-                            if(opts.car.brand&&typeof(opts.car.brand)=='object') {
+                            if(opts.car.brand&&typeof(opts.car.brand)=='object'&&!opts.car.brand._id) {
                                 var CarBrand = mongoose.model('CarBrand', schemas.CarBrand),
                                     brand = new CarBrand(opts.car.brand);
                                 onBrandReady = function (cb) {
@@ -68,6 +68,7 @@
                               onBrandReady(function (err, brand) {
                                 if(!err) {
                                     opts.car.brand = brand._id;
+                                    delete opts.car._id;
                                     var car = new Car(opts.car);
                                     car.save(function (err, car) {
                                         if(err) {

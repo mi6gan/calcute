@@ -9,7 +9,7 @@ module.exports.schemas = {
         },
         label: {
             type: String,
-            template: '/templates/fields/textbutton.html',
+            template: '/templates/fields/generic.html',
             required: true,
             inputAttrs: {
                 placeholder: 'Введите название марки'
@@ -20,15 +20,16 @@ module.exports.schemas = {
         label: {
             type: String,
             template: '/templates/fields/textbutton.html',
-            required: true,
             inputAttrs: {
                 placeholder: 'Введите название модели'
             }
         },
+        fullLabel: {
+            type: String
+        },
         brand: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'CarBrand',
-            required: true
+            ref: 'CarBrand'
         },
         isDraft: {
             type: Boolean,
@@ -454,8 +455,13 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
             if( typeof( value ) == 'object' && value.fullLabel) {
                 return value.fullLabel;
             }
+            else if( typeof( value ) == 'object' && value.label && value.brand) {
+                return value.brand.label + ' ' + value.label;
+            }
             else if(this.customCar) {
-                return this.customCar;
+                if( typeof( value ) == 'object' && value.brand) {
+                    return value.brand.label + ' ' + this.customCar;
+                }
             }
             break;
         case 'capacity':
