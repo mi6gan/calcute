@@ -452,16 +452,14 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
     }
     switch( pathName ) {
         case 'car':
-            if( typeof( value ) == 'object' && value.fullLabel) {
+            if(this.customCar) {
+                return this.customCar;
+            }
+            else if( typeof( value ) == 'object' && value.fullLabel) {
                 return value.fullLabel;
             }
             else if( typeof( value ) == 'object' && value.label && value.brand) {
                 return value.brand.label + ' ' + value.label;
-            }
-            else if(this.customCar) {
-                if( typeof( value ) == 'object' && value.brand) {
-                    return value.brand.label + ' ' + this.customCar;
-                }
             }
             break;
         case 'capacity':

@@ -68,7 +68,9 @@
                               onBrandReady(function (err, brand) {
                                 if(!err) {
                                     opts.car.brand = brand._id;
-                                    delete opts.car._id;
+                                    if('_id' in opts.car) {
+                                        delete opts.car._id;
+                                    }
                                     var car = new Car(opts.car);
                                     car.save(function (err, car) {
                                         if(err) {
