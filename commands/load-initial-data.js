@@ -18,18 +18,19 @@ angoose.mongoose.connect('localhost/calcute');
 
     jsonData.brands.forEach(function(brand) {
         console.log('Adding brand ' + brand.text + '\n');
-        models.CarBrand.findOneAndUpdate({label: brand.text}, {label: brand.text, icon: icons[brand.text]||null}, {upsert: true}, function(err, brandDoc) {
+        models.CarBrand.findOneAndUpdate({label: brand.text}, {label: brand.text, icon: icons[brand.text]||null}, {upsert: true, new: true}, function(err, brandDoc) {
             if(err) {
                 throw err;
             }
             brand.values.forEach(function(carLabel) {
                 console.log('\tAdding car ' + carLabel);
+                var fullLabel = brand.text + ' ' + carLabel;
                 models.Car.findOneAndUpdate({
                     label: carLabel,
-                    brand: brandDoc
+                    brand: brandDoc._id
                 }, 
-                {label: carLabel, brand: brandDoc._id},
-                {upsert: true}, 
+                {label: carLabel, fullLabel: fullLabel, brand: brandDoc._id},
+                {upsert: true, new: true}, 
                 function(err, doc) {
                     if(err) {
                         throw err;

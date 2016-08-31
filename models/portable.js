@@ -41,6 +41,13 @@ module.exports.schemas = {
             ref: 'Car',
             label: 'Автомобиль'
         },
+        customCar: {
+            type: String,
+            template: '/templates/fields/textbutton.html',
+            inputAttrs: {
+                placeholder: 'Введите название модели'
+            }
+        },
         year: {
             required: true,
             type: String,
@@ -290,11 +297,14 @@ module.exports.schemas = {
         comment: {
             required: false,
             type: String,
-            mask: 'S',
+            mask: 't',
             label: 'Комментарий',
             template: '/templates/fields/text.html',
             helpText: '(при желании)',
-            placeholder: 'Оставьте ваш комментарий'
+            placeholder: 'Оставьте ваш комментарий',
+            inputAttrs: {
+                size: 50
+            }
         }
     }),
     Company: new mongoose.Schema({
@@ -392,7 +402,39 @@ module.exports.schemas.DiscountInfo.methods.display = function portable ( pathNa
             if ( ( typeof(value) == 'object' ) && ( 'title' in value ) ) {
                 return value.title;
             }
-            break;
+        case 'comment':
+            if( typeof(value) == 'string' ) {
+                var sliced = value.slice(0, 20);
+                return (sliced + ((sliced.length<value.length) ? '...' : '')); 
+            }
+        case 'fullName':
+            if( typeof(value) == 'string' ) {
+                var parts = value.split(' ');
+                if(parts.length) {
+                    var out = parts[0];
+                    if(parts.length>1) {
+                        out += (" " + parts[1].slice(0, 1) + ( parts[1].length>1 ? '.' : '' ));
+                    }
+                    if(parts.length>2) {
+                        out += (" " + parts[2].slice(0, 1) + ( parts[2].length>1 ? '.' : '' ));
+                    }
+                    return out;
+                }
+            }
+        case 'withConsult':
+            if(value=='Да') {
+                return 'Нужна консультация';
+            }
+            else if(value=='Нет') {
+                return 'Не нужна консультация';
+            }
+        case 'isNotFirst':
+            if(value=='Да') {
+                return 'Убытки';
+            }
+            else if(value=='Нет') {
+                return 'Без убытков';
+            }
         default:
             if ( ( typeof(value) == 'object' ) && ( 'label' in value ) ) {
                 return value.label;
@@ -409,10 +451,11 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
     }
     switch( pathName ) {
         case 'car':
-            if( typeof( value ) == 'object' ) {
-                if ( typeof( value.brand ) == 'object' ) {
-                    return value.brand.label + ' ' + value.label;
-                }
+            if( typeof( value ) == 'object' && value.fullLabel) {
+                return value.fullLabel;
+            }
+            else if(this.customCar) {
+                return this.customCar;
             }
             break;
         case 'capacity':
