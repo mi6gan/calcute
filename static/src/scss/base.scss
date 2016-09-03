@@ -1,0 +1,697 @@
+.calcute-demo {
+    padding-top: 100px;
+    width: 100%;
+}
+
+@import "../../../node_modules/font-awesome/scss/variables";
+@import "../../../node_modules/font-awesome/scss/path";
+.calcute {
+    @import "bootstrap/variables";
+    @import "bootstrap/mixins/vendor-prefixes";
+    @import "bootstrap/mixins/text-overflow";
+    @import "bootstrap/mixins/gradients";
+    @import "../../../node_modules/animate.css/source/fading_exits/fadeOut";
+    @import "../../../node_modules/animate.css/source/fading_entrances/fadeIn";
+    @import "../../../node_modules/animate.css/source/base";
+    @import "../../../node_modules/font-awesome/scss/core";
+    @import "../../../node_modules/font-awesome/scss/icons";
+    @import "../../../node_modules/font-awesome/scss/animated";
+    @import "../../../node_modules/font-awesome/scss/mixins";
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+    color: $text-color;
+    @mixin ng-animate-opacity($duration) {
+        &.ng-animate {
+            &.ng-enter {
+                transition: opacity $duration;
+                opacity: 0.0;
+                &.ng-enter-active {
+                    opacity: 1.0;
+                }
+            }
+        }
+    }
+    .module {
+        $animation-duration-base: 0.1s;
+        $module-width: 645px;
+        width: $module-width;
+        margin: 0 auto;
+        .btn {
+            transition: background-color $animation-duration-base;
+            &:active,
+            &:focus,
+            &:active:focus,
+            &:focus:active
+            {
+                outline: none !important;
+            }
+        }
+        .form-group {
+            $duration: $animation-duration-base*4;
+            overflow: hidden;
+            padding-left: $padding-base-horizontal;
+            padding-right: $padding-base-horizontal;
+            margin-bottom: 0px;
+            @include ng-animate-opacity($duration);
+            &.ng-hide, &.ng-enter {
+                max-height: 0;
+                opacity: 0.0;
+                visibility: hidden;
+                transition: visibility 0s, max-height 0s $duration, margin $duration, opacity $duration;
+                &.ng-animate-hide, &.ng-enter-active {
+                    visibility: visible;
+                    max-height: 500px;
+                    opacity: 1.0;
+                    transition: visibility 0s, max-height 0s, margin $duration, opacity $duration;
+                }
+            }
+        }
+        .form-control {
+            @include box-shadow(none);
+            border-top: none;
+            border-bottom: 1px solid $input-border;
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+            background-color: transparent;
+            padding: $padding-base-vertical 0;
+            box-sizing: border-box;
+            &.ng-invalid {
+                &.ng-touched {
+                    border-bottom-color: $brand-danger;
+                    color: $brand-danger;
+                }
+            }
+         }
+         .text-input-wrapper {
+            cursor: pointer;
+            display: inline-block;
+            padding-left: 8px;
+            padding-right: 8px;
+            padding-top: 3px;
+            text-decoration: none;
+            border-bottom: none;
+            .ng-hide {
+                display: none;
+            }
+            .form-control {
+                display: inline;
+                height: auto;
+                line-height: 1.5em;
+                position: relative;
+                padding: 0 0 $padding-base-vertical/3 0;
+                width: auto;
+                transition: background-color $animation-duration-base, color $animation-duration-base;
+            }
+            .field-activator {
+                color: white;
+                font-size: 1em; 
+                line-height: 1.8em;
+            }
+            &.valid:not(.active):not(.empty) {
+                border-radius: 1em;
+                background-color: #4887d7;
+                .form-control {
+                    display: none;
+                }
+                .icon-placeholder {
+                    opacity: 0.0;
+                    width: 0px;
+                    display: inline-block;
+                    font-size: 0.9em;
+                    transition: opacity $animation-duration-base, width $animation-duration-base, background-color $animation-duration-base;
+                }
+                &:hover {
+                    background-color: #3B78C5;
+                    .icon-placeholder {
+                        opacity: 1.0;
+                        width: 15px;
+                    }
+                }
+            }
+            &:not(.valid) {
+                .icon-placeholder {
+                    opacity: 0.0;
+                }
+            }
+            &.active, &.empty {
+                color: $text-muted;
+                .field-activator {
+                    display: none;
+                }
+            }
+        }
+        .form-inline {
+        }
+        label {
+            font-size: $font-size-h6; 
+            &.semi-transparent {
+                opacity: 0.5;
+            }
+        }
+        hr {
+            margin-left: $font-size-base*0.5;
+            margin-right: $font-size-base*0.5;
+            &.transparent {
+                border-color: transparent;
+                &.small {
+                    margin-top: $line-height-computed*0.5;
+                    margin-bottom: $line-height-computed*0.5;
+                }
+            }
+        }
+        p.help-text {
+            font-size: $font-size-h6*0.85;
+            color: $text-muted;
+            padding-right: $padding-base-horizontal*1.9;
+        }
+        .grid-10 {
+            $grid-columns: 10;
+            @import "bootstrap/mixins/grid-framework";
+            @include make-grid('xs');
+        }
+        .grid-50 {
+            $grid-columns: 50;
+            @import "bootstrap/mixins/grid-framework";
+            @include make-grid('xs');
+            .grid-11 {
+                $grid-columns: 11;
+                @import "bootstrap/mixins/grid-framework";
+                @include make-grid('xs');
+            }
+            .grid-12 {
+                $grid-columns: 12;
+                @import "bootstrap/mixins/grid-framework";
+                @include make-grid('xs');
+            }
+            .grid-16 {
+                $grid-columns: 16;
+                @import "bootstrap/mixins/grid-framework";
+                @include make-grid('xs');
+            }
+            .grid-24 {
+                $grid-columns: 24;
+                @import "bootstrap/mixins/grid-framework";
+                @include make-grid('xs');
+            }
+        }
+        .ca {
+            display: inline;
+            &::before {
+                font-size: 0.9em;
+                display: inline;
+                content: '\25a0\25a0';
+                color: transparent;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+            }
+            &.ca-calculator::before {
+                background-image: url('../icons/calculator.png');
+                margin-top: 6px;
+            }
+            &.ca-car {
+                &::before {
+                    background-image: url('../icons/car.png');
+                }
+            }
+        }
+        big.ca, big.fa {
+            top: 0.15em;
+            font-size: 2em;
+            line-height: 0;
+            position: relative;
+        }
+        .btn-lg .ca {
+            padding-bottom: 14px;
+            font-size: 1.3em;
+        }
+        .btn-ca {
+            padding-bottom: 14px;
+        }
+        $duration: $animation-duration-base*4;
+        .start {
+            padding-top: 100px;
+            padding-bottom: 100px;
+            transition: top $duration, max-height $duration, padding $duration, visibility $duration, opacity $duration;
+            opacity: 1.0;
+            position: relative;
+            max-height: 500px;
+            overflow: hidden;
+            top: 0px;
+            &.ng-hide {
+                opacity: 0.0;
+                display: block;
+                max-height: 0;
+                padding: 0;
+                visibility: hidden;
+                top: 50px;
+            }
+        }
+        .well.kasko-calculator {
+            .well-placeholder {
+                font-size: $well-padding-horizontal;
+                line-height: 0;
+                font-family: monospace;
+            }
+            border: none;
+            $grid-gutter-width: 4px;
+            $width: ($module-width - ($well-padding-horizontal + 1) * 2 );
+            width: $module-width;
+            transition: min-height $duration, opacity $duration, top $duration;
+            position: relative;
+            overflow: hidden;
+            &.ng-hide {
+                opacity: 0.0;
+            }
+            &.ng-leave {
+                opacity: 1.0;
+                &.ng-leave-active {
+                    opacity: 0.0;
+                }
+            }
+            &.ng-enter {
+                position: absolute;
+                opacity: 0.0;
+                &.ng-enter-active {
+                    opacity: 1.0;
+                }
+            }
+            .row {
+                margin-left: 0px;
+                margin-right: 0px;
+                @import "bootstrap/mixins/grid-framework";
+                @include make-grid-columns();
+                &.outer {
+                    $outer-padding: ( $font-size-base * 0.5 );
+                    margin-right: ( 0 - $outer-padding );
+                    &:not(.outer-end) {
+                        margin-left: ( 0 - $outer-padding );
+                        & > :first-child {
+                            width: auto;
+                            padding: 0 0 0 $outer-padding;
+                            & > * {
+                                padding-left: 0;
+                            }
+                        }
+                    }
+                    &:not(.outer-start) {
+                        & > :nth-last-child(2) {
+                            padding-left: ( $grid-gutter-width + $outer-padding );
+                        }
+                        & > :last-child {
+                            padding: 0 0 0 $grid-gutter-width;
+                            & > * {
+                                padding-right: 0;
+                                padding-left: 0;
+                            }
+                        }
+                    }
+                    &.outer-start {
+                        margin-left: ( 0 - $outer-padding*2 );
+                        & > :first-child {
+                            padding-left: $grid-gutter-width;
+                        }
+                    }
+                    &.outer-end {
+                        margin-right: ( 0 - $outer-padding*2 );
+                        & > :nth-last-child(2) {
+                            padding-left: ( $grid-gutter-width + $outer-padding ); 
+                        }
+                        & > :last-child {
+                            width: auto;
+                            padding-right: $grid-gutter-width;
+                        }
+                    }
+                }
+                &.auto-width {
+                    & > * {
+                        width: auto;
+                    }
+                }
+            }
+            screen {
+                width: $width;
+                box-sizing: content-box;
+                display: block;
+                padding-left: 0;
+                padding-right: 0;
+                padding-bottom: 2*$line-height-computed;
+                z-index: 1;
+                margin-left: 0;
+                transition: margin-left $duration;
+                position: absolute;
+                h3.with-icon {
+                    margin-top: 0;
+                }
+                @mixin screen-animation ($enter, $leave, $enter-active, $leave-active) { 
+                    &#{$enter} {
+                        margin-left: -$module-width;
+                    }
+                    &#{$enter-active} {
+                        margin-left: 0;
+                    }
+                    &#{$leave} {
+                        margin-left: 0;
+                    }
+                    &#{$leave-active} {
+                        margin-left: -$module-width;
+                    }
+                    &.ng-leave-active + #{$enter},
+                    &.ng-hide + #{$enter}{
+                        margin-left: $module-width;
+                        &#{$enter-active} {
+                            margin-left: 0;
+                        }
+                    }
+                    &.ng-enter-active + #{$leave},
+                    &:not(.ng-hide) + #{$leave}{
+                        margin-left: 0;
+                        &#{$leave-active} {
+                            margin-left: $module-width;
+                        }
+                    }
+                }
+                @include screen-animation(
+                    ':not(.ng-hide).ng-animate-hide',
+                    '.ng-hide.ng-animate-hide',
+                    ':not(.ng-hide):not(.ng-animate-hide)',
+                    '.ng-hide:not(.ng-animate-hide)'
+                );
+                &.ng-animate { 
+                    @include screen-animation(
+                        '.ng-enter',
+                        '.ng-leave',
+                        '.ng-enter-active',
+                        '.ng-leave-active'
+                    ); 
+                }
+                a, button.btn-link {
+                  text-decoration: none;
+                  color: $text-color;
+                  transition: background-color $animation-duration-base, color $animation-duration-base;
+                  &:not(.unstyled) {
+                    letter-spacing: -0.14px;
+                    display: inline-block;
+                    padding: 3px $font-size-base*0.5;
+                    border-radius: 1em;
+                    &:hover,
+                    &:active, 
+                    &:focus, 
+                    &:active:focus, 
+                    &:focus:active, 
+                    &.active {
+                        &:not(.disabled ) {
+                            background-color: #4887d7;
+                            color: white;
+                        }
+                    }
+                    &.disabled {
+                        background-color: $gray-lighter*0.85;
+                    }
+                  }
+                  &.unstyled {
+                    display: inline;
+                    padding: 0;
+                    &:hover,
+                    &:active, 
+                    &:focus, 
+                    &:active:focus, 
+                    &:focus:active, 
+                    &.active {
+                        color: $text-muted;
+                    }
+                  }
+              }
+              .editable {
+                &::after {
+                    width: 0;
+                    margin-left: 0;
+                    opacity: 0;
+                    @include fa-icon();
+                    content: $fa-var-pencil;
+                    transition: width $animation-duration-base, margin $animation-duration-base, opacity $animation-duration-base;
+                    cursor: pointer;
+                    font-size: 11px;
+                }
+                &:hover::after {
+                    width: 15px;
+                    margin-left: 5px;
+                    opacity: 1.0;
+                }
+              }
+              .screen-footer {
+                    @include ng-animate-opacity($animation-duration-base*4);
+                    width: $width;
+                    color: white;
+                    font-weight: 300;
+                    font-size: $font-size-base*1.2;
+                    .btn-submit {
+                        border:2px solid rgba(255, 255, 255, 0.24);
+                        border-radius: $border-radius-large;
+                        color: white;
+                        font-weight: 400;
+                        padding: $line-height-computed $padding-base-horizontal*1.5;
+                        background-color: rgba(255, 255, 255, 0);
+                        line-height: $line-height-computed;
+                        &:hover,
+                        &:active, 
+                        &:focus, 
+                        &:active:focus, 
+                        &:focus:active 
+                        {
+                            color: rgba(255, 255, 255, 0.5);
+                            background-color: rgba(255, 255, 255, 0.24);
+                        }
+                        .arrow {
+                            line-height: 0.4;
+                            font-size: 2.5em;
+                            @extend .fa;
+                            &::before {
+                                content: '→';
+                            }
+                        }
+                    }
+                    p {
+                        margin-top: 0;
+                        margin-bottom: 0;
+                    }
+                    &::before {
+                        box-sizing: content-box;
+                        content: " ";
+                        display: block;
+                        height: 100%;
+                        width: $width;
+                        padding: 0 ( $well-padding-horizontal + 2 );
+                        background-color: $brand-primary;
+                        position: absolute;
+                        margin-left: -$well-padding-horizontal;
+                    }
+                }
+                model-form {
+                    box-sizing: border-box;
+                    $duration: $animation-duration-base*4;
+                    display: block;
+                    transition: max-height $duration $duration / 4 linear, margin $duration, opacity $duration, visibility $duration;
+                    opacity: 1.0;
+                    visibility: visible;
+                    &.ng-hide, &.ng-enter {
+                        max-height: 0;
+                        opacity: 0.0;
+                        visibility: hidden;
+                        transition: visibility 0s, max-height 0s $duration, margin $duration, opacity $duration;
+                        &.ng-animate-hide, &.ng-enter-active {
+                            visibility: visible;
+                            opacity: 1.0;
+                            transition: visibility 0s, max-height 0s, margin $duration, opacity $duration;
+                        }
+                    }
+                    .change-btn {
+                        position: absolute;
+                        font-size: $font-size-small;
+                        right: 0;
+                        top: 0;
+                        color: $text-muted;
+                        transition: background-color $animation-duration-base, color $animation-duration-base;
+                        &:hover,
+                        &:active, 
+                        &:focus, 
+                        &:active:focus, 
+                        &:focus:active, 
+                        &.active {
+                                background-color: #4887d7;
+                                color: white;
+                        }
+                    }
+                    &.inline {
+                        .left-vr {
+                            border-left: 1px solid #dedede;
+                        }
+                        .row {
+                            line-height: 1.8;
+                        }
+                        label {
+                            margin-top: 5px;
+                        }
+                        input {
+                            height: auto;
+                            padding: 0;
+                            width: 90%;
+                            &.ng-valid {
+                                &.ng-touched:not(.ng-empty) {
+                                    &:not(:focus) {
+                                        padding-bottom: 3px;
+                                        position: relative;
+                                        top: 3px;
+                                        right: 4px;
+                                    }
+                                }
+                            }
+                        }
+                        .select {
+                            a {
+                                margin-left: 5px;
+                            }
+                        }
+                        .editable {
+                            &::after {
+                                margin-left: 40px;
+                                position: absolute;
+                                top: 4px;
+                            }
+                        }
+                        .text-input-wrapper {
+                            padding-left: 4px;
+                            padding-right: 4px;
+                            margin-left: -4px;
+                            padding-top: 0px;
+                            label {
+                                color: $text-color;
+                                font-weight: normal;
+                                margin-top: 0px;
+                            }
+                            .field-activator {
+                                font-size: 0.9em;
+                            }
+                            &.empty,
+                            &.active {
+                                > .field-controller {
+                                    display: block;
+                                }
+                                > .field-label {
+                                    display: none;
+                                }
+                            }
+                            &.valid:not(.empty):not(.active) {
+                                > .field-controller {
+                                    display: none;
+                                }
+                                > .field-label {
+                                    display: block;
+                                }
+                            }
+                        }
+                    }
+                }
+                .select {
+                    line-height: 2;
+                    a {
+                        @include user-select(none);
+                        line-height: 1.25;
+                        min-width: 30px;
+                        text-align: center;
+                        &:hover {
+                            background-color: #3B78C5 !important;
+                            color: #FFF !important;
+                        }
+                    }
+                    &.compact {
+                        a {
+                            line-height: 1.25;
+                            margin-left: 2px;
+                            padding-left: $padding-base-horizontal/2;
+                            padding-right: $padding-base-horizontal/2;
+                        }
+                    }
+                    &.multiselect {
+                        a {
+                            &:not(.active) {
+                                border: 1px solid $gray-lighter*0.85;
+                                &:hover {
+                                    color: $brand-primary !important;
+                                    border: 1px solid $brand-primary;
+                                    background-color: transparent !important;
+                                }
+                            }
+                            &.active {
+                                border: 1px solid $brand-primary;
+                            }
+                        }
+                    }
+                    &.wide-lines {
+                        line-height: 2.5;
+                    }
+                }
+                .inline-overflow {
+                    @include text-overflow();
+                    display: inline-block;
+                }
+                p.bigger-line-height {
+                    line-height: 1.4;
+                }
+            }
+            $loading-duration: $animation-duration-base*4;
+            $loading-delay: $animation-duration-base*10;
+            &::before {
+                background-color: transparent;
+                visibility: hidden;
+                transition: background $loading-duration $loading-delay, visibility $loading-duration $loading-delay, z-index $loading-duration $loading-delay;
+                z-index: -1;
+            }
+            screen {
+                &::after {
+                    opacity: 0.0;
+                    visibility: hidden;
+                    z-index: -1;
+                    transition: opacity $loading-duration $loading-delay, visibility $loading-duration $loading-delay, z-index $loading-duration $loading-delay;
+               }
+            }
+            &.loading { 
+                &::before {
+                  content: "";
+                  width: $width + ( 2 * $well-padding-horizontal ); 
+                  position: absolute;
+                  background-color: rgba(255, 255, 255, 0.5);
+                  display: block;
+                  margin-top: ( 0 - $well-padding-vertical );
+                  margin-left: ( 0 - $well-padding-horizontal );
+                  z-index: 9;
+                  visibility: visible;
+                  height: 100%;
+                }
+                screen {
+                    &::before {
+                        @extend .fa;
+                        @extend .fa-spin;
+                        $spinner-width: 50px;
+                        position: absolute;
+                        margin-left: ( $width - $spinner-width ) / 2;
+                        color: $text-muted; 
+                        margin-top: 100px;
+                        font-size: $spinner-width;
+                        z-index: 10;
+                        content: $fa-var-cog;
+                        visibility: visible;
+                        opacity: 1.0;
+                    }
+                }
+            }
+            .form-inline {
+            }
+            .row.ng-hide {
+                display: none;
+            }
+        }
+    }
+}
