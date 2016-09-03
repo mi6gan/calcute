@@ -1,0 +1,35 @@
+<div class="row grid-50">
+    <div class="col-xs-11 col-xs-offset-1 text-left">
+        <label ng-bind="field.path.options.label"></label>
+        <p class="help-text" ng-if="field.path.options.helpText && field.$valid && field.$empty">
+            <ng-bind ng-bind="field.path.options.helpText"></ng-bind>
+        </p>
+        <ul class="list-unstyled error-messages" ng-if="!field.$valid" role="alert" multiple>
+            <ng-repeat ng-repeat="message in field.$errorMessages">
+                <li><small class="text-danger">{{ message }}</small></li>
+            </ng-repeat>
+        </ul>
+    </div>
+    <div class="col-xs-22">
+        <div class="select">
+        <span ng-repeat="countLabel in field.path.options.countLabels">
+            <a role="button" ng-class="( field.value.length == countLabel[0] ) ? 'active' : ''" ng-click="field.setCount(countLabel[0])" >
+                <small ng-bind="countLabel[1]"></small>
+            </a>
+        </span>
+        </div>
+        <ng-repeat ng-repeat="item in field.value">
+        <model-form class="inline" src="item.model" instance="item" extra="{index: $index+1}"> 
+            <hr class="transparent small" />
+            <div class="row grid-24">
+                <div class="col-xs-12"><label>Водитель {{ modelForm.extra.index }}</label></div>
+                <div class="col-xs-12 select"><model-field name="gender" always-visible="true" /></div>
+            </div>
+            <div class="row grid-24">
+                <div class="col-xs-12"><model-field name="age" always-visible="true" /></div>
+                <div class="col-xs-12"><model-field name="experience" always-visible="true" /></div>
+            </div>
+        </model-form>
+        </ng-repeat>
+    </div>
+</div>

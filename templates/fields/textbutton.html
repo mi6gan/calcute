@@ -1,0 +1,2 @@
+<input name="{{ field.name }}" ng-model="field.value" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" />
+<a ng-class=" ( field.$empty || !field.$valid ) ? '' : 'active' " class="change-btn" role="button" ng-click="modelForm.instance.$submitted = true">&#9166; подтвердить</a>

@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
-module.exports.schemas = {
+(function initModule() {
+  this.schemas = {
     CarBrand: new mongoose.Schema({
         icon: String,
         isDraft: {
@@ -13,7 +14,7 @@ module.exports.schemas = {
             required: true,
             inputAttrs: {
                 placeholder: 'Введите название марки'
-            }
+            },
         }
     }),
     Car: new mongoose.Schema({
@@ -29,7 +30,8 @@ module.exports.schemas = {
         },
         brand: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'CarBrand'
+            ref: 'CarBrand',
+            template: '/templates/fields/complex/carbrand.html'
         },
         isDraft: {
             type: Boolean,
@@ -40,7 +42,8 @@ module.exports.schemas = {
         car: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Car',
-            label: 'Автомобиль'
+            label: 'Автомобиль',
+            template: '/templates/fields/complex/car.html'
         },
         customCar: {
             type: String,
@@ -221,6 +224,17 @@ module.exports.schemas = {
                 'Введенный стаж не соответствует возрасту',
                 'not fits the age'
             ]
+        },
+        licenceId: {
+            required: true,
+            type: String,
+            label: 'Водительское удостоверение',
+            mask: 'dddd dddddd',
+            template: '/templates/fields/generic/text.html',
+            inputAttrs: {
+                size: 15,
+                placeholder: 'Серия Номер'
+            },
         }
     }),
     DiscountInfo: new mongoose.Schema({
@@ -254,18 +268,6 @@ module.exports.schemas = {
                 size: 8, 
                 placeholder: "ДД.ММ.ГГГГ"
             }
-        },
-        licenceId: {
-            required: true,
-            label: 'Водительское удостоверение',
-            type: String,
-            template: '/templates/fields/text.html',
-            mask: 'dddd dddddd',
-            rowClass: 'grid-16',
-            inputAttrs: {
-                size: 15,
-                placeholder: 'Серия Номер'
-            },
         },
         company: {
             required: true,
@@ -314,10 +316,14 @@ module.exports.schemas = {
             type: String
         }
     })
-};
+  };
 
-for( var schemaName in module.exports.schemas ) {
-    module.exports.schemas[schemaName].statics.getPathErrorMessage = function portable (pathName, errorKey) {
+  this.schemas.DiscountInfo.post('init', function(doc) {
+      console.log(doc);
+  });
+
+  for( var schemaName in this.schemas ) {
+    this.schemas[schemaName].statics.getPathErrorMessage = function portable (pathName, errorKey) {
             var messages = {
                 $: {
                     $: "введите правильное значение" ,
@@ -330,7 +336,7 @@ for( var schemaName in module.exports.schemas ) {
                pathMessages.$ ||
                messages.$.$;
     };
-    module.exports.schemas[schemaName].methods.setValidity = function portable (pathName, valid) {
+    this.schemas[schemaName].methods.setValidity = function portable (pathName, valid) {
             if( pathName.length && pathName[0] == '_' ) {
                 return;
             }
@@ -359,28 +365,28 @@ for( var schemaName in module.exports.schemas ) {
                 }
             }
     };
-}
+  }
 
-module.exports.schemas.Feedback.methods.isVisible = function portable ( pathName ) {
+  this.schemas.Feedback.methods.isVisible = function portable ( pathName ) {
     switch(pathName) {
         case 'franchiseSum':
-            var schema = this.__proto__.model.schema,
+            var schema = this.schema,
                 fEnum = schema.paths.franchise.options.enum,
                 fValue = this.franchise;
             return (fEnum.indexOf(fValue) == 0);
         case 'bank':
-            var schema = this.__proto__.model.schema,
+            var schema = this.schema,
                 cEnum = schema.paths.credit.options.enum,
                 cValue = this.credit;
             return (cEnum.indexOf(cValue) == 0);
         default:
             return true;
     }
-}
+  }
 
-module.exports.schemas.Driver.methods.display = function portable ( pathName ) {
+  this.schemas.Driver.methods.display = function portable ( pathName ) {
     var value = this[pathName],
-        path = this.__proto__.model.schema.paths[pathName];
+        path = this.schema.paths[pathName];
     if(undefined !== value) {
         var n = parseInt(value),
             plural = (n%10==1 && n%100!=11 ? 0 : n%10>=2 && n %10<=4 && (n%100<10 || n%100>=20) ? 1 : 2),
@@ -388,12 +394,12 @@ module.exports.schemas.Driver.methods.display = function portable ( pathName ) {
         return (path.options.label + ' ' + n + ' ' + years[plural]);
     }
     return;
-};
+  };
 
-// next shitty display methods are need to be refactored somehow but I don't give a fuck for awhile
-module.exports.schemas.DiscountInfo.methods.display = function portable ( pathName ) {
+  // next shitty display methods are need to be refactored somehow but I don't give a fuck for awhile
+  this.schemas.DiscountInfo.methods.display = function portable ( pathName ) {
     var value = this[pathName],
-        path = this.__proto__.model.schema.paths[pathName],
+        path = this.schema.paths[pathName],
         index = -1;
     if( path.options.enum ) {
         index = path.options.enum.indexOf(value);
@@ -441,11 +447,11 @@ module.exports.schemas.DiscountInfo.methods.display = function portable ( pathNa
                 return value.label;
             }
     }
-    return (typeof( value ) == 'object') ? value.label : String( value );
-};
-module.exports.schemas.Feedback.methods.display = function portable ( pathName ) {
+    return (typeof( value ) == 'object') ? value.label : (value ? String( value ) : null);
+  };
+  this.schemas.Feedback.methods.display = function portable ( pathName ) {
     var value = this[pathName],
-        path = this.__proto__.model.schema.paths[pathName],
+        path = this.schema.paths[pathName],
         index = -1;
     if( path.options.enum ) {
         index = path.options.enum.indexOf(value);
@@ -491,22 +497,21 @@ module.exports.schemas.Feedback.methods.display = function portable ( pathName )
             }
     }
     return (typeof( value ) == 'object') ? value.label : String( value );
-};
-
-
-module.exports.schemas.Feedback.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
+  };
+  this.schemas.Feedback.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
     switch( pathName ) {
         case 'drivers':
             return 'Заполните все поля (эти сообщения улучшим перед релизом, пока не стал убивать на это время)'; 
     }    
     return 'Введите правильное значение';
-};
-module.exports.schemas.Driver.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
+  };
+  this.schemas.Driver.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
     return 'Заполните все поля';
-};
-module.exports.schemas.Car.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
+  };
+  this.schemas.Car.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
     return 'Введите правильное значение';
-};
-module.exports.schemas.CarBrand.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
+  };
+  this.schemas.CarBrand.methods.getPathErrorMessage = function portable ( pathName, errKey ) {
     return 'Введите правильное значение';
-};
+  };
+}).call(module.exports);

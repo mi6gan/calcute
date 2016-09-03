@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html ng-app="Calcute" data-ng-csp="no-inline-style" lang="ru">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=665, initial-scale=1">
+
+    <title>Calcute Demo Page</title>
+    <script type="text/javascript" src="/calcute.js"></script>
+    <script type="text/javascript" src="/vendor/angular/js/angular-messages.js"></script>
+    <script type="text/javascript" src="/vendor/angular/js/angular-animate.js"></script>
+    <script type="text/javascript" src="/vendor/angular/js/angular-route.js"></script>
+    <script type="text/javascript" src="/vendor/angular/js/angular-masker.js"></script>
+    <!--script type="text/javascript" src="/assets/build/vendor.min.js"></script-->
+    <script type="text/javascript" src="/calcute/js/apps/controllers.js"></script>
+    <!--script type="text/javascript" src="/assets/build/calcute.min.js"></script-->
+    <link href="/vendor/bootstrap/css/base.css" rel="stylesheet">
+    <link href="/calcute/css/base.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    </head>
+    <body>
+        <div class="container-fluid calcute-demo calcute">
+            <div class="module">
+                <div ng-controller="KaskoCalculator">
+                    <div class="start" ng-hide="feedback">
+                        <div class="row">
+                            <div class="col-xs-offset-3 col-xs-6 text-center">
+                                <button ng-model="feedback" ng-click="feedback = newFeedback()" class="btn btn-ca btn-lg btn-primary">
+                                    <span class="ca ca-calculator" aria-hidden="true"></span>
+                                    Рассчитать стоимость
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-offset-3 col-xs-6">
+                                <span>&nbsp;</span>
+                                <h4 class="text-center text-muted">Это недолго и вам очень-очень понравится, обещаем!</h4> 
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="well kasko-calculator" ng-if="feedback" screens>
+    
+                        <!-- ================================================== -->
+                        <ng-if ng-if="!feedback.$submitted">
+                        <screen class="container-fluid" ng-if="!feedback.car.brand._id && !feedback.car._id && !feedback.car.$submitted">
+                            <h3>
+                                <span class="well-placeholder">&nbsp;</span><big class="ca ca-car"></big><span class="well-placeholder">&nbsp;&nbsp;</span>Выберите марку своего авто:
+                            </h3>
+                            <model-form src="models.Car" instance="feedback.car">
+                                <model-field name="brand" />
+                                <!--div class="form-group has-feedback" ng-show="modelForm.instance.car.$input">
+                                    <model-field name="customCar" auto-focus="true" />
+                                    <a ng-class=" ( field.$empty || !field.$valid ) ? '' : 'active' " class="change-btn" role="button" ng-click="modelForm.instance.car.$submitted = true">&#9166; подтвердить</a>
+                                </div-->
+                            </model-form>
+                        </screen>
+                        <!-- ================================================== -->
+                        <screen class="container-fluid" ng-if="feedback.car.brand._id && !feedback.car.$submitted">
+                            <h3 ng-class="feedback.car.brand.icon ? 'with-icon' : ''">
+                                <a role="button" class="btn btn-link btn-lg unstyled" ng-click="feedback.car.brand = undefined">
+                                    <big class="fa fa-angle-left"></big><i class="well-placeholder">&nbsp;</i>Выберите модель вашего <ng-bind ng-bind="feedback.car.brand.label"></ng-bind>:
+                                    <img ng-if="feedback.car.brand.icon" class="invisible" ng-src="{{ feedback.car.brand.icon }}" />
+                                </a>
+                                <img ng-if="feedback.car.brand.icon" class="pull-right" ng-src="{{ feedback.car.brand.icon }}" />
+                            </h3>
+                            <p>&nbsp;</p>
+
+                            <model-form src="models.Feedback" instance="feedback" include-fields="car">
+                                <model-field name="car" />
+                            </model-form>
+                        </screen>
+    
+                        <screen class="container-fluid" ng-if="feedback.car.$submitted">
+                            <p>&nbsp;</p>
+
+                            <model-form src="models.Feedback" exclude-fields="car customCar" instance="feedback">
+                                <div ng-repeat="item in modelForm.fieldNames">
+                                    <model-field name="{{ item }}" />
+                                    <hr/>
+                                </div>
+
+                                <h1 class="text-center" ng-if="modelForm.$totalEmpty">
+                                    <label class="semi-transparent text-muted">Осталось еще <span ng-bind="modelForm.$totalEmpty"></span>...</label>
+                                </h1>
+
+                                <div class="row">
+                                    <div class="col-xs-12 select wide-lines">
+                                        <a role="button" ng-click="modelForm.instance.car = undefined" class="active editable"><small ng-bind="modelForm.instance.display('car')"></small></a>
+                                        <ng-repeat ng-repeat="field in modelForm.fields" ng-if="!field.$empty && field.value">
+                                            <a role="button" ng-click="field.value = undefined" class="disabled editable"><small ng-bind="field.displayValue"></small></a>
+                                        </ng-repeat>
+                                    </div>
+                                </div>
+                                <p>&nbsp;</p>
+                                <div ng-if="modelForm.$totalEmpty == 0 && modelForm.$totalInvalid == 0" class="screen-footer">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p>&nbsp;</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 text-left">
+                                            <p><br/>&ndash; Все готово для отправки, сэр!<br/>&nbsp;</p>
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <button class="btn btn-lg btn-submit" ng-click="modelForm.save()">&nbsp; &nbsp; Отправить заявку &nbsp;&nbsp;<span class="arrow pull-right"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </model-form>
+                        </screen>
+                        </ng-if>
+
+                        <ng-if ng-if="feedback.$submitted">
+                        <screen class="container-fluid">
+                            <p class="h2 text-center bigger-line-height">
+                                Хотите расчет с учетом накопленных скидок?<br/>
+                                Тогда заполните следующие поля:
+                            </p>
+                            <p>&nbsp</p>
+                            <model-form src="models.DiscountInfo" defaults="{ feedback: feedback._id, fullName: feedback.fullName }" instance="discountInfo">
+                                <div ng-repeat="item in modelForm.fieldNames">
+                                    <model-field name="{{ item }}" />
+                                    <hr/>
+                                </div>
+                                <h1 class="text-center" ng-if="modelForm.$totalEmpty">
+                                    <label class="semi-transparent text-muted">Осталось еще <span ng-bind="modelForm.$totalEmpty"></span>...</label>
+                                </h1>
+                                <div class="row">
+                                    <div class="col-xs-12 select wide-lines">
+                                        <ng-repeat ng-repeat="field in modelForm.fields" ng-if="!field.$empty && field.$valid">
+                                            <a role="button" ng-click="field.value = undefined" class="disabled editable"><small ng-bind="field.displayValue"></small></a>
+                                        </ng-repeat>
+                                    </div>
+                                </div>
+                            </model-form>
+                        </screen>
+                        </ng-if>
+
+                    </div>
+                </div><!-- KaskoCalculator -->
+    
+                <p>
+                Where does it come from?
+    
+                Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+    
+                The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
+                </p>
+    
+            </div><!-- calcute container -->
+        </div><!-- container-fluid -->
+    </body>
+</html>

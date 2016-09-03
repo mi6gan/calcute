@@ -1,0 +1,14 @@
+<div>
+<div row-array="field.ref.queryPubTop" row-columns="6" column-breakpoint='xs' row-class="outer" first-column-class="text-left" column-class="text-center" last-column-class="text-right">
+    <button class="btn btn-link" role="button" ng-class="( field.value == item ) ? 'active' : ''" ng-click="field.setRef(item)">
+        <img ng-src="{{ item.icon }}" />
+        <p class="center-block small" ng-bind="item.label"></p>
+    </button>
+</div>
+<hr/>
+<div row-array="field.ref.queryPub" row-columns="6" column-breakpoint='xs' array-args='{ $orderby: { label: 1 } }' row-class="outer outer-end">
+    <small><a role="button" ng-class="( field.value == item ) ? 'active' : ''" ng-click="field.setRef(item)" ng-bind="item.label"></a><br/></small>
+    <small ng-if="last"><a role="button" ng-class="field.$form.instance.$input ? 'active' : ''" ng-click="field.$form.instance.$input = true">Другая</a></small>
+</div>
+<p>&nbsp;</p>
+</div>
