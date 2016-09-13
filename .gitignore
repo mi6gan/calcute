@@ -1,4 +1,4 @@
-/angoose-client-generated.js
 /node_modules
-/static/build
-/lib/settings/localnet.js
+/build
+/settings/localnet.js
+.*.swp

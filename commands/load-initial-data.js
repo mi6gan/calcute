@@ -8,12 +8,12 @@ function loadCars() {
     var data = fs.readFileSync('fixtures/legacy.json'),
         jsonData = JSON.parse(data),
         icons = {
-            BMW: '/assets/build/images/brand-1.png',
-            Audi: '/assets/build/images/brand-2.png',
-            Ford: '/assets/build/images/brand-3.png',
-            Honda: '/assets/build/images/brand-4.png',
-            Hyundai: '/assets/build/images/brand-5.png',
-            Mazda: '/assets/build/images/brand-6.png'
+            BMW: '/images/brand-1.png',
+            Audi: '/images/brand-2.png',
+            Ford: '/images/brand-3.png',
+            Honda: '/images/brand-4.png',
+            Hyundai: '/images/brand-5.png',
+            Mazda: '/images/brand-6.png'
         };
     return Promise.all(jsonData.brands.map(function(brand){
         console.log('Adding brand ' + brand.text + '\n');

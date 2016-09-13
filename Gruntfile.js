@@ -1,5 +1,7 @@
-module.exports = function(grunt) {
-
+module.exports = function(grunt, settingsKey) {
+  var tasks = grunt.cli ? grunt.cli.tasks : [],
+      mainTask = tasks.length ? tasks[0] : 'default'; 
+  settingsKey = settingsKey||((mainTask=='default') ?  'prod' : 'local');
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     sass: {
@@ -8,108 +10,88 @@ module.exports = function(grunt) {
           includePaths: ['node_modules/bootstrap-sass/assets/stylesheets']
       },
       base: {
-        src: 'static/src/scss/base.scss',
-        dest: 'static/build/calcute/css/base.css'
+        src: 'assets/demo/scss/base.scss',
+        dest: 'build/demo/css/base.css'
       },
       bootstrap: {
-        src: 'static/src/scss/bootstrap.scss',
-        dest: 'static/build/vendor/bootstrap/css/base.css'
+        src: 'assets/demo/scss/bootstrap.scss',
+        dest: 'build/demo/vendor/bootstrap/css/base.css'
       }
     },
     copy: {
     images: {
 		files: [
             {expand: true,
-            cwd: 'static/src/images/',
-            src: ['*.{png,jpg}'], dest: 'static/build/images'}
+            cwd: 'assets/demo/images/',
+            src: ['*.{png,jpg}'], dest: 'build/demo/images'}
         ]
     },
     icons: {
 		files: [
             {expand: true,
-            cwd: 'static/src/icons/',
-            src: ['*.{png,jpg}'], dest: 'static/build/calcute/icons'}
+            cwd: 'assets/demo/icons/',
+            src: ['*.{png,jpg}'], dest: 'build/demo/icons'}
         ]
-    },
-    js: {
-        files: [{
-            expand: true,
-            cwd: 'static/src/js',
-            src: ['**'], dest: 'static/build/calcute/js'}]
-    },
-    angularjs: {
-		files: [{
-            expand: true,
-            cwd: 'node_modules/angular',
-            src: ['angular.js',], dest: 'static/build/vendor/angular/js'}]
-    },
-    angularmessages: {
-		files: [{
-            expand: true,
-            cwd: 'node_modules/angular-messages',
-            src: ['angular-messages.js',], dest: 'static/build/vendor/angular/js'}]
-    },
-    angularanimatejs: {
-		files: [{
-            expand: true,
-            cwd: 'node_modules/angular-animate',
-            src: ['angular-animate.js',], dest: 'static/build/vendor/angular/js'}]
-    },
-    angularresourcejs: {
-		files: [{
-            expand: true,
-            cwd: 'node_modules/angular-resource',
-            src: ['angular-resource.js',], dest: 'static/build/vendor/angular/js'}]
-    },
-    angularroutejs: {
-		files: [{
-            expand: true,
-            cwd: 'node_modules/angular-route',
-            src: ['angular-route.js',], dest: 'static/build/vendor/angular/js'}]
-    },
-    angularmasksjs: {
-        files: [{
-            src: 'static/src/vendor/ngMask/ngMask.js', 
-            dest: 'static/build/vendor/angular/js/angular-mask.js'
-        }]
     },
     bootstrapjs: {
         files: [{
             expand: true,
             cwd: 'node_modules/bootstrap-sass/javascripts/bootstrap',
             src: ['button.js'],
-            dest: 'static/build/vendor/js/bootstrap'}]
+            dest: 'build/vendor/bootstrap/js'}]
       },
     fonts: {
 		files: [{
                 expand: true,
                 cwd: 'node_modules/font-awesome/fonts/',
                 src: ['*.{otf,eot,svg,ttf,woff,woff2}'],
-                dest: 'static/build/calcute/fonts/'
+                dest: 'build/demo/fonts/'
             }]
       },
     },
     watch: {
         sass: {
-            files: ['static/src/scss/**'],
+            files: ['assets/**/scss/**'],
             tasks: ['sass:base', 'sass:bootstrap']
         },
     	fonts: {
-		    files: ['static/src/fonts/**'],
+		    files: ['assets/**/fonts/**'],
 		    tasks: ['copy:fonts']
 	    },
     	images: {
-		    files: ['static/src/images/**'],
+		    files: ['assets/**/images/**'],
 		    tasks: ['copy:images']
 	    },
     	icons: {
-		    files: ['static/src/icons/**'],
+		    files: ['assets/**/icons/**'],
 		    tasks: ['copy:icons']
 	    },
     	js: {
-		    files: ['static/src/js/**'],
+		    files: ['assets/**/js/**'],
 		    tasks: ['copy:js']
 	    },
+        browserifycalcute: {
+		    files: ['node_modules/mongoose/lib/browser.js', 'settings/local.js', 'apps/demo.js'],
+            tasks: ['browserify:calcute']
+        },
+        gruntfile: {
+            files: ['Gruntfile.js'],
+            tasks: [mainTask]
+        }
+    },
+    browserify: {
+        calcute: {
+            files: {
+                'build/demo/app.js': ['apps/demo.js']
+            },
+            options: {
+                alias: {
+                    'mongoose': './node_modules/mongoose/lib/browser.js',
+                    'mongoose-id-validator': './node_modules/mongoose-id-validator/lib/id-validator.js',
+                    'settings': './settings/' + settingsKey + '.js'
+                }
+            }
+       }
     },
     uglify: {
         vendorminjs: {
@@ -119,7 +101,7 @@ module.exports = function(grunt) {
                 'sourceMap': true
             },
             files: {
-                'static/build/vendor.min.js': ['static/build/vendor/angular/js/angular.js', 'static/build/vendor/angular/js/angular-*.js']
+                'build/vendor.min.js': ['build/vendor/angular/js/angular.js', 'build/vendor/angular/js/angular-*.js']
             }
         },
         calcuteminjs: {
@@ -129,17 +111,10 @@ module.exports = function(grunt) {
                 'sourceMap': true
             },
             files: {
-                'static/build/calcute.min.js': ['server/angoose-client-generated.js', 'static/build/calcute/**/*.js']
+                'build/demo/app.min.js': ['build/demo/app.js']
             }
         }
     },
-    browserify: {
-        angularmasker: {
-            files: {
-                'static/build/vendor/angular/js/angular-masker.js': ['node_modules/angular-masker/src/angular-masker.js']
-            }
-        }
-    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -147,7 +122,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.registerTask('default', ['copy', 'sass', 'browserify']);
-  grunt.registerTask('prod', ['copy', 'sass', 'browserify', 'uglify']);
-
+  grunt.registerTask('local', ['copy', 'sass', 'browserify']);
+  grunt.registerTask('default', ['copy', 'sass', 'browserify', 'uglify']);
 };

@@ -14,13 +14,13 @@
     "angular-bridge": "^0.5.0",
     "angular-masker": "git+https://github.com/mi6gan/angular-masker.git",
     "angular-messages": "^1.5.5",
+    "angular-mocks": "^1.5.8",
     "angular-resource": "~1.5.5",
     "angular-route": "~1.5.5",
     "animate.css": "~3.5.1",
     "body-parser": "^1.15.2",
     "bootstrap-sass": "^3.3.7",
     "bower": "~1.7.9",
-    "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "cors": "~2.7.1",
     "easyimage": "^2.1.0",
@@ -33,14 +33,21 @@
     "grunt-contrib-uglify": "~1.0.1",
     "grunt-contrib-watch": "~1.0.0",
     "grunt-sass": "~1.1.0",
+    "karma": "^1.2.0",
     "mocha": "^3.0.2",
     "mongoose": "^4.6.0",
     "mongoose-id-validator": "^0.3.0",
     "mpromise": "~0.5.5",
+    "ng-schema": "^0.1.0",
     "protractor": "^4.0.4",
     "request": "~2.72.0",
     "sinon": "^1.17.5",
     "supertest": "^2.0.0",
     "wait.for": "~0.6.6"
+  },
+  "devDependencies": {
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-mocha": "^1.1.1"
   }
 }

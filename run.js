@@ -1,12 +1,12 @@
-var models = require("./models/local.js"),
+var models = require("./lib/models/local.js"),
     fs     = require('fs');
 var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
-    settings = require('./settings.js')[settingsKey];
+    settings = require('./settings/index.js')[settingsKey];
 (function runServer(){
     var initModels = new Promise(function initModels(resolve) {
       var request = require('request'),
           mongoose = require('mongoose'),
-          remote = require("./models/remote.js");
+          remote = require("./lib/models/remote.js");
       console.log('initalizing db and models...');
       remote.schemas.Feedback.post('save', function(doc) {
         doc.populate('car', function(err, car) {
@@ -83,25 +83,11 @@ var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
           resolve();
       });
     });
-    var browserifySrc = new Promise(function browserifySrc(resolve) {
-        var browserify = require('browserify');
-        console.log('browserifying sources...');
-        var browserifier = browserify(),
-            jsStream = fs.createWriteStream('./static/build/calcute.js');
-        browserifier.add('node_modules/mongoose/lib/browser.js', {'expose': 'mongoose'});
-        browserifier.add('./lib/settings/' + settingsKey + '.js', {'expose': 'settings'});
-        browserifier.add('./lib/angular-models.js');
-        jsStream.on('finish', function () {
-            resolve();
-            console.log('sources ready for a browser');
-        });
-        browserifier.bundle().pipe(jsStream);
-    });
     var gruntBuild = new Promise(function gruntBuild(resolve) {
         var init = require('./Gruntfile.js'),
             grunt = require('grunt');
         console.log('running grunt tasks...');
-        init(grunt);
+        init(grunt, settingsKey);
         grunt.tasks(settings.GRUNT_TASKS, {}, function () {
             resolve();
             console.log('grunt tasks finished');
@@ -140,7 +126,7 @@ var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
         app.use(bodyParser.json());
         
         app.get('/demo', function(req, res){
-            fs.readFile('demo/index.html', function(err, page) {
+            fs.readFile('assets/demo/index.html', function(err, page) {
                 res.writeHead(200, {'Content-Type': 'text/html'});
                 res.write(page);
                 res.end();
@@ -153,7 +139,7 @@ var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
             res.end();
         });
         app.set('port', 8080);
-        app.use(express.static(__dirname + '/static/build'));
+        app.use(express.static(__dirname + '/build'));
         
         
         var bridge = new Bridge(app, {
@@ -176,7 +162,6 @@ var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
 
     Promise.all([
         initModels,
-        browserifySrc,
         gruntBuild,
         initServer
     ]).then(function onFullfilled() {

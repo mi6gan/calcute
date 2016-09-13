@@ -20,7 +20,7 @@ exports.local = {
     GATEWAY_URL: 'http://debuggw.cube-group.ru',
     GATEWAY_USERNAME: 'cubegroup',
     GATEWAY_PASSWORD: 'mieSh2ut',
-    GRUNT_TASKS: ['default']
+    GRUNT_TASKS: ['local']
 }
 
 exports.localnet = {

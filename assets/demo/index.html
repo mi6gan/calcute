@@ -1,21 +1,14 @@
 <!DOCTYPE html>
-<html ng-app="Calcute" data-ng-csp="no-inline-style" lang="ru">
+<html ng-app="Demo" data-ng-csp="no-inline-style" lang="ru">
     <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=665, initial-scale=1">
 
     <title>Calcute Demo Page</title>
-    <script type="text/javascript" src="/calcute.js"></script>
-    <script type="text/javascript" src="/vendor/angular/js/angular-messages.js"></script>
-    <script type="text/javascript" src="/vendor/angular/js/angular-animate.js"></script>
-    <script type="text/javascript" src="/vendor/angular/js/angular-route.js"></script>
-    <script type="text/javascript" src="/vendor/angular/js/angular-masker.js"></script>
-    <!--script type="text/javascript" src="/assets/build/vendor.min.js"></script-->
-    <script type="text/javascript" src="/calcute/js/apps/controllers.js"></script>
-    <!--script type="text/javascript" src="/assets/build/calcute.min.js"></script-->
-    <link href="/vendor/bootstrap/css/base.css" rel="stylesheet">
-    <link href="/calcute/css/base.css" rel="stylesheet">
+    <script type="text/javascript" src="demo/app.js"></script>
+    <link href="demo/vendor/bootstrap/css/base.css" rel="stylesheet">
+    <link href="demo/css/base.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -26,10 +19,11 @@
         <div class="container-fluid calcute-demo calcute">
             <div class="module">
                 <div ng-controller="KaskoCalculator">
-                    <div class="start" ng-hide="feedback">
+                <form model-schema="Feedback" form-data-prefix="feedback" name="feedbackForm">
+                    <div class="start" ng-hide="feedback.$inited">
                         <div class="row">
                             <div class="col-xs-offset-3 col-xs-6 text-center">
-                                <button ng-model="feedback" ng-click="feedback = newFeedback()" class="btn btn-ca btn-lg btn-primary">
+                                <button ng-click="feedback.$inited = true" class="btn btn-ca btn-lg btn-primary">
                                     <span class="ca ca-calculator" aria-hidden="true"></span>
                                     Рассчитать стоимость
                                 </button>
@@ -51,13 +45,24 @@
                             <h3>
                                 <span class="well-placeholder">&nbsp;</span><big class="ca ca-car"></big><span class="well-placeholder">&nbsp;&nbsp;</span>Выберите марку своего авто:
                             </h3>
-                            <model-form src="models.Car" instance="feedback.car">
-                                <model-field name="brand" />
-                                <!--div class="form-group has-feedback" ng-show="modelForm.instance.car.$input">
-                                    <model-field name="customCar" auto-focus="true" />
-                                    <a ng-class=" ( field.$empty || !field.$valid ) ? '' : 'active' " class="change-btn" role="button" ng-click="modelForm.instance.car.$submitted = true">&#9166; подтвердить</a>
+                            <p>&nbsp;</p>
+                                <ng-model ng-model="feedback.label" />
+                                <!--ng-model ng-model="feedback.car">
+                                    <form model-schema="Car" form-data-prefix="car" name="carForm">
+                                        <input ng-model="car.fullLabel" type="text" class="form-control input-sm" />
+                                    <!--form model-schema="Car" form-data-prefix>
+                                    <!--div row-array=".queryPubTop" row-columns="6" column-breakpoint='xs' row-class="outer" first-column-class="text-left" column-class="text-center" last-column-class="text-right">
+                                        <button class="btn btn-link" role="button" ng-class="( field.value == item ) ? 'active' : ''" ng-click="field.setRef(item)">
+                                            <img ng-src="{{ item.icon }}" />
+                                            <p class="center-block small" ng-bind="item.label"></p>
+                                        </button>
+                                    </div-->
+                                <!--model-field name="brand" /-->
+                                <!--model-field name="fullLabel" /-->
+                                <!--div class="form-group has-feedback" ng-show="modelForm.instance.$input">
                                 </div-->
-                            </model-form>
+                                </ng-model>
+                                {{ feedbackForm.car.$valid }}
                         </screen>
                         <!-- ================================================== -->
                         <screen class="container-fluid" ng-if="feedback.car.brand._id && !feedback.car.$submitted">
@@ -69,15 +74,13 @@
                                 <img ng-if="feedback.car.brand.icon" class="pull-right" ng-src="{{ feedback.car.brand.icon }}" />
                             </h3>
                             <p>&nbsp;</p>
-
-                            <model-form src="models.Feedback" instance="feedback" include-fields="car">
+                            <model-form src="models.Feedback" instance="feedback">
                                 <model-field name="car" />
                             </model-form>
                         </screen>
     
                         <screen class="container-fluid" ng-if="feedback.car.$submitted">
                             <p>&nbsp;</p>
-
                             <model-form src="models.Feedback" exclude-fields="car customCar" instance="feedback">
                                 <div ng-repeat="item in modelForm.fieldNames">
                                     <model-field name="{{ item }}" />
@@ -143,6 +146,7 @@
                         </ng-if>
 
                     </div>
+                </form>
                 </div><!-- KaskoCalculator -->
     
                 <p>
