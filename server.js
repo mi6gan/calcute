@@ -140,6 +140,7 @@ var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
         });
         app.set('port', 8080);
         app.use(express.static(__dirname + '/build'));
+        app.use(express.static(__dirname + '/assets'));
         
         
         var bridge = new Bridge(app, {

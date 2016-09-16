@@ -1,13 +1,13 @@
 <div class="row grid-50">
 <div class="col-xs-11 col-xs-offset-1 text-left">
     <label ng-bind="field.path.options.label"></label>
-    <p class="help-text" ng-if="field.path.options.helpText && !fieild.value && !field.$error">
+    <p class="help-text" ng-if="field.path.options.helpText && !field.$viewValue && !field.$error">
         <ng-bind ng-bind="field.path.options.helpText"></ng-bind>
     </p>
 </div>
 <div class="col-xs-38 select" ng-class="field.path.options.enum.length > 10 ? 'compact' : ''">
     <span class="grid-11" ng-repeat="item in field.path.options.enum">
-        <a name="{{ field.name }}" role="button" ng-class="(field.value==item) ? 'active' : ''" ng-model="field.value" set-on="click" set-value="item">
+        <a name="{{ field.name }}" role="button" ng-class="(field.$viewValue==item) ? 'active' : ''" ng-click="field.$setViewValue(item)">
             <small ng-bind="item.label ? item.label : item"></small>
         </a>
     </span>

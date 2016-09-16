@@ -71,7 +71,7 @@ module.exports = function(grunt, settingsKey) {
 		    tasks: ['copy:js']
 	    },
         browserifycalcute: {
-		    files: ['node_modules/mongoose/lib/browser.js', 'settings/local.js', 'apps/demo.js'],
+		    files: ['settings/' + settingsKey + '.js', 'apps/demo.js', 'lib/**/*.js'],
             tasks: ['browserify:calcute']
         },
         gruntfile: {
@@ -80,28 +80,56 @@ module.exports = function(grunt, settingsKey) {
         }
     },
     browserify: {
-        calcute: {
+        vendor: {
             files: {
-                'build/demo/app.js': ['apps/demo.js']
+                'build/vendor/js/bundle.js': [
+                    'node_modules/mongoose/lib/browser.js',
+                    'node_modules/mongoose-id-validator/lib/id-validator.js'
+                ],
             },
             options: {
                 alias: {
                     'mongoose': './node_modules/mongoose/lib/browser.js',
-                    'mongoose-id-validator': './node_modules/mongoose-id-validator/lib/id-validator.js',
-                    'settings': './settings/' + settingsKey + '.js'
+                    'mongoose-id-validator': './node_modules/mongoose-id-validator/lib/id-validator.js'
+                },
+                browserifyOptions: {
+                    debug: true
+                }
+            }
+        },
+        calcute: {
+            files: {
+                'build/demo/js/app.js': ['apps/demo.js']
+            },
+            options: {
+                alias: {
+                    'settings': './settings/' + settingsKey + '.js',
+                },
+                external: ['mongoose', 'mongoose-id-validator'],
+                browserifyOptions: {
+                    debug: true
                 }
             }
        }
     },
     uglify: {
-        vendorminjs: {
+        angularminjs: {
             options: {
                 'report': 'min',
                 'mangle': false,
                 'sourceMap': true
             },
             files: {
-                'build/vendor.min.js': ['build/vendor/angular/js/angular.js', 'build/vendor/angular/js/angular-*.js']
+                'build/vendor/js/angular.min.js': ['build/vendor/angular/js/angular.js', 'build/vendor/angular/js/angular-*.js']
+            },
+        },
+        vendorminjs: {
+            options: {
+                'report': 'min',
+                'sourceMap': true
+            },
+            files: {
+                'build/vendor/js/bundle.min.js': ['build/vendor/js/bundle.js']
             }
         },
         calcuteminjs: {
@@ -111,10 +139,10 @@ module.exports = function(grunt, settingsKey) {
                 'sourceMap': true
             },
             files: {
-                'build/demo/app.min.js': ['build/demo/app.js']
+                'build/demo/js/app.min.js': ['build/demo/js/app.js']
             }
         }
-    },
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -123,5 +151,6 @@ module.exports = function(grunt, settingsKey) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.registerTask('local', ['copy', 'sass', 'browserify']);
+  grunt.registerTask('prod', ['copy', 'sass', 'browserify', 'uglify']);
   grunt.registerTask('default', ['copy', 'sass', 'browserify', 'uglify']);
 };

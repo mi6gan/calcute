@@ -3,21 +3,22 @@
     var angular = require('angular');
     var directives = {
         "array": require('../lib/directives/array.js'),
-        "row-array": require('../lib/directives/row-array.js'),
-        "form-schema": require('../lib/directives/form-schema.js'),
+        "rowArray": require('../lib/directives/row-array.js'),
         "screen": require('../lib/directives/screen.js'),
         "screens": require('../lib/directives/screens.js'),
-        "ng-model": require('../lib/directives/ng-model.js')
+        //"ngModel": require('../lib/directives/ng-model.js')
     };
     var modules = {
-        'ngMessages': require('angular-messages'),
-        'ngRoute': require('angular-route'),
-        'ngAnimate': require('angular-animate'),
-        'masker': require('./node_modules/angular-masker/src/angular-masker.js'),
         "models": require('../lib/modules/models.js')
     };
-
-    var app = angular.module('Demo', Object.keys(modules));
+    var extModules = {
+        'ngMessages': require('angular-messages'),
+        'ngResource': require('angular-resource'),
+        'ngRoute': require('angular-route'),
+        'ngAnimate': require('angular-animate'),
+        'masker': require('../node_modules/angular-masker/src/angular-masker.js')
+    };
+    var app = angular.module('Demo', Object.keys(extModules));
     app.config(function(MaskerProvider) {
         angular.extend(MaskerProvider.patterns, {
             "N": /[A-za-zА-Яа-я]{1,20}/,
@@ -33,6 +34,12 @@
             "t": /[A-za-zА-Яа-я0-9\s]{1,200}/
         });
     });
+    for(name in modules){
+        modules[name](app);
+    }
+    for(name in directives){
+        app.directive(name, directives[name]);
+    }
     app.controller('KaskoCalculator', function($scope, $timeout, Feedback, Car, CarBrand, DiscountInfo){
         $scope.models = {
             Feedback: Feedback,
