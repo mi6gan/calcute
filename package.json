@@ -19,6 +19,8 @@
     "angular-resource": "~1.5.5",
     "angular-route": "~1.5.5",
     "animate.css": "~3.5.1",
+    "babel-preset-latest": "^6.14.0",
+    "babelify": "^7.3.0",
     "body-parser": "^1.15.2",
     "bootstrap-sass": "^3.3.7",
     "bower": "~1.7.9",

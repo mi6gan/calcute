@@ -1,10 +1,10 @@
-<div class="text-input-wrapper grid-24" ng-class="{ active: field.$active, valid: field.$valid, empty: field.$empty }">
+<div class="text-input-wrapper grid-24">
     <div class="row field-controller">
         <div class="col-xs-14">
             <label ng-bind="field.path.options.label"></label>
         </div>
         <div class="col-xs-10">
-            <input name="{{ field.name }}" ng-model="field.value" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" />
+            <input name="{{ field.$name }}" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" />
         </div>
     </div>
     <div class="row field-label">

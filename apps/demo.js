@@ -1,6 +1,7 @@
 'use strict';
 (function load() {
     var angular = require('angular');
+    var settings = require('settings');
     var directives = [
         require('../lib/directives/array.js'),
         require('../lib/directives/row-array.js'),
@@ -18,25 +19,9 @@
         'ngMessages': require('angular-messages'),
         'ngResource': require('angular-resource'),
         'ngRoute': require('angular-route'),
-        'ngAnimate': require('angular-animate'),
-        'masker': require('../node_modules/angular-masker/src/angular-masker.js')
+        'ngAnimate': require('angular-animate')
     };
     var app = angular.module('Demo', Object.keys(extModules));
-    app.config(function(MaskerProvider) {
-        angular.extend(MaskerProvider.patterns, {
-            "N": /[A-za-zА-Яа-я]{1,20}/,
-            "n": /[A-za-zА-Яа-я]{0,20}/,
-            "C": /\d{1,4}/,
-            "R": /\d{1,9}/,
-            "L": /\d{1,20}/,
-            "S": /[A-za-zА-Яа-я\s]{1,20}/,
-            "D": /\d{1,2}/,
-            "M": /\d{1,2}/,
-            "Y": /\d{1,4}/,
-            "d": /\d{1,1}/,
-            "t": /[A-za-zА-Яа-я0-9\s]{1,200}/
-        });
-    });
     angular.forEach(modules, function(module){
         module(this);
     }, app);
@@ -71,20 +56,21 @@
             licenceId: '1234 567890'
         });
         */
+        if(settings.DEBUG){
         $scope.feedback = new Feedback({
             car: { fullLabel: 'Custom Car' },
             year: Feedback.prototype.schema.paths.year.options.enum[0],
-            /*
             capacity: "21312",
             price: Feedback.prototype.schema.paths.price.options.enum[0],
+            credit: Feedback.prototype.schema.paths.credit.options.enum[0],
             city: Feedback.prototype.schema.paths.city.options.enum[0],
             type: [Feedback.prototype.schema.paths.type.options.enum[0]],
             franchise: Feedback.prototype.schema.paths.franchise.options.enum[0],
             franchiseSum: 1000,
             fullName: "ewrwe ewrwer",
             phoneNumber: "+7 (342) 342 34 23"
-            */
         });
+        }
         /*
         //$scope.saveFeedback();
         Car.findOne({}, function(err, car) {

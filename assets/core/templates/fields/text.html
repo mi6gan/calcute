@@ -12,7 +12,7 @@
 </div>
 <div class="col-xs-38 small">
     <div class="text-input-wrapper">
-        <input name="{{ field.$name }}" ng-model="value" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" />
+        <input name="{{ field.$name }}" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" />
         <small class="field-activator" ng-click="field.activate()"><ng-bind ng-bind="field.displayValue"></ng-bind> <span class="text-center icon-placeholder"><small class="fa fa-pencil"></small></span></small>
     </div>
 </div>

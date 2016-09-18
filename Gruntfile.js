@@ -140,7 +140,8 @@ module.exports = function(grunt, settingsKey) {
                 ],
                 browserifyOptions: {
                     debug: settings.DEBUG
-                }
+                },
+                transform: (settings.DEBUG ? undefined : ['babelify', {presets: 'latest'}])
             }
        }
     },
