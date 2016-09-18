@@ -1,7 +1,7 @@
 var models = require("./lib/models/local.js"),
     fs     = require('fs');
 var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
-    settings = require('./settings/index.js')[settingsKey];
+    settings = require('./settings')[settingsKey];
 (function runServer(){
     var initModels = new Promise(function initModels(resolve) {
       var request = require('request'),

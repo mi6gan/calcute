@@ -1,7 +1,8 @@
 module.exports = function(grunt, settingsKey) {
   var tasks = grunt.cli ? grunt.cli.tasks : [],
-      mainTask = tasks.length ? tasks[0] : 'default'; 
-  settingsKey = settingsKey||((mainTask=='default') ?  'prod' : 'local');
+    mainTask = tasks.length ? tasks[0] : 'default', 
+    settingsKey = settingsKey||((mainTask=='default') ?  'prod' : 'local'),
+    settings = require('./settings')[settingsKey];
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     sass: {
@@ -80,20 +81,43 @@ module.exports = function(grunt, settingsKey) {
         }
     },
     browserify: {
-        vendor: {
+        mongoose: {
             files: {
-                'build/vendor/js/bundle.js': [
-                    'node_modules/mongoose/lib/browser.js',
-                    'node_modules/mongoose-id-validator/lib/id-validator.js'
+                'build/vendor/js/mongoose.bundle.js': [
+                    'mongoose',
+                    'mongoose-id-validator'
                 ],
             },
             options: {
                 alias: {
                     'mongoose': './node_modules/mongoose/lib/browser.js',
-                    'mongoose-id-validator': './node_modules/mongoose-id-validator/lib/id-validator.js'
+                    'mognoose-id-validator': './node_modules/mongoose-id-validator/index.js'
                 },
                 browserifyOptions: {
-                    debug: true
+                    debug: settings.DEBUG
+                }
+            }
+        },
+        angular: {
+            files: {
+                'build/vendor/js/angular.bundle.js': [
+                    'angular',
+                    'angular-messages',
+                    'angular-resource',
+                    'angular-route',
+                    'angular-animate'
+                ],
+            },
+            options: {
+                alias: {
+                    'angular': './node_modules/angular/index.js',
+                    'angular-messages': './node_modules/angular-messages/index.js',
+                    'angular-resource': './node_modules/angular-resource/index.js',
+                    'angular-route': './node_modules/angular-route/index.js',
+                    'angular-animate': './node_modules/angular-animate/index.js'
+                },
+                browserifyOptions: {
+                    debug: settings.DEBUG
                 }
             }
         },
@@ -105,38 +129,46 @@ module.exports = function(grunt, settingsKey) {
                 alias: {
                     'settings': './settings/' + settingsKey + '.js',
                 },
-                external: ['mongoose', 'mongoose-id-validator'],
+                external: [
+                    'mongoose', 
+                    'mongoose-id-validator',
+                    'angular',
+                    'angular-messages',
+                    'angular-resource',
+                    'angular-route',
+                    'angular-animate'
+                ],
                 browserifyOptions: {
-                    debug: true
+                    debug: settings.DEBUG
                 }
             }
        }
     },
     uglify: {
+        mongooseminjs: {
+            options: {
+                'report': 'min',
+                'sourceMap': settings.DEBUG
+            },
+            files: {
+                'build/vendor/js/mongoose.min.js': ['build/vendor/js/mongoose.bundle.js']
+            }
+        },
         angularminjs: {
             options: {
                 'report': 'min',
                 'mangle': false,
-                'sourceMap': true
+                'sourceMap': settings.DEBUG
             },
             files: {
-                'build/vendor/js/angular.min.js': ['build/vendor/angular/js/angular.js', 'build/vendor/angular/js/angular-*.js']
+                'build/vendor/js/angular.min.js': ['build/vendor/js/angular.bundle.js']
             },
-        },
-        vendorminjs: {
-            options: {
-                'report': 'min',
-                'sourceMap': true
-            },
-            files: {
-                'build/vendor/js/bundle.min.js': ['build/vendor/js/bundle.js']
-            }
         },
         calcuteminjs: {
             options: {
                 'report': 'min',
                 'mangle': false,
-                'sourceMap': true
+                'sourceMap': settings.DEBUG
             },
             files: {
                 'build/demo/js/app.min.js': ['build/demo/js/app.js']

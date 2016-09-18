@@ -8,7 +8,8 @@ exports.prod = {
         pidFile: path.join(__dirname, '..', '..', '..', 'tmp', 'fcgi.pid')
     },
     GATEWAY_URL: 'http://localhost:8080/local/crm',
-    GRUNT_TASKS: ['prod']
+    GRUNT_TASKS: ['prod'],
+    DEBUG: false
 }
 
 exports.local = {
@@ -20,7 +21,8 @@ exports.local = {
     GATEWAY_URL: 'http://debuggw.cube-group.ru',
     GATEWAY_USERNAME: 'cubegroup',
     GATEWAY_PASSWORD: 'mieSh2ut',
-    GRUNT_TASKS: ['local']
+    GRUNT_TASKS: ['local'],
+    DEBUG: true
 }
 
 exports.localnet = {
@@ -32,7 +34,8 @@ exports.localnet = {
     GATEWAY_URL: 'http://debuggw.cube-group.ru',
     GATEWAY_USERNAME: 'cubegroup',
     GATEWAY_PASSWORD: 'mieSh2ut',
-    GRUNT_TASKS: ['prod']
+    GRUNT_TASKS: ['prod'],
+    DEBUG: false
 }
 exports.test = {
 	MONGO_CONSTRING: "mongodb://localhost/calcutetest"

@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=665, initial-scale=1">
 
     <title>Calcute Demo Page</title>
-    <script type="text/javascript" src="/vendor/js/bundle.js"></script>
+    <script type="text/javascript" src="/vendor/js/angular.bundle.js"></script>
+    <script type="text/javascript" src="/vendor/js/mongoose.bundle.js"></script>
     <script type="text/javascript" src="/demo/js/app.js"></script>
     <link href="/demo/vendor/bootstrap/css/base.css" rel="stylesheet">
     <link href="/demo/css/base.css" rel="stylesheet">
@@ -20,7 +21,7 @@
         <div class="container-fluid calcute-demo calcute">
             <div class="module">
                 <div ng-controller="KaskoCalculator">
-                <ng-form name="feedbackForm" model="Feedback">
+                <ng-form name="feedbackForm" model="Feedback" instance="feedback">
                     <div class="start" ng-hide="feedbackForm.$inited">
                         <div class="row">
                             <div class="col-xs-offset-3 col-xs-6 text-center">
@@ -41,29 +42,20 @@
     
                         <!-- ================================================== -->
                         <ng-if ng-if="!feedbackForm.$commited">
-                        <screen class="container-fluid" ng-if="!feedback.car.brand._id && !feedback.car._id && !feedback.car.$submitted">
+                        <screen class="container-fluid" ng-if="!feedback.car.brand && !feedback.car.fullLabel">
                             <h3>
                                 <span class="well-placeholder">&nbsp;</span><big class="ca ca-car"></big><span class="well-placeholder">&nbsp;&nbsp;</span>Выберите марку своего авто:
                             </h3>
                             <p>&nbsp;</p>
-                             <ng-form name="carForm" model="Car">
-                                <ng-model ng-model="feedback.car.brand" />
-                                <!--input ng-model="car.fullLabel" type="text" class="form-control input-sm" />
-                                    <div row-array=".queryPubTop" row-columns="6" column-breakpoint='xs' row-class="outer" first-column-class="text-left" column-class="text-center" last-column-class="text-right">
-                                        <button class="btn btn-link" role="button" ng-class="( field.value == item ) ? 'active' : ''" ng-click="field.setRef(item)">
-                                            <img ng-src="{{ item.icon }}" />
-                                            <p class="center-block small" ng-bind="item.label"></p>
-                                        </button>
-                                    </div>
-                                </input-->
+                             <ng-form name="carForm" model="Car" instance="feedback.car">
+                                <ng-model ng-model="brand" />
+                                <ng-if ng-if="carForm.brandOther">
+                                    <ng-model ng-model="fullLabel" />
+                                </ng-if>
                              </ng-form>
-                                <!--model-field name="brand" /-->
-                                <!--model-field name="fullLabel" /-->
-                                <!--div class="form-group has-feedback" ng-show="modelForm.instance.$input">
-                                </div-->
                         </screen>
                         <!-- ================================================== -->
-                        <screen class="container-fluid" ng-if="feedback.car.brand._id && !feedback.car.$submitted">
+                        <screen class="container-fluid" ng-if="feedback.car.brand && !feedback.car.fullLabel">
                             <h3 ng-class="feedback.car.brand.icon ? 'with-icon' : ''">
                                 <a role="button" class="btn btn-link btn-lg unstyled" ng-click="feedback.car.brand = undefined">
                                     <big class="fa fa-angle-left"></big><i class="well-placeholder">&nbsp;</i>Выберите модель вашего <ng-bind ng-bind="feedback.car.brand.label"></ng-bind>:
@@ -72,36 +64,26 @@
                                 <img ng-if="feedback.car.brand.icon" class="pull-right" ng-src="{{ feedback.car.brand.icon }}" />
                             </h3>
                             <p>&nbsp;</p>
-                            <ng-model ng-model="feedback.car" />
+                            <ng-model ng-model="car" />
+                             <ng-form name="carForm" model="Car" instance="feedback.car">
+                                <ng-if ng-if="feedbackForm.carOther">
+                                    <ng-model ng-model="fullLabel" />
+                                </ng-if>
+                             </ng-form>
                         </screen>
     
-                        <screen class="container-fluid" ng-if="feedback.car.$submitted">
+                        <screen class="container-fluid" ng-if="feedback.car.fullLabel">
                             <p>&nbsp;</p>
-                            <ng-model ng-model="feedback.year" /><hr/>
-                            <ng-model ng-model="feedback.capacity" /><hr/>
-                            <ng-model ng-model="feedback.price" /><hr/>
-                            <ng-model ng-model="feedback.credit" /><hr/>
-                            <ng-model ng-model="feedback.bank" /><hr/>
-                            <ng-model ng-model="feedback.city" /><hr/>
-                            <ng-model ng-model="feedback.drivers" /><hr/>
-                            <ng-model ng-model="feedback.type" /><hr/>
-                            <ng-model ng-model="feedback.type" /><hr/>
-                            <ng-model ng-model="feedback.franchise" /><hr/>
-                            <ng-model ng-model="feedback.franchiseSum" /><hr/>
-                            <ng-model ng-model="feedback.fullName" /><hr/>
-                            <ng-model ng-model="feedback.phoneNumber" /><hr/>
+                            <ng-model-set include="year capacity price credit city drivers type franchise franchiseSum fullName phoneNumber" after="<hr/>" />
 
                             <h1 class="text-center" ng-if="feedbackForm.$totalEmpty">
                                 <label class="semi-transparent text-muted">Осталось еще <span ng-bind="feedbackForm.$totalEmpty"></span>...</label>
                             </h1>
 
                             <div class="row">
-                                    <div class="col-xs-12 select wide-lines">
-                                        <a role="button" ng-click="modelForm.instance.car = undefined" class="active editable"><small ng-bind="feedbackForm.instance.display('car')"></small></a>
-                                        <ng-repeat ng-repeat="field in modelForm.fields" ng-if="!field.$empty && field.value">
-                                            <a role="button" ng-click="field.value = undefined" class="disabled editable"><small ng-bind="field.displayValue"></small></a>
-                                        </ng-repeat>
-                                    </div>
+                                <div class="col-xs-12 select wide-lines">
+                                    <ng-model-set include="car year capacity price credit city drivers type franchise franchiseSum fullName phoneNumber" template="/core/templates/fields/tag.html" after="<span> </span>" />
+                                </div>
                             </div>
                             <p>&nbsp;</p>
                             <div ng-if="modelForm.$totalEmpty == 0 && modelForm.$totalInvalid == 0" class="screen-footer">

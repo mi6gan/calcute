@@ -9,7 +9,7 @@
 <hr/>
 <div row-array="field.ref.queryPub" row-columns="6" column-breakpoint='xs' array-args='{ $orderby: { label: 1 } }' row-class="outer outer-end">
     <small><a role="button" ng-class="( field.$viewValue==item ) ? 'active' : ''" ng-click="field.setRef(item)" ng-bind="item.label"></a><br/></small>
-    <small ng-if="last"><a role="button" ng-class="( field.$viewValue==true ) ? 'active' : ''" ng-click="field.$setViewValue(true)">Другая</a></small>
+    <small ng-if="last"><a role="button" ng-class="( form.brandOther ) ? 'active' : ''" ng-click="field.setOther(true)">Другая</a></small>
 </div>
 <p>&nbsp;</p>
 </div>
