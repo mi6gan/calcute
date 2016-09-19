@@ -1,13 +1,14 @@
 <div class="row grid-50">
 <div class="col-xs-11 col-xs-offset-1 text-left">
     <label ng-bind="field.path.options.label"></label>
-    <p class="help-text" ng-if="field.path.options.helpText">
+    <p class="help-text" ng-if="field.path.options.helpText && field.$valid && field.$pristine">
         <ng-bind ng-bind="field.path.options.helpText"></ng-bind>
     </p>
     <ul class="list-unstyled error-messages" ng-if="!field.$valid" role="alert" multiple>
-        <ng-repeat ng-repeat="(code, value) in field.$errors">
+        <li class="text-danger"><small>Введите правильное значение</small></li>
+        <!--ng-repeat ng-repeat="(code, value) in field.$error">
             <ng-if ng-if="value"><li><small class="text-danger">error: {{ code }}</small></li></ng-if>
-        </ng-repeat>
+        </ng-repeat-->
     </ul>
 </div>
 <div class="col-xs-38 small">

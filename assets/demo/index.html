@@ -21,7 +21,6 @@
         <div class="container-fluid calcute-demo calcute">
             <div class="module">
                 <div ng-controller="KaskoCalculator">
-                <ng-form name="feedbackForm" model="Feedback" instance="feedback">
                     <div class="start" ng-hide="feedbackForm.$inited">
                         <div class="row">
                             <div class="col-xs-offset-3 col-xs-6 text-center">
@@ -39,6 +38,7 @@
                         </div>
                     </div>
                     <div class="well kasko-calculator" ng-if="feedbackForm.$inited" screens>
+                        <ng-form name="feedbackForm" model="Feedback" instance="feedback">
     
                         <!-- ================================================== -->
                         <ng-if ng-if="!feedbackForm.$commited">
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                             <p>&nbsp;</p>
-                            <div ng-if="modelForm.$totalEmpty == 0 && modelForm.$totalInvalid == 0" class="screen-footer">
+                            <div ng-if="feedbackForm.$valid" class="screen-footer">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <p>&nbsp;</p>
@@ -97,41 +97,36 @@
                                             <p><br/>&ndash; Все готово для отправки, сэр!<br/>&nbsp;</p>
                                         </div>
                                         <div class="col-md-6 text-right">
-                                            <button class="btn btn-lg btn-submit" ng-click="modelForm.save()">&nbsp; &nbsp; Отправить заявку &nbsp;&nbsp;<span class="arrow pull-right"></span></button>
+                                            <button class="btn btn-lg btn-submit" ng-click="feedbackForm.save()">&nbsp; &nbsp; Отправить заявку &nbsp;&nbsp;<span class="arrow pull-right"></span></button>
                                         </div>
                                     </div>
                             </div>
                         </screen>
                         </ng-if>
+                        </ng-form>
 
-                        <ng-if ng-if="feedback.$submitted">
+                        <ng-form name="discountForm" model="DiscountInfo" instance="discountInfo">
+                        <ng-if ng-if="feedbackForm.$commited">
                         <screen class="container-fluid">
                             <p class="h2 text-center bigger-line-height">
                                 Хотите расчет с учетом накопленных скидок?<br/>
                                 Тогда заполните следующие поля:
                             </p>
                             <p>&nbsp</p>
-                            <model-form src="models.DiscountInfo" defaults="{ feedback: feedback._id, fullName: feedback.fullName }" instance="discountInfo">
-                                <div ng-repeat="item in modelForm.fieldNames">
-                                    <model-field name="{{ item }}" />
-                                    <hr/>
-                                </div>
+                                <ng-model-set include="fullName birthDate company isNotFirst withConsult tarif comment" after="<hr/>" />
                                 <h1 class="text-center" ng-if="modelForm.$totalEmpty">
                                     <label class="semi-transparent text-muted">Осталось еще <span ng-bind="modelForm.$totalEmpty"></span>...</label>
                                 </h1>
                                 <div class="row">
                                     <div class="col-xs-12 select wide-lines">
-                                        <ng-repeat ng-repeat="field in modelForm.fields" ng-if="!field.$empty && field.$valid">
-                                            <a role="button" ng-click="field.value = undefined" class="disabled editable"><small ng-bind="field.displayValue"></small></a>
-                                        </ng-repeat>
+                                        <ng-model-set include="fullName birthDate company isNotFirst withConsult tarif comment" template="/core/templates/fields/tag.html" after="<span> </span>" hide-empty="true" />
                                     </div>
                                 </div>
-                            </model-form>
                         </screen>
                         </ng-if>
+                        </ng-form>
 
                     </div>
-                </ng-form>
                 </div><!-- KaskoCalculator -->
     
                 <p>

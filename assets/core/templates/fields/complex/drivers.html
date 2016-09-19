@@ -4,10 +4,8 @@
         <p class="help-text" ng-if="field.path.options.helpText && field.$valid && field.$empty">
             <ng-bind ng-bind="field.path.options.helpText"></ng-bind>
         </p>
-        <ul class="list-unstyled error-messages" ng-if="!field.$valid" role="alert" multiple>
-            <ng-repeat ng-repeat="message in field.$errorMessages">
-                <li><small class="text-danger">{{ message }}</small></li>
-            </ng-repeat>
+        <ul class="list-unstyled error-messages" ng-if="form.driverForm0.$invalid" role="alert" multiple>
+            <li class="text-danger"><small>Данные введены неверно</small></li>
         </ul>
     </div>
     <div class="col-xs-22">
