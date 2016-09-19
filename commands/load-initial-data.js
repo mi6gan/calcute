@@ -1,5 +1,5 @@
 var fs      = require('fs'),
-    models = require('../models/local.js'),
+    models = require('../lib/models/local.js'),
     mongoose = require('mongoose');
 
 mongoose.connect('localhost/calcute');
@@ -8,12 +8,12 @@ function loadCars() {
     var data = fs.readFileSync('fixtures/legacy.json'),
         jsonData = JSON.parse(data),
         icons = {
-            BMW: '/images/brand-1.png',
-            Audi: '/images/brand-2.png',
-            Ford: '/images/brand-3.png',
-            Honda: '/images/brand-4.png',
-            Hyundai: '/images/brand-5.png',
-            Mazda: '/images/brand-6.png'
+            BMW: '/demo/images/brand-1.png',
+            Audi: '/demo/images/brand-2.png',
+            Ford: '/demo/images/brand-3.png',
+            Honda: '/demo/images/brand-4.png',
+            Hyundai: '/demo/images/brand-5.png',
+            Mazda: '/demo/images/brand-6.png'
         };
     return Promise.all(jsonData.brands.map(function(brand){
         console.log('Adding brand ' + brand.text + '\n');

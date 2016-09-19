@@ -4,8 +4,8 @@ var path=require('path'),
 exports.prod = {
 	MONGO_CONSTRING: "mongodb://localhost/calcute",
     SERVER: {
-        socket: path.join(__dirname, '..', '..', '..', 'tmp', 'fcgi.sock'),
-        pidFile: path.join(__dirname, '..', '..', '..', 'tmp', 'fcgi.pid')
+        socket: path.join(__dirname, '..', '..', '..', '..', 'tmp', 'fcgi.sock'),
+        pidFile: path.join(__dirname, '..', '..', '..', '..', 'tmp', 'fcgi.pid')
     },
     GATEWAY_URL: 'http://localhost:8080/local/crm',
     GRUNT_TASKS: ['prod'],
