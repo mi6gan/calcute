@@ -3,10 +3,10 @@
     var angular = require('angular');
     var settings = require('settings');
     var directives = [
-        require('../lib/directives/array.js'),
-        require('../lib/directives/row-array.js'),
         require('../lib/directives/screen.js'),
         require('../lib/directives/screens.js'),
+        require('../lib/directives/array.js'),
+        require('../lib/directives/row-array.js'),
         require('../lib/directives/ng-form.js'),
         require('../lib/directives/ng-model.js'),
         require('../lib/directives/ng-model-set.js'),
@@ -70,6 +70,7 @@
             fullName: "ewrwe ewrwer",
             phoneNumber: "+7 (342) 342 34 23"
         });
+        $scope.feedbackForm = true;
         }
         /*
         //$scope.saveFeedback();

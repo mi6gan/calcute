@@ -84,65 +84,77 @@
                 }
             }
          }
-         .text-input-wrapper {
-            cursor: pointer;
-            display: inline-block;
-            padding-left: 8px;
-            padding-right: 8px;
-            padding-top: 3px;
-            text-decoration: none;
-            border-bottom: none;
-            .ng-hide {
-                display: none;
-            }
-            .form-control {
-                display: inline;
-                height: auto;
-                line-height: 1.5em;
-                position: relative;
-                padding: 0 0 $padding-base-vertical/3 0;
-                width: auto;
-                transition: background-color $animation-duration-base, color $animation-duration-base;
-            }
-            .field-activator {
-                color: white;
-                font-size: 1em; 
-                line-height: 1.8em;
-            }
-            &.valid:not(.active):not(.empty) {
-                border-radius: 1em;
-                background-color: #4887d7;
+         @mixin text-input-wrapper($class) {
+            #{$class} {
+                cursor: pointer;
+                display: inline-block;
+                padding-left: 8px;
+                padding-right: 8px;
+                padding-top: 3px;
+                text-decoration: none;
+                border-bottom: none;
                 .form-control {
-                    display: none;
+                    display: inline;
+                    height: auto;
+                    line-height: 1.5em;
+                    position: relative;
+                    padding: 0 0 $padding-base-vertical/3 0;
+                    width: auto;
+                    transition: background-color $animation-duration-base, color $animation-duration-base;
                 }
-                .icon-placeholder {
-                    opacity: 0.0;
-                    width: 0px;
-                    display: inline-block;
-                    font-size: 0.9em;
-                    transition: opacity $animation-duration-base, width $animation-duration-base, background-color $animation-duration-base;
-                }
-                &:hover {
-                    background-color: #3B78C5;
+                .field-activator {
+                    color: white;
+                    font-size: 1em; 
+                    line-height: 1.8em;
                     .icon-placeholder {
-                        opacity: 1.0;
-                        width: 15px;
+                        opacity: 0.0;
+                        width: 0px;
+                        display: inline-block;
+                        font-size: 0.9em;
+                        transition: opacity $animation-duration-base, width $animation-duration-base, background-color $animation-duration-base;
                     }
                 }
-            }
-            &:not(.valid) {
-                .icon-placeholder {
-                    opacity: 0.0;
+             }
+             &.ng-valid.ng-not-empty.ng-touched {
+                #{$class} {
+                    border-radius: 1em;
+                    background-color: #4887d7;
+                    .form-control {
+                        display: none;
+                    }
+                    &:hover {
+                        background-color: #3B78C5;
+                        .icon-placeholder {
+                            opacity: 1.0;
+                            width: 15px;
+                        }
+                    }
                 }
-            }
-            &.active, &.empty {
-                color: $text-muted;
-                .field-activator {
-                    display: none;
+             }
+             &.ng-invalid {
+                #{$class} {
+                    label {
+                        color: $brand-danger !important;
+                    }
+                    .form-control {
+                        border-color: $brand-danger;
+                        color: $brand-danger;
+                    }
                 }
-            }
+             }
+             &.ng-invalid, &.ng-empty, &.ng-untouched {
+                #{$class} {
+                    .field-activator {
+                        display: none;
+                    }
+                }
+             }
+         }
+        ng-model-set > ng-model {
+            @include text-input-wrapper('> div > div > .text-input-wrapper'); 
         }
-        .form-inline {
+        ng-form.inline ng-model {
+            @include text-input-wrapper('> div > .text-input-wrapper'); 
         }
         label {
             font-size: $font-size-h6; 
@@ -489,7 +501,7 @@
                         margin-left: -$well-padding-horizontal;
                     }
                 }
-                model-form {
+                ng-form {
                     box-sizing: border-box;
                     $duration: $animation-duration-base*4;
                     display: block;
@@ -561,7 +573,7 @@
                                 top: 4px;
                             }
                         }
-                        .text-input-wrapper {
+                        .text--input-wrapper {
                             padding-left: 4px;
                             padding-right: 4px;
                             margin-left: -4px;
@@ -573,23 +585,6 @@
                             }
                             .field-activator {
                                 font-size: 0.9em;
-                            }
-                            &.empty,
-                            &.active {
-                                > .field-controller {
-                                    display: block;
-                                }
-                                > .field-label {
-                                    display: none;
-                                }
-                            }
-                            &.valid:not(.empty):not(.active) {
-                                > .field-controller {
-                                    display: none;
-                                }
-                                > .field-label {
-                                    display: block;
-                                }
                             }
                         }
                     }
@@ -686,8 +681,6 @@
                         opacity: 1.0;
                     }
                 }
-            }
-            .form-inline {
             }
             .row.ng-hide {
                 display: none;
