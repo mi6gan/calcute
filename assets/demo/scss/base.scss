@@ -637,7 +637,7 @@
                 }
             }
             $loading-duration: $animation-duration-base*4;
-            $loading-delay: $animation-duration-base*10;
+            $loading-delay: $animation-duration-base*0.0;
             &::before {
                 background-color: transparent;
                 visibility: hidden;

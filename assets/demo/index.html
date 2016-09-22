@@ -40,7 +40,7 @@
                     <div class="well kasko-calculator" ng-if="feedbackForm" screens>
     
                         <!-- ================================================== -->
-                        <ng-form name="feedbackForm" model="Feedback" instance="feedback" ng-model-options="{allowInvalid: true}">
+                        <ng-form name="feedbackForm" model="Feedback" instance="feedback">
                         <ng-if ng-if="!feedbackForm.$commited">
 
                         <screen ng-if="!feedback.car.brand && !feedback.car.fullLabel">

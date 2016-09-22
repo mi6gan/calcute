@@ -57,7 +57,6 @@
         });
         */
         if(settings.DEBUG){
-            /*
         $scope.feedback = new Feedback({
             car: { fullLabel: 'Custom Car' },
             year: Feedback.prototype.schema.paths.year.options.enum[0],
@@ -72,7 +71,6 @@
             phoneNumber: "+7 (342) 342 34 23"
         });
         $scope.feedbackForm = true;
-        */
         }
         /*
         //$scope.saveFeedback();
