@@ -1,2 +1,10 @@
-<input name="{{ field.$name }}" ng-model="value" input-attrs="path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ path.options.mask }}" ng-required="{{ path.options.required ? 'true' : 'false' }}" />
-<a ng-class=" ( !value ) ? '' : 'active' " class="change-btn" role="button" ng-click="field.$setViewValue(value)">&#9166; подтвердить</a>
+<div class="grid-50">
+<div class="row">
+    <div class="col-xs-41">
+        <input name="{{ field.$name }}" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" auto-focus="true" set-on-empty="empty" />
+    </div>
+    <div class="col-xs-9">
+        <a ng-class=" empty ? '' : 'active' " class="btn btn-sm" role="button" ng-click="field.$setViewValue(value)">&#9166; подтвердить</a>
+    </div>
+</div>
+</div>

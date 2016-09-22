@@ -56,7 +56,7 @@
                              </ng-form>
                         </screen>
 
-                        <screen ng-if="feedback.car.brand && !feedback.car.fullLabel">
+                        <screen ng-if="feedback.car.brand && !feedback.car.fullLabel && !feedback.car.label">
                             <h3 ng-class="feedback.car.brand.icon ? 'with-icon' : ''">
                                 <a role="button" class="btn btn-link btn-lg unstyled" ng-click="feedback.car.brand = undefined">
                                     <big class="fa fa-angle-left"></big><i class="well-placeholder">&nbsp;</i>Выберите модель вашего <ng-bind ng-bind="feedback.car.brand.label"></ng-bind>:
@@ -68,12 +68,12 @@
                             <ng-model ng-model="car" />
                              <ng-form name="carForm" model="Car" instance="feedback.car">
                                 <ng-if ng-if="feedbackForm.carOther">
-                                    <ng-model ng-model="fullLabel" />
+                                    <ng-model ng-model="label" />
                                 </ng-if>
                              </ng-form>
                         </screen>
     
-                        <screen class="container-fluid" ng-if="feedback.car.fullLabel">
+                        <screen class="container-fluid" ng-if="feedback.car.fullLabel || feedback.car.label">
                             <p>&nbsp;</p>
                             <ng-model-set include="year capacity price credit city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" after="<hr/>" />
 
