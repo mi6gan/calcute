@@ -1,16 +1,16 @@
 <div class="row grid-50">
 <div class="col-xs-11 col-xs-offset-1 text-left">
     <label ng-bind="field.path.options.label"></label>
-    <p class="help-text" ng-if="field.path.options.helpText && field.$valid && field.$pristine">
+    <p class="help-text" ng-if="field.path.options.helpText && !field.$viewValue && field.$pristine">
         <ng-bind ng-bind="field.path.options.helpText"></ng-bind>
     </p>
-    <ul class="list-unstyled error-messages" ng-if="!field.$valid" role="alert" multiple>
+    <ul class="list-unstyled error-messages" ng-if="!field.$valid && field.$dirty" role="alert" multiple>
         <li class="text-danger"><small>Введите правильное значение</small></li>
     </ul>
 </div>
 <div class="col-xs-38 small">
     <div class="text-input-wrapper">
-        <input name="{{ field.$name }}" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" />
+        <input name="{{ field.$name }}" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" auto-focus="true" />
         <small class="field-activator" ng-click="field.activate()"><ng-bind ng-bind="display"></ng-bind> <span class="text-center icon-placeholder"><small class="fa fa-pencil"></small></span></small>
     </div>
 </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="Demo" data-ng-csp="no-inline-style" lang="ru">
+<html ng-app="demo" data-ng-csp="no-inline-style" lang="ru">
     <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,7 +20,7 @@
     <body>
         <div class="container-fluid calcute-demo calcute">
             <div class="module">
-                <div ng-controller="KaskoCalculator">
+                <div ng-controller="kaskoCalculator">
                     <div class="start" ng-hide="feedbackForm">
                         <div class="row">
                             <div class="col-xs-offset-3 col-xs-6 text-center">
@@ -40,7 +40,7 @@
                     <div class="well kasko-calculator" ng-if="feedbackForm" screens>
     
                         <!-- ================================================== -->
-                        <ng-form name="feedbackForm" model="Feedback" instance="feedback">
+                        <ng-form name="feedbackForm" model="Feedback" instance="feedback" ng-model-options="{allowInvalid: true}">
                         <ng-if ng-if="!feedbackForm.$commited">
 
                         <screen ng-if="!feedback.car.brand && !feedback.car.fullLabel">
@@ -75,7 +75,7 @@
     
                         <screen class="container-fluid" ng-if="feedback.car.fullLabel || feedback.car.label">
                             <p>&nbsp;</p>
-                            <ng-model-set include="year capacity price credit city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" after="<hr/>" />
+                            <ng-model-set include="year capacity price credit bank city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" after="<hr/>" />
 
                             <h1 class="text-center" ng-if="feedbackForm.$totalEmpty">
                                 <label class="semi-transparent text-muted">Осталось еще <span ng-bind="feedbackForm.$totalEmpty"></span>...</label>
@@ -83,7 +83,7 @@
 
                             <div class="row">
                                 <div class="col-xs-12 select wide-lines">
-                                    <ng-model-set include="car year capacity price credit city drivers type franchise franchiseSum fullName phoneNumber" template="/core/templates/fields/tag.html" after="<span> </span>" />
+                                    <ng-model-set include="car year capacity price credit bank city drivers type franchise franchiseSum fullName phoneNumber" template="/core/templates/fields/tag.html" after="<span> </span>" />
                                 </div>
                             </div>
                             <p>&nbsp;</p>
