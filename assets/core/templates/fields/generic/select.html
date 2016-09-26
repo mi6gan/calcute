@@ -1,5 +1,5 @@
 <span ng-repeat="item in field.path.options.enum">
-    <a name="{{ field.name }}" role="button" ng-class="(field.$viewValue==item) ? 'active' : ''" ng-click="field.$setViewValue(item)">
+    <a name="{{ field.$name }}" role="button" ng-class="{ 'active': field.$viewValue==item }" ng-click="field.$setViewValue(item)">
         <small ng-bind="item.label ? item.label : item"></small>
     </a>
 </span>

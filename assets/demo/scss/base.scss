@@ -153,7 +153,7 @@
         ng-model-set > ng-model {
             @include text-input-wrapper('> div > div > .text-input-wrapper'); 
         }
-        ng-form.inline ng-model {
+        ng-form ng-model, ng-form ng-model.inline {
             @include text-input-wrapper('> div > .text-input-wrapper'); 
         }
         label {
@@ -459,6 +459,7 @@
                     color: white;
                     font-weight: 300;
                     font-size: $font-size-base*1.2;
+                    overflow: hidden;
                     .btn-submit {
                         border:2px solid rgba(255, 255, 255, 0.24);
                         border-radius: $border-radius-large;
@@ -477,12 +478,10 @@
                             background-color: rgba(255, 255, 255, 0.24);
                         }
                         .arrow {
-                            line-height: 0.4;
-                            font-size: 2.5em;
+                            position: relative;
+                            top: 2px;
                             @extend .fa;
-                            &::before {
-                                content: '→';
-                            }
+                            @extend .fa-long-arrow-right;
                         }
                     }
                     p {
@@ -490,15 +489,38 @@
                         margin-bottom: 0;
                     }
                     &::before {
+                        overflow: hidden;
                         box-sizing: content-box;
                         content: " ";
                         display: block;
                         height: 100%;
                         width: $width;
                         padding: 0 ( $well-padding-horizontal + 2 );
-                        background-color: $brand-primary;
                         position: absolute;
                         margin-left: -$well-padding-horizontal;
+                    }
+                    &.bg-success::before {
+                        background-color: $brand-success;
+                    }
+                    &.bg-primary::before {
+                        background-color: $brand-primary;
+                    }
+                }
+                .bg-symbol {
+                    margin-left: -30px;
+                    overflow: hidden;
+                    position: absolute;
+                    z-index: 1;
+                    opacity: 0.2;
+                    > span {
+                        @include user-select(none);
+                        cursor: default;
+                        bottom: 100px;
+                        font-family: $font-family-monospace;
+                        font-size: 230px;
+                        font-weight: 100;
+                        left: -30px;
+                        position: relative;
                     }
                 }
                 ng-form {

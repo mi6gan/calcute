@@ -1,5 +1,5 @@
 <div class="small">
-    <label ng-bind="field.path.options.label"></label>
+    <label ng-if="field.path.options.label" ng-bind="field.path.options.label"></label>
     <div class="text-input-wrapper">
         <input name="{{ field.$name }}" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" />
         <small class="field-activator" ng-click="field.activate()"><ng-bind ng-bind="display"></ng-bind> <span class="text-center icon-placeholder"><small class="fa fa-pencil"></small></span></small>

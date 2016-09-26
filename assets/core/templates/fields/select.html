@@ -5,9 +5,9 @@
         <ng-bind ng-bind="field.path.options.helpText"></ng-bind>
     </p>
 </div>
-<div class="col-xs-38 select" ng-class="field.path.options.enum.length > 10 ? 'compact' : ''">
+<div class="col-xs-38 select" ng-class="{ 'compact': field.path.options.enum.length>10 }">
     <span class="grid-11" ng-repeat="item in field.path.options.enum">
-        <a name="{{ field.name }}" role="button" ng-class="(field.$viewValue==item) ? 'active' : ''" ng-click="field.$setViewValue(item)">
+        <a name="{{ field.name }}" role="button" ng-class="{ 'active': field.$viewValue==item }" ng-click="field.$setViewValue(item)">
             <small ng-bind="item.label ? item.label : item"></small>
         </a>
     </span>

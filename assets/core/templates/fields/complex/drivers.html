@@ -11,7 +11,7 @@
     <div class="col-xs-22">
         <div class="select">
         <span ng-repeat="countLabel in field.path.options.countLabels">
-            <a role="button" ng-class="( field.$viewValue.length == countLabel[0] ) ? 'active' : ''" ng-click="field.setCount(countLabel[0])">
+            <a role="button" ng-class="{ 'active': field.$viewValue.length==countLabel[0] }" ng-click="field.setCount(countLabel[0])">
                 <small ng-bind="countLabel[1]"></small>
             </a>
         </span>

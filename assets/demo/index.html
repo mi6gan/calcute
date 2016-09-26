@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="demo" data-ng-csp="no-inline-style" lang="ru">
+<html ng-app="appDemo" data-ng-csp="no-inline-style" lang="ru">
     <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,7 +20,7 @@
     <body>
         <div class="container-fluid calcute-demo calcute">
             <div class="module">
-                <div ng-controller="kaskoCalculator">
+                <div ng-controller="KKController">
                     <div class="start" ng-hide="feedbackForm">
                         <div class="row">
                             <div class="col-xs-offset-3 col-xs-6 text-center">
@@ -57,7 +57,7 @@
                         </screen>
 
                         <screen ng-if="feedback.car.brand && !feedback.car.fullLabel && !feedback.car.label">
-                            <h3 ng-class="feedback.car.brand.icon ? 'with-icon' : ''">
+                            <h3 ng-class="{ 'with-icon': feedback.car.brand.icon }">
                                 <a role="button" class="btn btn-link btn-lg unstyled" ng-click="feedback.car.brand = undefined">
                                     <big class="fa fa-angle-left"></big><i class="well-placeholder">&nbsp;</i>Выберите модель вашего <ng-bind ng-bind="feedback.car.brand.label"></ng-bind>:
                                     <img ng-if="feedback.car.brand.icon" class="invisible" ng-src="{{ feedback.car.brand.icon }}" />
@@ -87,7 +87,7 @@
                                 </div>
                             </div>
                             <p>&nbsp;</p>
-                            <div ng-if="feedbackForm.$valid" class="screen-footer">
+                            <div ng-if="feedbackForm.$valid" class="screen-footer bg-primary">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <p>&nbsp;</p>
@@ -98,7 +98,7 @@
                                         <p><br/>&ndash; Все готово для отправки, сэр!<br/>&nbsp;</p>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <button class="btn btn-lg btn-submit" ng-click="feedbackForm.save()">&nbsp; &nbsp; Отправить заявку &nbsp;&nbsp;<span class="arrow pull-right"></span></button>
+                                        <button class="btn btn-lg btn-submit" ng-click="feedbackForm.save()">&nbsp; Отправить заявку &nbsp; <span class="arrow"></span>&nbsp; </button>&nbsp; &nbsp;
                                     </div>
                                 </div>
                             </div>
@@ -108,25 +108,43 @@
                         </ng-form>
 
                         <ng-if ng-if="feedbackForm.$commited">
-                        <ng-form name="discountForm" model="DiscountInfo" instance="discountInfo">
+                        <ng-form name="discountForm" model="DiscountInfo" instance="discountInfo" initial="{ fullName: feedback.fullName, drivers: feedback.drivers }">
                         <screen>
                             <p class="h2 text-center bigger-line-height">
                                 Хотите расчет с учетом накопленных скидок?<br/>
                                 Тогда заполните следующие поля:
                             </p>
-                            <p>&nbsp</p>
-                                <ng-model-set include="fullName birthDate company isNotFirst withConsult tarif comment" auto-hide="true" after="<hr/>" />
-                                <h1 class="text-center" ng-if="modelForm.$totalEmpty">
-                                    <label class="semi-transparent text-muted">Осталось еще <span ng-bind="modelForm.$totalEmpty"></span>...</label>
-                                </h1>
+                            <p>&nbsp;</p>
+                            <ng-model-set include="fullName birthDate drivers company isNotFirst withConsult tarif comment" auto-hide="true" after="<hr/>" />
+                            <h1 class="text-center" ng-if="modelForm.$totalEmpty">
+                                <label class="semi-transparent text-muted">Осталось еще <span ng-bind="modelForm.$totalEmpty"></span>...</label>
+                            </h1>
+                            <div class="row">
+                                <div class="col-xs-12 select wide-lines">
+                                    <ng-model-set include="fullName birthDate drivers company isNotFirst withConsult tarif comment" template="/core/templates/fields/tag.html" after="<span> </span>" />
+                                </div>
+                            </div>
+                            <p>&nbsp;</p>
+                            <div>
+                            <div ng-if="discountForm.$valid" class="bg-symbol">
+                                <span>%</span>
+                            </div>
+                            <div ng-if="discountForm.$valid" class="screen-footer bg-success bg-percent">
                                 <div class="row">
-                                    <div class="col-xs-12 select wide-lines">
-                                        <ng-model-set include="fullName birthDate company isNotFirst withConsult tarif comment" template="/core/templates/fields/tag.html" after="<span> </span>" />
+                                    <div class="col-md-12">
+                                        <p>&nbsp;</p>
                                     </div>
                                 </div>
-                        </ng-if>
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <button class="btn btn-lg btn-submit" ng-click="discountForm.save()">&nbsp; Рассчитать со скидкой &nbsp; <span class="arrow"></span>&nbsp; </button>&nbsp; &nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
                         </screen>
                         </ng-form>
+                        </ng-if>
 
                     </div>
                 </div><!-- KaskoCalculator -->

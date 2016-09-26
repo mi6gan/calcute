@@ -1,0 +1,16 @@
+<ng-repeat ng-repeat="item in field.$viewValue">
+<ng-form name="{{ 'driverForm' + $index }}" model="Driver" instance="item"> 
+<div class="row grid-50">
+<div class="col-xs-11 col-xs-offset-1 text-left">
+    <label>Удостоверение {{ field.$viewValue.length==1 ? '' : $index+1 }}</label>
+    <ul class="list-unstyled error-messages" ng-if="!field.$valid && field.$dirty" role="alert" multiple>
+        <li class="text-danger"><small>Введите правильное значение</small></li>
+    </ul>
+</div>
+<div class="col-xs-38">
+    <ng-model class="inline" ng-model="licence" />
+</div>
+</div>
+<hr ng-if="$index<(field.$viewValue.length-1)"/>
+</ng-form>
+</ng-repeat>

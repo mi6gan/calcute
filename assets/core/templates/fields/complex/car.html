@@ -1,7 +1,7 @@
 <div>
 <div row-array="field.ref.queryPub" array-args="{ brandId: form.getValue(field.$name).brand._id.toString() }" row-columns="6" column-breakpoint='xs' column-class="text-left">
-    <small><a role="button" ng-class="( field.$viewValue == item ) ? 'active' : ''" ng-click="field.setRef(item)" ng-bind="item.label"></a><br/></small>
-    <small ng-if="last"><a role="button" ng-class="( form.carOther ) ? 'active' : ''" ng-click="field.setOther(true)">Другая</a></small>
+    <small><a role="button" ng-class="{ 'active': field.$viewValue == item }" ng-click="field.setRef(item)" ng-bind="item.label"></a><br/></small>
+    <small ng-if="last"><a role="button" ng-class="{ 'active': form.carOther }" ng-click="field.setOther(true)">Другая</a></small>
 </div>
 <p>&nbsp;</p>
 </div>

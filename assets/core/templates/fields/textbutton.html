@@ -4,7 +4,7 @@
         <input name="{{ field.$name }}" input-attrs="field.path.options.inputAttrs" class="form-control input-sm" type="text" mask="{{ field.path.options.mask }}" ng-required="{{ field.path.options.required ? 'true' : 'false' }}" set-on-empty="empty" auto-focus="true" />
     </div>
     <div class="col-xs-9">
-        <a ng-class=" empty ? '' : 'active' " class="btn btn-sm" role="button" ng-click="field.$setViewValue(value)">&#9166; подтвердить</a>
+        <a ng-class="{ 'active': !empty }" class="btn btn-sm" role="button" ng-click="field.$setViewValue(value)">&#9166; подтвердить</a>
     </div>
 </div>
 </div>

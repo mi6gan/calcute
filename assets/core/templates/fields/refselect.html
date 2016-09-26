@@ -7,7 +7,7 @@
 </div>
 <div class="col-xs-38 select compact">
     <span class="grid-11" array="field.ref.queryPub" array-name="refchoices">
-        <a name="{{ field.name }}" role="button" ng-class="( field.$viewValue == item ) ? 'active' : ''" ng-click="field.setRef(item)">
+        <a name="{{ field.name }}" role="button" ng-class="{'active': field.$viewValue==item }" ng-click="field.setRef(item)">
             <small ng-bind="( item.title || item.label ) ? ( item.title || item.label ) : item"></small>
         </a>
     </span>
