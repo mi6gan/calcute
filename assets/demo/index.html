@@ -37,7 +37,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="well kasko-calculator" ng-if="feedbackForm" screens>
+                    <div ng-class="{ 'bg-success': discountForm.$commited }" class="well kasko-calculator" ng-if="feedbackForm" screens>
     
                         <!-- ================================================== -->
                         <ng-form name="feedbackForm" model="Feedback" instance="feedback" ng-model-options="{allowInvalid: true}">
@@ -75,7 +75,7 @@
     
                         <screen class="container-fluid" ng-if="feedback.car.fullLabel || feedback.car.label">
                             <p>&nbsp;</p>
-                            <ng-model-set include="year capacity price credit bank city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" after="<hr/>" />
+                            <ng-model-set class="hr-after-each" include="year capacity price credit bank city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" />
 
                             <h1 class="text-center" ng-if="feedbackForm.$totalEmpty">
                                 <label class="semi-transparent text-muted">Осталось еще <span ng-bind="feedbackForm.$totalEmpty"></span>...</label>
@@ -108,14 +108,23 @@
                         </ng-form>
 
                         <ng-if ng-if="feedbackForm.$commited">
-                        <ng-form name="discountForm" model="DiscountInfo" instance="discountInfo" initial="{ fullName: feedback.fullName, drivers: feedback.drivers }">
-                        <screen>
+                        <ng-form name="discountForm" model="DiscountInfo" instance="discountInfo" initial="{ feedback: feedback._id, fullName: feedback.fullName, drivers: feedback.drivers }">
+                        <screen ng-if="!discountForm.$commited">
+                            <p>&nbsp;</p>
+                            <p class="h2 text-center first-step-success-message">
+                                <big class="fa fa-circle-thin"></big>
+                                <big class="check-icon">✓</big>
+                            </p>
+                            <p class="text-center first-step-success-message">
+                                <span>Спасибо за вашу заявку.</span>
+                            </p>
+                            <p>&nbsp;</p>
                             <p class="h2 text-center bigger-line-height">
                                 Хотите расчет с учетом накопленных скидок?<br/>
                                 Тогда заполните следующие поля:
                             </p>
                             <p>&nbsp;</p>
-                            <ng-model-set include="fullName birthDate drivers company isNotFirst withConsult tarif comment" auto-hide="true" after="<hr/>" />
+                            <ng-model-set class="hr-after-each" include="fullName birthDate drivers company isNotFirst withConsult tarif comment" auto-hide="false" />
                             <h1 class="text-center" ng-if="modelForm.$totalEmpty">
                                 <label class="semi-transparent text-muted">Осталось еще <span ng-bind="modelForm.$totalEmpty"></span>...</label>
                             </h1>
@@ -144,6 +153,18 @@
                             </div>
                         </screen>
                         </ng-form>
+                        <screen ng-if="discountForm.$commited">
+                            <div class="row">
+                                <div class="col-xs-7"></div>
+                                <div class="col-xs-5">
+                                    <h1>&ndash; Юхууу!</h1>
+                                    <p>
+                                        Ваша заявка принята в обработку, в ближайшее время с вами свяжется специально обученный человек :)
+                                        <button class="btn btn-lg btn-submit" ng-click="reInitAll()">Сделать еще один расчет</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </screen>
                         </ng-if>
 
                     </div>

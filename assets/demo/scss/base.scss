@@ -32,6 +32,19 @@
             }
         }
     }
+    .fa.fa-thin {
+        font-weight: 100;
+    }
+    .first-step-success-message {
+        > * {
+            color: #6dd671;
+        }
+        .check-icon {
+            position: absolute;
+            margin-left: -1.1em;
+            margin-top: -0.1em;
+        }
+    }
     .module {
         $animation-duration-base: 0.1s;
         $module-width: 645px;
@@ -152,6 +165,21 @@
          }
         ng-model-set > ng-model {
             @include text-input-wrapper('> div > div > .text-input-wrapper'); 
+        }
+        ng-model-set.hr-after-each > ng-model:not(.path--drivers) {
+            &::after {
+                content: "";
+                margin-left: $font-size-base*0.5;
+                margin-right: $font-size-base*0.5;
+                margin-top: $line-height-computed;
+                margin-bottom: $line-height-computed;
+                border-width: 0px 0px 1px 0px;
+                border-color: $hr-border;
+                border-style: solid;
+                display: inline-block;
+                width: 98%;
+                height: 1px;
+            }
         }
         ng-form ng-model, ng-form ng-model.inline {
             @include text-input-wrapper('> div > .text-input-wrapper'); 
