@@ -20,7 +20,7 @@
     <body>
         <div class="container-fluid calcute-demo calcute">
             <div class="module">
-                <div ng-controller="KKController">
+                <div class="controller" ng-controller="KKController">
                     <div class="start" ng-hide="feedbackForm">
                         <div class="row">
                             <div class="col-xs-offset-3 col-xs-6 text-center">
@@ -37,7 +37,8 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-class="{ 'bg-success': discountForm.$commited }" class="well kasko-calculator" ng-if="feedbackForm" screens>
+                    <div ng-if="discountInfo._id && !discountInfo.isNew" class="success-bg-img"></div>
+                    <div ng-class="{ 'bg-success': discountInfo._id && !discountInfo.isNew }" class="well kasko-calculator" ng-if="feedbackForm" screens>
     
                         <!-- ================================================== -->
                         <ng-form name="feedbackForm" model="Feedback" instance="feedback" ng-model-options="{allowInvalid: true}">
@@ -153,15 +154,16 @@
                             </div>
                         </screen>
                         </ng-form>
-                        <screen ng-if="discountForm.$commited">
-                            <div class="row">
+                        <screen ng-if="discountInfo._id && !discountInfo.isNew">
+                            <div class="row success-row">
                                 <div class="col-xs-7"></div>
                                 <div class="col-xs-5">
                                     <h1>&ndash; Юхууу!</h1>
                                     <p>
                                         Ваша заявка принята в обработку, в ближайшее время с вами свяжется специально обученный человек :)
-                                        <button class="btn btn-lg btn-submit" ng-click="reInitAll()">Сделать еще один расчет</button>
+                                        <br/>
                                     </p>
+                                    <button class="btn btn-lg btn-submit" ng-click="reInitAll()">Сделать еще один расчет</button>
                                 </div>
                             </div>
                         </screen>

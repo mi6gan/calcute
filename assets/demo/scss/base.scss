@@ -21,6 +21,30 @@
     font-size: $font-size-base;
     line-height: $line-height-base;
     color: $text-color;
+    @mixin btn-submit() {
+        border:2px solid rgba(255, 255, 255, 0.24);
+        border-radius: $border-radius-large;
+        color: white;
+        font-weight: 400;
+        padding: $line-height-computed $padding-base-horizontal*1.5;
+        background-color: rgba(255, 255, 255, 0);
+        line-height: $line-height-computed;
+        &:hover,
+        &:active, 
+        &:focus, 
+        &:active:focus, 
+        &:focus:active 
+        {
+            color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.24);
+        }
+        .arrow {
+            position: relative;
+            top: 2px;
+            @extend .fa;
+            @extend .fa-long-arrow-right;
+        }
+    }
     @mixin ng-animate-opacity($duration) {
         &.ng-animate {
             &.ng-enter {
@@ -50,6 +74,19 @@
         $module-width: 645px;
         width: $module-width;
         margin: 0 auto;
+        .controller {
+            .success-bg-img {
+               content: "";
+               position: absolute;
+               margin-top: -25px;
+               display: inline-block;
+               background-image: url('../images/success-bg.png');
+               background-repeat: no-repeat;
+               width: 324px;
+               height: 243px;
+               z-index: 1;
+           }
+        }
         .btn {
             transition: background-color $animation-duration-base;
             &:active,
@@ -295,6 +332,22 @@
                 line-height: 0;
                 font-family: monospace;
             }
+            &.bg-success {
+                screen > :not(.success-row) {
+                    display: none;
+                }
+                background-color: $brand-success;
+                color: white;
+                h1 {
+                    margin-bottom: 5px;
+                }
+                .btn-submit {
+                    @include btn-submit();
+                    font-size: $font-size-base*1.1;
+                    padding-bottom: 10px;
+                    padding-top: 10px;
+                }
+            }
             border: none;
             $grid-gutter-width: 4px;
             $width: ($module-width - ($well-padding-horizontal + 1) * 2 );
@@ -489,28 +542,7 @@
                     font-size: $font-size-base*1.2;
                     overflow: hidden;
                     .btn-submit {
-                        border:2px solid rgba(255, 255, 255, 0.24);
-                        border-radius: $border-radius-large;
-                        color: white;
-                        font-weight: 400;
-                        padding: $line-height-computed $padding-base-horizontal*1.5;
-                        background-color: rgba(255, 255, 255, 0);
-                        line-height: $line-height-computed;
-                        &:hover,
-                        &:active, 
-                        &:focus, 
-                        &:active:focus, 
-                        &:focus:active 
-                        {
-                            color: rgba(255, 255, 255, 0.5);
-                            background-color: rgba(255, 255, 255, 0.24);
-                        }
-                        .arrow {
-                            position: relative;
-                            top: 2px;
-                            @extend .fa;
-                            @extend .fa-long-arrow-right;
-                        }
+                        @include btn-submit();
                     }
                     p {
                         margin-top: 0;
