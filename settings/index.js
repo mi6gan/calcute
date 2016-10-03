@@ -8,11 +8,12 @@ exports.production = {
         host: '0.0.0.0'
     },
     GATEWAY_URL: 'http://crm:8000/api/',
-    GRUNT_TASKS: ['prod'],
+    GRUNT_TASKS: ['production'],
     DEBUG: false
 }
 
 exports.stage = Object.create(exports.production);
+exports.stage.GRUNT_TASKS = ['stage'];
 
 exports.local = {
 	MONGO_CONSTRING: "mongodb://localhost/calcute",
