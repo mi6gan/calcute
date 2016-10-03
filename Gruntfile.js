@@ -1,7 +1,7 @@
 module.exports = function(grunt, settingsKey) {
   var tasks = grunt.cli ? grunt.cli.tasks : [],
     mainTask = tasks.length ? tasks[0] : 'default', 
-    settingsKey = settingsKey||((mainTask=='default') ?  'prod' : 'local'),
+    settingsKey = settingsKey||((mainTask=='default') ?  'local' : 'local'),
     settings = require('./settings')[settingsKey];
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
