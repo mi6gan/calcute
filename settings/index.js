@@ -1,7 +1,7 @@
 var path=require('path'),
     SERVER_ROOT=__dirname + "/../../../";
 
-exports.production = {
+module.exports.production = {
 	MONGO_CONSTRING: "mongodb://mongo/calcute",
     SERVER: {
         port: 8000,
@@ -12,11 +12,11 @@ exports.production = {
     DEBUG: false
 }
 
-exports.stage = Object.create(exports.production);
-exports.stage.GRUNT_TASKS = ['stage'];
-exports.stage.DEBUG= true;
+module.exports.stage = Object.create(module.exports.production);
+module.exports.stage.GRUNT_TASKS = ['stage'];
+module.exports.stage.DEBUG= true;
 
-exports.local = {
+module.exports.local = {
 	MONGO_CONSTRING: "mongodb://localhost/calcute",
     SERVER: {
         port: 8080,
@@ -29,7 +29,7 @@ exports.local = {
     DEBUG: true
 }
 
-exports.localnet = {
+module.exports.localnet = {
 	MONGO_CONSTRING: "mongodb://localhost/calcute",
     SERVER: {
         port: 8080,
@@ -41,6 +41,6 @@ exports.localnet = {
     GRUNT_TASKS: ['prod'],
     DEBUG: false
 }
-exports.test = {
+module.exports.test = {
 	MONGO_CONSTRING: "mongodb://localhost/calcutetest"
 }
