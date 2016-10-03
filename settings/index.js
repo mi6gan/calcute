@@ -2,7 +2,7 @@ var path=require('path'),
     SERVER_ROOT=__dirname + "/../../../";
 
 exports.production = {
-	MONGO_CONSTRING: "mongodb://localhost/calcute",
+	MONGO_CONSTRING: "mongodb://mongo/calcute",
     SERVER: {
         port: 8000,
         host: '0.0.0.0'
