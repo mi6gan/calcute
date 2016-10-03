@@ -14,6 +14,7 @@ exports.production = {
 
 exports.stage = Object.create(exports.production);
 exports.stage.GRUNT_TASKS = ['stage'];
+exports.stage.DEBUG= true;
 
 exports.local = {
 	MONGO_CONSTRING: "mongodb://localhost/calcute",
