@@ -1,6 +1,6 @@
 var models = require("./lib/models/local.js"),
     fs     = require('fs');
-var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
+var settingsKey = process.argv.length>2 ? process.argv[2] : 'local',
     settings = require('./settings')[settingsKey];
 (function runServer(){
     var initModels = new Promise(function initModels(resolve) {
@@ -13,7 +13,7 @@ var settingsKey = process.argv.length>2 ? process.argv[2] : 'prod',
          car.populate('brand', function(err, brand) {
     	    var username = settings.GATEWAY_USERNAME,
     	        password = settings.GATEWAY_PASSWORD,
-    	        url = settings.GATEWAY_URL.replace(/[\/]+$/g, '') + '/crm/kk/seo/feedback',
+    	        url = settings.GATEWAY_URL.replace(/[\/]+$/g, '') + '/projects/kk/feedbacks/',
     	        legacyData = {
     	            mk: brand.label + ' ' + car.label,
     	            phone: doc.phoneNumber,

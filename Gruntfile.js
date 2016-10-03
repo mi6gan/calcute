@@ -186,6 +186,7 @@ module.exports = function(grunt, settingsKey) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.registerTask('local', ['copy', 'sass', 'browserify']);
-  grunt.registerTask('prod', ['copy', 'sass', 'browserify', 'uglify']);
+  grunt.registerTask('production', ['copy', 'sass', 'browserify', 'uglify']);
+  grunt.registerTask('stage', ['copy', 'sass', 'browserify', 'uglify']);
   grunt.registerTask('default', ['copy', 'sass', 'browserify', 'uglify']);
 };

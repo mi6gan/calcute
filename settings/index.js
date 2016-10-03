@@ -1,16 +1,18 @@
 var path=require('path'),
     SERVER_ROOT=__dirname + "/../../../";
 
-exports.prod = {
+exports.production = {
 	MONGO_CONSTRING: "mongodb://localhost/calcute",
     SERVER: {
         socket: path.join(__dirname, '..', '..', '..', '..', 'tmp', 'fcgi.sock'),
         pidFile: path.join(__dirname, '..', '..', '..', '..', 'tmp', 'fcgi.pid')
     },
-    GATEWAY_URL: 'http://localhost:8080/local/crm',
+    GATEWAY_URL: 'http://crm:8000/api/',
     GRUNT_TASKS: ['prod'],
     DEBUG: false
 }
+
+exports.stage = Object.create(exports.production);
 
 exports.local = {
 	MONGO_CONSTRING: "mongodb://localhost/calcute",
