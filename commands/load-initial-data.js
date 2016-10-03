@@ -2,7 +2,7 @@ var fs      = require('fs'),
     models = require('../lib/models/local.js'),
     mongoose = require('mongoose');
 
-mongoose.connect('localhost/calcute');
+mongoose.connect('mongo/calcute');
 
 function loadCars() {
     var data = fs.readFileSync('fixtures/legacy.json'),
