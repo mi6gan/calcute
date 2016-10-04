@@ -1,12 +1,12 @@
 {
-  "name": "calcute-crm",
+  "name": "calcute",
   "description": "CRM system by CUBE-GROUPru",
-  "main": "run.js",
+  "main": "server.js",
   "version": "0.0.1",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://mi6gan@bitbucket.org/mi6gan/calcute-server.git"
+    "url": "https://mi6gan@bitbucket.org/cube-group/calcute.git"
   },
   "private": true,
   "devDependencies": {
