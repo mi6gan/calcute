@@ -1,82 +1,13 @@
 var models = require("./lib/models/local.js"),
+    settings = require('./settings/index.js'),
     fs     = require('fs');
-var settingsKey = process.argv.length>2 ? process.argv[2] : 'local',
-    settings = require('./settings')[settingsKey];
 (function runServer(){
     var initModels = new Promise(function initModels(resolve) {
       var request = require('request'),
           mongoose = require('mongoose'),
           remote = require("./lib/models/remote.js");
       console.log('initalizing db and models...');
-      remote.schemas.Feedback.post('save', function(doc) {
-        doc.populate('car', function(err, car) {
-         car.populate('brand', function(err, brand) {
-    	    var username = settings.GATEWAY_USERNAME,
-    	        password = settings.GATEWAY_PASSWORD,
-    	        url = settings.GATEWAY_URL.replace(/[\/]+$/g, '') + '/projects/kk/feedbacks/',
-    	        legacyData = {
-    	            mk: brand.label + ' ' + car.label,
-    	            phone: doc.phoneNumber,
-    	            name: doc.fullName,
-    	            year: doc.year,
-    	            capacity: doc.capacity,
-    	            cost: doc.price.label,
-    	            city: doc.city.label,
-    	            drivers_count: doc.driversCount,
-    	            is_kasko: false,
-    	            is_osago: false,
-    	            is_osago_extension: false,
-    	            is_accident: false
-    	        };
-                if( doc.type ) {
-    	            doc.type.forEach( function (v) {
-                        switch(remote.schemas.Feedback.paths.type.options.enum.indexOf(v)) {
-                            case 0:
-                                legacyData.is_kasko = true;
-                                break;
-                            case 1:
-                                legacyData.is_osago = true;
-                                break;
-                            case 2:
-                                legacyData.is_osago_extension = true;
-                                legacyData.is_accident = true;
-                                break;
-                        }
-                    } );
-                }
-    	        var data = {
-    	            number: 999999 + parseInt(doc._id.toString().substring(9*2), 16),
-    	            excerpt: (function() {
-    	                var s = [];
-    	                if(legacyData.is_osago) {
-    	                    s.push('ОСАГО');
-    	                }
-    	                if(legacyData.is_kasko) {
-    	                    s.push('КАСКО');
-    	                }
-    	                if(legacyData.is_osago_extension) {
-    	                    s.push('Расширение');
-    	                }
-    	                if(legacyData.is_accident) {
-    	                    s.push('Несчастный случай');
-    	                }
-    	                return s.join(', ');
-    	            })(),
-    	            data: JSON.stringify(legacyData),
-    	            form_url: '/'
-    	        },
-    	        form = {
-    	            schedule: true,
-    	            data: JSON.stringify(data) 
-    	        },
-                post = request.post(url, { form: form }, function() {
-                });
-    	    if (username) {
-                post = post.auth(username, password);
-    	    }
-         });
-        });
-      });
+
       mongoose.Promise = Promise;
       mongoose.connect(settings.MONGO_CONSTRING).then(function () {
           console.log('connected to ' + settings.MONGO_CONSTRING);
@@ -87,7 +18,7 @@ var settingsKey = process.argv.length>2 ? process.argv[2] : 'local',
         var init = require('./Gruntfile.js'),
             grunt = require('grunt');
         console.log('running grunt tasks...');
-        init(grunt, settingsKey);
+        init(grunt);
         grunt.tasks(settings.GRUNT_TASKS, {}, function () {
             resolve();
             console.log('grunt tasks finished');
@@ -169,7 +100,6 @@ var settingsKey = process.argv.length>2 ? process.argv[2] : 'local',
         console.log('\n* ready for connections');
     }, function onRejected(err) {
         console.log(err);
-        //TODO send some log info
         process.exit();
     });
 })();

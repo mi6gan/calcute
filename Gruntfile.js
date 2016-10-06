@@ -1,7 +1,6 @@
-module.exports = function(grunt, settingsKey) {
+module.exports = function(grunt) {
   var tasks = grunt.cli ? grunt.cli.tasks : [],
-    settingsKey = tasks.length ? tasks[0] : settingsKey, 
-    settings = require('./settings')[settingsKey];
+      settings = require('./settings/index.js');
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     sass: {
@@ -71,12 +70,12 @@ module.exports = function(grunt, settingsKey) {
 		    tasks: ['copy:js']
 	    },
         browserifycalcute: {
-		    files: ['settings/' + settingsKey + '.js', 'apps/demo.js', 'lib/**/*.js'],
+		    files: ['settings/' + settings.name + '.js', 'apps/demo.js', 'lib/**/*.js'],
             tasks: ['browserify:calcute']
         },
         gruntfile: {
             files: ['Gruntfile.js'],
-            tasks: [settingsKey]
+            tasks: [settings.name]
         }
     },
     browserify: {
@@ -126,7 +125,7 @@ module.exports = function(grunt, settingsKey) {
             },
             options: {
                 alias: {
-                    'settings': './settings/' + settingsKey + '.js',
+                    'settings': './settings/apps/' + settings.name + '.js',
                 },
                 external: [
                     'mongoose', 
