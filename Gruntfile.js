@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     settings = require('./settings/index.js');
   } catch(e) {
     settings = {
-        DEBUG: true,
+        DEBUG: false,
         name: 'local'
     };
   }
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
     watch: {
         sass: {
             files: ['assets/**/scss/**'],
-            tasks: ['sass:base', 'sass:bootstrap']
+            tasks: ['sass:base', 'sass:bootstrap', 'cssmin:calcute']
         },
     	fonts: {
 		    files: ['assets/**/fonts/**'],
@@ -84,12 +84,8 @@ module.exports = function(grunt) {
 		    tasks: ['copy:icons']
 	    },
     	js: {
-		    files: ['assets/**/js/**'],
-		    tasks: ['copy:js']
-	    },
-        browserifycalcute: {
-		    files: ['settings/' + settings.name + '.js', 'apps/calcute.js', 'lib/**/*.js'],
-            tasks: ['browserify:calcute']
+		    files: ['assets/**/js/**', 'settings/' + settings.name + '.js', 'apps/calcute.js', 'lib/**/*.js'],
+		    tasks: ['browserify:calcute', 'uglify:calcuteminjs']
         },
         gruntfile: {
             files: ['Gruntfile.js'],

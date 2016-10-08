@@ -1,13 +1,13 @@
 <div>
 <div row-array="field.ref.queryPubTop" row-columns="6" column-breakpoint='xs' row-class="outer" first-column-class="text-left" column-class="text-center" last-column-class="text-right">
     <button class="btn btn-link" role="button" ng-class="{ 'active': field.$viewValue==item }" ng-click="field.setRef(item)">
-        <img ng-src="{{ item.icon }}" />
+        <ng-img src="item.icon" />
         <p class="center-block small" ng-bind="item.label"></p>
     </button>
 </div>
 <hr/>
 <div row-array="field.ref.queryPub" row-columns="6" column-breakpoint='xs' array-args='{ $orderby: { label: 1 } }' row-class="outer outer-end">
-    <small><a role="button" ng-class="{ 'active': field.$viewValue==item }" ng-click="field.setRef(item)" ng-bind="item.label"></a><br/></small>
+    <small ng-if="item.label"><a role="button" ng-class="{ 'active': field.$viewValue==item }" ng-click="field.setRef(item)" ng-bind="item.label"></a><br/></small>
     <small ng-if="last"><a role="button" ng-class="{ 'active ': form.brandOther }" ng-click="field.setOther(true)">Другая</a></small>
 </div>
 <p>&nbsp;</p>

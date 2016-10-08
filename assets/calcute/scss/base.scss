@@ -1,5 +1,4 @@
 .calcute-demo {
-    padding-top: 100px;
     width: 100%;
 }
 
@@ -66,7 +65,7 @@
         .check-icon {
             position: absolute;
             margin-left: -1.1em;
-            margin-top: -0.1em;
+            margin-top: -0.2em;
         }
     }
     .module {
@@ -155,7 +154,7 @@
                 .field-activator {
                     color: white;
                     font-size: 1em; 
-                    line-height: 1.8em;
+                    line-height: 1.6;
                     .icon-placeholder {
                         opacity: 0.0;
                         width: 0px;
@@ -675,7 +674,7 @@
                     line-height: 2;
                     a {
                         @include user-select(none);
-                        line-height: 1.25;
+                        line-height: 1.4;
                         min-width: 30px;
                         text-align: center;
                         &:hover {
@@ -685,7 +684,7 @@
                     }
                     &.compact {
                         a {
-                            line-height: 1.25;
+                            line-height: 1.4;
                             margin-left: 2px;
                             padding-left: $padding-base-horizontal/2;
                             padding-right: $padding-base-horizontal/2;

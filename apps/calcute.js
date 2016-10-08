@@ -7,6 +7,7 @@
         'screens': require('../lib/directives/screens.js'),
         'array': require('../lib/directives/array.js'),
         'rowArray': require('../lib/directives/row-array.js'),
+        'ngImg': require('../lib/directives/ng-img.js'),
         'ngForm': require('../lib/directives/ng-form.js'),
         'ngModel': require('../lib/directives/ng-model.js'),
         'ngModelSet': require('../lib/directives/ng-model-set.js'),
@@ -69,6 +70,9 @@
             tarif: DiscountInfo.prototype.schema.paths.tarif.options.enum[0]
           });
           $scope.feedbackForm = true;
+        }
+        else {
+            $scope.reInitAll();
         }
     });
 })();

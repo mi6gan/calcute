@@ -1,0 +1,119 @@
+<ng-form name="feedbackForm" model="Feedback" instance="feedback" ng-model-options="{allowInvalid: true}">
+    <ng-if ng-if="!feedbackForm.$commited">
+        <screen ng-if="!feedback.car.brand && !feedback.car.fullLabel">
+            <h3>
+                <span class="well-placeholder">&nbsp;</span><big class="ca ca-car"></big><span class="well-placeholder">&nbsp;&nbsp;</span>Выберите марку своего авто:
+            </h3>
+            <p>&nbsp;</p>
+            <ng-form name="carForm" model="Car" instance="feedback.car">
+                <ng-model ng-model="brand" />
+                <ng-if ng-if="carForm.brandOther">
+                    <ng-model ng-model="fullLabel" />
+                </ng-if>
+            </ng-form>
+        </screen>
+        <screen ng-if="feedback.car.brand && !feedback.car.fullLabel && !feedback.car.label">
+            <h3 ng-class="{ 'with-icon': feedback.car.brand.icon }">
+                <a role="button" class="btn btn-link btn-lg unstyled" ng-click="feedback.car.brand = undefined">
+                    <big class="fa fa-angle-left"></big><i class="well-placeholder">&nbsp;</i>Выберите модель вашего <ng-bind ng-bind="feedback.car.brand.label"></ng-bind>:
+                    <ng-img class="invisible" src="feedback.car.brand.icon" />
+                </a>
+                <!--img ng-if="feedback.car.brand.icon" class="pull-right" ng-src="{{ feedback.car.brand.icon }}" /-->
+                <ng-img ng-if="feedback.car.brand.icon" class="pull-right" src="feedback.car.brand.icon" />
+            </h3>
+            <p>&nbsp;</p>
+            <ng-model ng-model="car" />
+            <ng-form name="carForm" model="Car" instance="feedback.car">
+                <ng-if ng-if="feedbackForm.carOther">
+                    <ng-model ng-model="label" />
+                </ng-if>
+            </ng-form>
+        </screen>
+        <screen class="container-fluid" ng-if="feedback.car.fullLabel || feedback.car.label">
+            <p>&nbsp;</p>
+            <ng-model-set class="hr-after-each" include="year capacity price credit bank city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" />
+            <h1 class="text-center" ng-if="feedbackForm.$totalEmpty">
+                <label class="semi-transparent text-muted">Осталось еще <span ng-bind="feedbackForm.$totalEmpty"></span>...</label>
+            </h1>
+            <div class="row">
+                <div class="col-xs-12 select wide-lines">
+                    <ng-model-set include="car year capacity price credit bank city drivers type franchise franchiseSum fullName phoneNumber" template="/calcute/templates/fields/tag.html" after="<span> </span>" />
+                </div>
+            </div>
+            <p>&nbsp;</p>
+            <div ng-if="feedbackForm.$valid" class="screen-footer bg-primary">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>&nbsp;</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 text-left">
+                        <p><br/>&ndash; Все готово для отправки, сэр!<br/>&nbsp;</p>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button class="btn btn-lg btn-submit" ng-click="feedbackForm.save()">&nbsp; Отправить заявку &nbsp; <span class="arrow"></span>&nbsp; </button>&nbsp; &nbsp;
+                    </div>
+                </div>
+            </div>
+        </screen>
+    </ng-if>
+</ng-form>
+<ng-if ng-if="feedbackForm.$commited">
+    <ng-form name="discountForm" model="DiscountInfo" instance="discountInfo" initial="{ feedback: feedback._id, fullName: feedback.fullName, drivers: feedback.drivers }">
+        <screen ng-if="!discountForm.$commited">
+             <p>&nbsp;</p>
+             <p class="h2 text-center first-step-success-message">
+                <big class="fa fa-circle-thin"></big>
+                <big class="check-icon">✓</big>
+             </p>
+             <p class="text-center first-step-success-message">
+                <br/>
+                <span>Спасибо за вашу заявку.</span>
+             </p>
+             <p>&nbsp;</p>
+             <p class="h2 text-center bigger-line-height">
+                Хотите расчет с учетом накопленных скидок?<br/>
+                Тогда заполните следующие поля:
+             </p>
+             <p>&nbsp;</p>
+             <ng-model-set class="hr-after-each" include="fullName birthDate drivers company isNotFirst withConsult tarif comment" auto-hide="false" />
+             <h1 class="text-center" ng-if="modelForm.$totalEmpty">
+                <label class="semi-transparent text-muted">Осталось еще <span ng-bind="modelForm.$totalEmpty"></span>...</label>
+             </h1>
+             <div class="row">
+                <div class="col-xs-12 select wide-lines">
+                    <ng-model-set include="fullName birthDate drivers company isNotFirst withConsult tarif comment" template="/calcute/templates/fields/tag.html" after="<span> </span>" />
+                </div>
+             </div>
+             <p>&nbsp;</p>
+             <div>
+                <div ng-if="discountForm.$valid" class="bg-symbol">
+                    <span>%</span>
+                </div>
+                <div ng-if="discountForm.$valid" class="screen-footer bg-success bg-percent">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>&nbsp;</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-lg btn-submit" ng-click="discountForm.save()">&nbsp; Рассчитать со скидкой &nbsp; <span class="arrow"></span>&nbsp; </button>&nbsp; &nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </screen>
+    </ng-form>
+    <screen ng-if="discountInfo._id && !discountInfo.isNew">
+        <div class="row success-row">
+            <div class="col-xs-7"></div>
+            <div class="col-xs-5">
+                <h1>&ndash; Юхууу!</h1>
+                <p>Ваша заявка принята в обработку, в ближайшее время с вами свяжется специально обученный человек :)<br/></p>
+                <button class="btn btn-lg btn-submit" ng-click="reInitAll()">Сделать еще один расчет</button>
+            </div>
+        </div>
+    </screen>
+</ng-if>
