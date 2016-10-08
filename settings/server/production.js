@@ -4,6 +4,6 @@ module.exports = {
         port: 8000,
         host: '0.0.0.0'
     },
-    GATEWAY_URL: 'http://crm:8000/api/',
+    GATEWAY_URL: 'http://crm:8000/',
     DEBUG: false
 }
