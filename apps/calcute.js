@@ -2,16 +2,16 @@
 (function load() {
     var angular = require('angular');
     var settings = require('settings');
-    var directives = [
-        require('../lib/directives/screen.js'),
-        require('../lib/directives/screens.js'),
-        require('../lib/directives/array.js'),
-        require('../lib/directives/row-array.js'),
-        require('../lib/directives/ng-form.js'),
-        require('../lib/directives/ng-model.js'),
-        require('../lib/directives/ng-model-set.js'),
-        require('../lib/directives/input.js')
-    ];
+    var directives = {
+        'screen': require('../lib/directives/screen.js'),
+        'screens': require('../lib/directives/screens.js'),
+        'array': require('../lib/directives/array.js'),
+        'rowArray': require('../lib/directives/row-array.js'),
+        'ngForm': require('../lib/directives/ng-form.js'),
+        'ngModel': require('../lib/directives/ng-model.js'),
+        'ngModelSet': require('../lib/directives/ng-model-set.js'),
+        'input': require('../lib/directives/input.js')
+    };
     var modules = [
         require('../lib/modules/models.js')
     ];
@@ -21,13 +21,23 @@
         'ngRoute': require('angular-route'),
         'ngAnimate': require('angular-animate')
     };
-    var app = angular.module('appDemo', Object.keys(extModules));
+    var app = angular.module('Calcute', Object.keys(extModules));
     angular.forEach(modules, function(module){
         module(this);
     }, app);
-    angular.forEach(directives, function(directive){
-        this.directive(directive.name, directive);
+    angular.forEach(directives, function(directive, name){
+        this.directive(name, directive);
     }, app);
+    app.config(function($httpProvider){
+        $httpProvider.interceptors.push(function($q){
+            return {request: function(config){
+                if(config.url&&config.url.length&&config.url[0]=='/'){
+                    config.url = settings.SERVICE_URL + config.url;
+                }
+                return config;
+            }};
+        });
+    });
     app.controller('KKController', function($scope, $timeout, Feedback, Car, CarBrand, DiscountInfo){
         $scope.reInitAll = function(){
             $scope.discountForm = false;

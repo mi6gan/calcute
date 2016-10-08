@@ -5,6 +5,5 @@ module.exports = {
         host: '0.0.0.0'
     },
     GATEWAY_URL: 'http://crm:8000/api/',
-    GRUNT_TASKS: ['stage'],
     DEBUG: true
 }

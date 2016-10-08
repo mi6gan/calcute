@@ -1,7 +1,10 @@
 var models = require("./lib/models/local.js"),
     settings = require('./settings/index.js'),
+    nunjucks = require('nunjucks'),
     fs     = require('fs');
 (function runServer(){
+    nunjucks.configure(['']);
+    nunjucks.configure({noCache: settings.DEBUG});
     var initModels = new Promise(function initModels(resolve) {
       var request = require('request'),
           mongoose = require('mongoose'),
@@ -19,7 +22,7 @@ var models = require("./lib/models/local.js"),
             grunt = require('grunt');
         console.log('running grunt tasks...');
         init(grunt);
-        grunt.tasks(settings.GRUNT_TASKS, {}, function () {
+        grunt.tasks(['default'], {}, function () {
             resolve();
             console.log('grunt tasks finished');
         });
@@ -36,14 +39,10 @@ var models = require("./lib/models/local.js"),
         app.use(cors({
             origin: function(origin, callback) {
                 if(origin) {
-                    var domain = origin.replace(/http(s|):\/\//, '');
+                    var domain = origin.replace(/http(s|):\/\//, '').split(':')[0];
                     models.Module.findOne({ domains: { $all: [domain]} }, function(err, doc) {
-                        if(err||!doc) {
-                            callback(null, false);
-                        }
-                        else {
-                            callback(null, true);
-                        }
+                        if(err||!doc) {callback(null, false);}
+                        else {callback(null, true);}
                     });
                 }
                 else {
@@ -55,9 +54,8 @@ var models = require("./lib/models/local.js"),
               extended: true
         }));
         app.use(bodyParser.json());
-        
         app.get('/demo', function(req, res){
-            fs.readFile('assets/demo/index.html', function(err, page) {
+            nunjucks.render('assets/calcute/templates/index.html', {settings: settings}, function(err, page) {
                 res.writeHead(200, {'Content-Type': 'text/html'});
                 res.write(page);
                 res.end();
@@ -69,7 +67,6 @@ var models = require("./lib/models/local.js"),
             res.write(JSON.strinfigy(body));
             res.end();
         });
-        app.set('port', 8080);
         app.use(express.static(__dirname + '/build'));
         app.use(express.static(__dirname + '/assets'));
         

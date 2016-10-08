@@ -1,6 +1,14 @@
 module.exports = function(grunt) {
   var tasks = grunt.cli ? grunt.cli.tasks : [],
-      settings = require('./settings/index.js');
+      settings;
+  try {
+    settings = require('./settings/index.js');
+  } catch(e) {
+    settings = {
+        DEBUG: true,
+        name: 'local'
+    };
+  }
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     sass: {
@@ -9,27 +17,37 @@ module.exports = function(grunt) {
           includePaths: ['node_modules/bootstrap-sass/assets/stylesheets']
       },
       base: {
-        src: 'assets/demo/scss/base.scss',
-        dest: 'build/demo/css/base.css'
+        src: 'assets/calcute/scss/base.scss',
+        dest: 'build/calcute/css/base.css'
       },
       bootstrap: {
-        src: 'assets/demo/scss/bootstrap.scss',
-        dest: 'build/demo/vendor/bootstrap/css/base.css'
+        src: 'assets/calcute/scss/bootstrap.scss',
+        dest: 'build/calcute/vendor/bootstrap/css/base.css'
       }
+    },
+    cssmin: {
+        calcute: {
+            files: {
+                'build/calcute/css/bundle.min.css': [
+                    'build/calcute/vendor/bootstrap/css/base.css',
+                    'build/calcute/css/base.css'
+                ]
+            }
+        }
     },
     copy: {
     images: {
 		files: [
             {expand: true,
-            cwd: 'assets/demo/images/',
-            src: ['*.{png,jpg}'], dest: 'build/demo/images'}
+            cwd: 'assets/calcute/images/',
+            src: ['*.{png,jpg}'], dest: 'build/calcute/images'}
         ]
     },
     icons: {
 		files: [
             {expand: true,
-            cwd: 'assets/demo/icons/',
-            src: ['*.{png,jpg}'], dest: 'build/demo/icons'}
+            cwd: 'assets/calcute/icons/',
+            src: ['*.{png,jpg}'], dest: 'build/calcute/icons'}
         ]
     },
     bootstrapjs: {
@@ -44,7 +62,7 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: 'node_modules/font-awesome/fonts/',
                 src: ['*.{otf,eot,svg,ttf,woff,woff2}'],
-                dest: 'build/demo/fonts/'
+                dest: 'build/calcute/fonts/'
             }]
       },
     },
@@ -70,12 +88,12 @@ module.exports = function(grunt) {
 		    tasks: ['copy:js']
 	    },
         browserifycalcute: {
-		    files: ['settings/' + settings.name + '.js', 'apps/demo.js', 'lib/**/*.js'],
+		    files: ['settings/' + settings.name + '.js', 'apps/calcute.js', 'lib/**/*.js'],
             tasks: ['browserify:calcute']
         },
         gruntfile: {
             files: ['Gruntfile.js'],
-            tasks: [settings.name]
+            tasks: ['default']
         }
     },
     browserify: {
@@ -121,7 +139,7 @@ module.exports = function(grunt) {
         },
         calcute: {
             files: {
-                'build/demo/js/app.js': ['apps/demo.js']
+                'build/calcute/js/app.js': ['apps/calcute.js']
             },
             options: {
                 alias: {
@@ -149,6 +167,7 @@ module.exports = function(grunt) {
         mongooseminjs: {
             options: {
                 'report': 'min',
+                'mangle': false,
                 'sourceMap': settings.DEBUG
             },
             files: {
@@ -172,7 +191,7 @@ module.exports = function(grunt) {
                 'sourceMap': settings.DEBUG
             },
             files: {
-                'build/demo/js/app.min.js': ['build/demo/js/app.js']
+                'build/calcute/js/app.min.js': ['build/calcute/js/app.js']
             }
         }
     }
@@ -180,11 +199,14 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.registerTask('local', ['copy', 'sass', 'browserify']);
-  grunt.registerTask('production', ['copy', 'sass', 'browserify', 'uglify']);
-  grunt.registerTask('stage', ['copy', 'sass', 'browserify']);
-  grunt.registerTask('default', ['copy', 'sass', 'browserify', 'uglify']);
+  if(settings.DEBUG){
+    grunt.registerTask('default', ['copy', 'sass', 'browserify']);
+  }
+  else {
+    grunt.registerTask('default', ['copy', 'sass', 'cssmin', 'browserify', 'uglify']);
+  }
 };

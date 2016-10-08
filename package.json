@@ -29,6 +29,7 @@
     "grunt-browserify": "~5.0.0",
     "grunt-cli": "~1.2.0",
     "grunt-contrib-copy": "~1.0.0",
+    "grunt-contrib-cssmin": "^1.0.2",
     "grunt-contrib-uglify": "~1.0.1",
     "grunt-contrib-watch": "~1.0.0",
     "grunt-sass": "~1.1.0",
@@ -36,6 +37,7 @@
     "mongoose-id-validator": "^0.3.0",
     "mpromise": "~0.5.5",
     "ng-schema": "^0.1.0",
+    "nunjucks": "^2.5.2",
     "request": "~2.72.0",
     "wait.for": "~0.6.6"
   }

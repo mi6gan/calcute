@@ -4,6 +4,5 @@ module.exports = {
         port: 8080,
         host: '0.0.0.0'
     },
-    GRUNT_TASKS: ['local'],
-    DEBUG: true
+    DEBUG: false
 }

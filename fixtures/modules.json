@@ -1,5 +1,5 @@
-{"modules":[
+{"modules": [
     {"name": "Calcute Demo", "domains": ["calcute.cube-group.ru"]},
-    {"name": "Kasko Calculators", "domains": ["debug.kasko-calculators.ru"]},
-    {"name": "Kasko Me", "domains": ["debug.kasko.me"]}
+    {"name": "Kasko Calculators","domains": ["kasko-calculators.ru", "localhost"]},
+    {"name": "Kasko Me", "domains": ["kasko.me"]}
 ]}
