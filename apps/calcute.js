@@ -40,11 +40,26 @@
         });
     });
     app.controller('KKController', function($scope, $timeout, Feedback, Car, CarBrand, DiscountInfo){
-        $scope.reInitAll = function(){
+        var car = undefined;
+        $scope.$watch('initialCar', function(newCar){
+            if(newCar){
+                car = newCar;
+                $scope.reInitAll(true);
+            }
+        });
+        /*
+        $scope.$watch('initialBrandLabel', function(newLabel){
+            if(newLabel){
+                CarBrand.query({label: newLabel}, function(brands){
+                    console.log(brands);
+                });
+            }
+        });*/
+        $scope.reInitAll = function(formExists){
             $scope.discountForm = false;
-            $scope.feedbackForm = false;
+            $scope.feedbackForm = Boolean(formExists);
             $scope.discountInfo = new DiscountInfo();
-            $scope.feedback = new Feedback();
+            $scope.feedback = new Feedback({car: car});
         };
         if(settings.DEBUG){
           $scope.feedback = new Feedback({

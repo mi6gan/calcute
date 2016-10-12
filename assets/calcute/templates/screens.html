@@ -77,13 +77,13 @@
                 Тогда заполните следующие поля:
              </p>
              <p>&nbsp;</p>
-             <ng-model-set class="hr-after-each" include="fullName birthDate drivers company isNotFirst withConsult tarif comment" auto-hide="false" />
+             <ng-model-set class="hr-after-each" include="fullName birthDate drivers company isNotFirst withConsult tarif comment lastPolicy mileage expYear expMonth serviceGuarantee theftProtection autoStarter isMarried hasKids email prolongation" auto-hide="false" />
              <h1 class="text-center" ng-if="modelForm.$totalEmpty">
                 <label class="semi-transparent text-muted">Осталось еще <span ng-bind="modelForm.$totalEmpty"></span>...</label>
              </h1>
              <div class="row">
                 <div class="col-xs-12 select wide-lines">
-                    <ng-model-set include="fullName birthDate drivers company isNotFirst withConsult tarif comment" template="/calcute/templates/fields/tag.html" after="<span> </span>" />
+                    <ng-model-set include="fullName birthDate drivers company isNotFirst withConsult tarif comment lastPolicy mileage expYear expMonth serviceGuarantee theftProtection autoStarter isMarried hasKids email prolongation" template="/calcute/templates/fields/tag.html" after="<span> </span>" />
                 </div>
              </div>
              <p>&nbsp;</p>
