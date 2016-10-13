@@ -88,7 +88,6 @@ var models = require("./lib/models/local.js"),
             else{resolve();}
         });
     });
-
     Promise.all([
         initModels,
         gruntBuild,
