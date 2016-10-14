@@ -1,9 +1,6 @@
 var fs      = require('fs'),
     models = require('../lib/models/local.js'),
-    settings = require('../settings/index.js'),
     mongoose = require('mongoose');
-
-mongoose.connect(settings.MONGO_CONSTRING);
 
 function loadCars() {
     var data = fs.readFileSync('fixtures/legacy.json'),
@@ -80,7 +77,9 @@ function loadCompanies() {
     }));
 }
 
-module.exports.load = function(){ 
+module.exports.load = function(settings){ 
+    settings = settings || require('../settings/index.js');
+    mongoose.connect(settings.MONGO_CONSTRING);
     return Promise.all([
         loadCars(),
         loadModules(),

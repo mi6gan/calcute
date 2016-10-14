@@ -1,41 +1,43 @@
 var models = require("./lib/models/local.js"),
-    settings = require('./settings/index.js'),
-    nunjucks = require('nunjucks'),
     fs     = require('fs');
 (function runServer(){
-    nunjucks.configure(['']);
-    nunjucks.configure({noCache: settings.DEBUG});
-    var initModels = new Promise(function initModels(resolve) {
+    var initModels = function(settings){return new Promise(function initModels(resolve) {
       var request = require('request'),
           mongoose = require('mongoose'),
           remote = require("./lib/models/remote.js");
       console.log('initalizing db and models...');
-
+      settings = settings || require('./settings/index.js');
+      models.init(settings);
       mongoose.Promise = Promise;
       mongoose.connect(settings.MONGO_CONSTRING).then(function () {
-          console.log('connected to ' + settings.MONGO_CONSTRING);
-          resolve();
+        console.log('connected to ' + settings.MONGO_CONSTRING);
+        resolve(models);
       });
-    });
-    var gruntBuild = new Promise(function gruntBuild(resolve) {
+    })};
+    var gruntBuild = function(settings){return new Promise(function gruntBuild(resolve) {
         var init = require('./Gruntfile.js'),
             grunt = require('grunt');
         console.log('running grunt tasks...');
-        init(grunt);
+        settings = settings || require('./settings/index.js');
+        init(grunt, settings);
         grunt.tasks(['default'], {}, function () {
             resolve();
             console.log('grunt tasks finished');
         });
-    });
-    var initServer = new Promise(function initServer(resolve, reject) {
+    })};
+    var initServer = function(settings){ return new Promise(function initServer(resolve, reject) {
         var http    = require('http'),
             express = require('express'),
             cors = require('cors'),
             bodyParser = require('body-parser'),
-            Bridge = require('./lib/bridge.js');
+            Bridge = require('./lib/bridge.js'),
+            nunjucks = require('nunjucks');
+        settings = settings || require('./settings/index.js');
         var socketFile = settings.SERVER.socket,
             app = express(),
             server;
+        nunjucks.configure(['']);
+        nunjucks.configure({noCache: settings.DEBUG});
         app.use(cors({
             origin: function(origin, callback) {
                 if(origin) {
@@ -85,17 +87,24 @@ var models = require("./lib/models/local.js"),
         }
         server.listen(settings.SERVER.port, settings.SERVER.host, function (err) {
             if(err){reject(err);}
-            else{resolve();}
+            else{resolve(app);}
         });
-    });
-    Promise.all([
-        initModels,
-        gruntBuild,
-        initServer
-    ]).then(function onFullfilled() {
-        console.log('\n* ready for connections');
-    }, function onRejected(err) {
-        console.log(err);
-        process.exit();
-    });
+    })};
+    if(require.main==module){
+        Promise.all([
+            initModels(),
+            gruntBuild(),
+            initServer()
+        ]).then(function onFullfilled() {
+            console.log('\n* ready for connections');
+        }, function onRejected(err) {
+            console.log(err);
+            process.exit();
+        });
+    } else {
+        module.exports = {
+            initModels: initModels,
+            initServer: initServer
+        };
+    }
 })();

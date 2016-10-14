@@ -1,8 +1,7 @@
-module.exports = function(grunt) {
-  var tasks = grunt.cli ? grunt.cli.tasks : [],
-      settings;
+module.exports = function(grunt, settings) {
+  var tasks = grunt.cli ? grunt.cli.tasks : [];
   try {
-    settings = require('./settings/index.js');
+    settings = settings || require('./settings/index.js');
   } catch(e) {
     settings = {
         DEBUG: false,
