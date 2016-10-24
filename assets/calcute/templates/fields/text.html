@@ -5,7 +5,7 @@
         <ng-bind ng-bind="field.path.options.helpText"></ng-bind>
     </p>
     <ul class="list-unstyled error-messages" ng-if="!field.$valid && field.$dirty" role="alert" multiple>
-        <li class="text-danger"><small>Введите правильное значение</small></li>
+        <li class="text-danger"><small ng-bind="field.path.options.errorText"></small></li>
     </ul>
 </div>
 <div class="col-xs-38 small">

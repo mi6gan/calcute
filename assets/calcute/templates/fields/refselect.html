@@ -1,9 +1,12 @@
 <div class="row grid-50">
 <div class="col-xs-11 col-xs-offset-1 text-left">
     <label ng-bind="field.path.options.label"></label>
-    <p class="help-text" ng-if="field.path.options.helpText && !field.value && !field.$error">
+    <p class="help-text" ng-if="field.path.options.helpText && !field.$viewValue && field.$pristine">
         <ng-bind ng-bind="field.path.options.helpText"></ng-bind>
     </p>
+    <ul class="list-unstyled error-messages" ng-if="!field.$valid && field.$dirty" role="alert" multiple>
+        <li class="text-danger"><small ng-bind="field.path.options.errorText"></small></li>
+    </ul>
 </div>
 <div class="col-xs-38 select compact">
     <span class="grid-11" array="field.ref.queryPub" array-name="refchoices">
