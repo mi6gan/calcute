@@ -31,9 +31,9 @@
         </screen>
         <screen class="container-fluid" ng-if="feedback.car.fullLabel || feedback.car.label">
             <p>&nbsp;</p>
-            <ng-model-set class="hr-after-each" include="year capacity power price credit bank city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" />
-            <h1 class="text-center" ng-if="feedbackForm.$totalEmpty">
-                <label class="semi-transparent text-muted">Осталось еще <span ng-bind="feedbackForm.$totalEmpty"></span>...</label>
+            <ng-model-set class="hr-after-each" include="year capacity power price credit bank city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" watch-state="state" ignore-state="bank franchiseSum" />
+            <h1 class="text-center" ng-if="state.hidden">
+                <label class="semi-transparent text-muted">Осталось еще <span ng-bind="state.hidden"></span>...</label>
             </h1>
             <div class="row">
                 <div class="col-xs-12 select wide-lines">
@@ -76,9 +76,9 @@
             Тогда заполните следующие поля:
          </p>
          <p>&nbsp;</p>
-         <ng-model-set class="hr-after-each" include="fullName birthDate drivers company isNotFirst withConsult tarif comment lastPolicy mileage expYear expMonth serviceGuarantee theftProtection autoStarter isMarried hasKids email prolongation" auto-hide="true" />
-         <h1 class="text-center" ng-if="modelForm.$totalEmpty">
-            <label class="semi-transparent text-muted">Осталось еще <span ng-bind="modelForm.$totalEmpty"></span>...</label>
+         <ng-model-set class="hr-after-each" include="fullName birthDate drivers company isNotFirst withConsult tarif comment lastPolicy mileage expYear expMonth serviceGuarantee theftProtection autoStarter isMarried hasKids email prolongation" auto-hide="true" watch-state="state" />
+         <h1 class="text-center" ng-if="state.hidden">
+            <label class="semi-transparent text-muted">Осталось еще <span ng-bind="state.hidden"></span>...</label>
          </h1>
          <div class="row">
             <div class="col-xs-12 select wide-lines">
