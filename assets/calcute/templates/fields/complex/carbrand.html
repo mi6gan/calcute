@@ -1,14 +1,24 @@
 <div>
-<div row-array="field.ref.queryPubTop" row-columns="6" column-breakpoint='xs' row-class="outer" first-column-class="text-left" column-class="text-center" last-column-class="text-right">
-    <button class="btn btn-link" role="button" ng-class="{ 'active': field.$viewValue==item }" ng-click="field.setRef(item)">
-        <ng-img src="item.icon" />
-        <p class="center-block small" ng-bind="item.label"></p>
-    </button>
-</div>
+<query promise="field.ref.queryPubTop().$promise" resolve-to="topItems" group-by="6">
+    <div class="row outer">
+        <div class="col-xs-2" ng-repeat="group in topItems track by $index" ng-class="[{ 'text-left': $first }, {'text-right': $last }]">
+            <ng-repeat ng-repeat="item in group">
+                <button class="btn btn-link" role="button" ng-class="{ 'active': field.$viewValue==item }" ng-click="field.setRef(item)">
+                    <ng-img src="item.icon" />
+                    <p class="center-block small" ng-bind="item.label"></p>
+                </button>
+            </ng-repeat>
+        </div>
+    </div>
+</query>
 <hr/>
-<div row-array="field.ref.queryPub" row-columns="6" column-breakpoint='xs' array-args='{ $orderby: { label: 1 } }' row-class="outer outer-end">
-    <small ng-if="item.label"><a role="button" ng-class="{ 'active': field.$viewValue==item }" ng-click="field.setRef(item)" ng-bind="item.label"></a><br/></small>
-    <small ng-if="last"><a role="button" ng-class="{ 'active ': form.brandOther }" ng-click="field.setOther(true)">Другая</a></small>
-</div>
+<query promise="field.ref.queryPub({ $orderby: { label: 1 } }).$promise" resolve-to="brandItems" group-by="6">
+    <div class="row outer outer-end">
+        <div class="col-xs-2" ng-repeat="group in brandItems track by $index">
+            <small ng-repeat="item in group"><a role="button" ng-class="{ 'active': field.$viewValue==item }" ng-click="field.setRef(item)" ng-bind="item.label"></a><br/></small>
+            <small ng-if="$last"><a role="button" ng-class="{ 'active ': form.brandOther }" ng-click="field.setOther(true)">Другая</a></small>
+        </div>
+    </div>
+</query>
 <p>&nbsp;</p>
 </div>

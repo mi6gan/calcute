@@ -1,5 +1,5 @@
 <screen ng-if="!feedback._id">
-    <ng-form name="feedbackForm" model="Feedback" instance="feedback" ng-model-options="{allowInvalid: true}">
+    <ng-form name="feedbackForm" model="Feedback" instance="feedback">
         <screen ng-if="!feedback.car.brand && !feedback.car.fullLabel">
             <h3>
                 <span class="well-placeholder">&nbsp;</span><big class="ca ca-car"></big><span class="well-placeholder">&nbsp;&nbsp;</span>Выберите марку своего авто:
@@ -18,7 +18,6 @@
                     <big class="fa fa-angle-left"></big><i class="well-placeholder">&nbsp;</i>Выберите модель вашего <ng-bind ng-bind="feedback.car.brand.label"></ng-bind>:
                     <ng-img class="invisible" src="feedback.car.brand.icon" />
                 </a>
-                <!--img ng-if="feedback.car.brand.icon" class="pull-right" ng-src="{{ feedback.car.brand.icon }}" /-->
                 <ng-img ng-if="feedback.car.brand.icon" class="pull-right" src="feedback.car.brand.icon" />
             </h3>
             <p>&nbsp;</p>

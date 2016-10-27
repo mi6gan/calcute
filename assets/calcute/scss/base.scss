@@ -331,14 +331,18 @@
             }
         }
         .well.kasko-calculator {
-            transition: min-height $duration, opacity $duration, top $duration;
+            &.initially-open {
+                height: 691px;
+                &.carbrand-selected {
+                    height: 100px;
+                }
+            }
             .well-placeholder {
                 font-size: $well-padding-horizontal;
                 line-height: 0;
                 font-family: monospace;
             }
             &.bg-success {
-                height: auto;
                 screen > :not(.success-row) {
                     display: none;
                 }
@@ -364,6 +368,7 @@
             $grid-gutter-width: 4px;
             $width: ($module-width - ($well-padding-horizontal + 1) * 2 );
             width: $module-width;
+            transition: min-height $duration, opacity $duration, top $duration;
             position: relative;
             overflow: hidden;
             &.ng-hide {

@@ -41,8 +41,8 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-if="discountInfo._id && !discountInfo.isNew" class="success-bg-img"></div>
-                    <div ng-class="{ 'bg-success': discountInfo._id && !discountInfo.isNew }" class="well kasko-calculator" ng-if="feedbackForm" screens template="/calcute/templates/screens.html"></div>
+                    <div ng-class="{'success-bg-img': discountInfo._id}"></div>
+                    <div ng-class="[{'bg-success': discountInfo._id}, {'carbrand-selected': feedback.car.brand}]" class="well kasko-calculator" ng-if="feedbackForm" screens template="/calcute/templates/screens.html"></div>
                 </div><!-- KaskoCalculator -->
                 <p>
                 Where does it come from?

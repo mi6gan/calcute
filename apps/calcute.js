@@ -3,15 +3,14 @@
     var angular = require('angular');
     var settings = require('settings');
     var directives = {
-        'screen': require('../lib/directives/screen.js'),
         'screens': require('../lib/directives/screens.js'),
-        'array': require('../lib/directives/array.js'),
-        'rowArray': require('../lib/directives/row-array.js'),
+        'screen': require('../lib/directives/screen.js'),
         'ngImg': require('../lib/directives/ng-img.js'),
         'ngForm': require('../lib/directives/ng-form.js'),
         'ngModel': require('../lib/directives/ng-model.js'),
         'ngModelSet': require('../lib/directives/ng-model-set.js'),
-        'input': require('../lib/directives/input.js')
+        'input': require('../lib/directives/input.js'),
+        'query': require('../lib/directives/query.js')
     };
     var modules = [
         require('../lib/modules/models.js')
