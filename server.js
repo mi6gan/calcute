@@ -93,7 +93,7 @@ var models = require("./lib/models/local.js"),
     if(require.main==module){
         Promise.all([
             initModels(),
-            //gruntBuild(),
+            gruntBuild(),
             initServer()
         ]).then(function onFullfilled() {
             console.log('\n* ready for connections');
