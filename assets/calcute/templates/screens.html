@@ -30,13 +30,13 @@
         </screen>
         <screen class="container-fluid" ng-if="feedback.car.fullLabel || feedback.car.label">
             <p>&nbsp;</p>
-            <ng-model-set class="hr-after-each" include="year capacity power price credit bank city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" watch-state="state" ignore-state="bank franchiseSum" />
+            <ng-model-set class="hr-after-each" include="year power capacity price credit bank city drivers type franchise franchiseSum fullName phoneNumber" auto-hide="true" watch-state="state" ignore-state="bank franchiseSum" />
             <h1 class="text-center" ng-if="state.hidden">
                 <label class="semi-transparent text-muted">Осталось еще <span ng-bind="state.hidden"></span>...</label>
             </h1>
             <div class="row">
                 <div class="col-xs-12 select wide-lines">
-                    <ng-model-set include="car year capacity power price credit bank city drivers type franchise franchiseSum fullName phoneNumber" template="/calcute/templates/fields/tag.html" after="<span> </span>" />
+                    <ng-model-set include="car year power capacity price credit bank city drivers type franchise franchiseSum fullName phoneNumber" template="/calcute/templates/fields/tag.html" after="<span> </span>" />
                 </div>
             </div>
             <p>&nbsp;</p>
@@ -75,13 +75,13 @@
             Тогда заполните следующие поля:
          </p>
          <p>&nbsp;</p>
-         <ng-model-set class="hr-after-each" include="fullName birthDate drivers company isNotFirst withConsult tarif comment lastPolicy mileage expYear expMonth serviceGuarantee theftProtection autoStarter isMarried hasKids email prolongation" auto-hide="true" watch-state="state" />
-         <h1 class="text-center" ng-if="state.hidden">
+         <ng-model-set class="hr-after-each" include="expYear expMonth company isNotFirst isMarried hasKids mileage serviceGuarantee prolongation lastPolicy theftProtection autoStarter withConsult tarif birthDate fullName email comment" auto-hide="true" watch-state="state" />
+         <h1 class="text-center" ng-if="state.hidden>0">
             <label class="semi-transparent text-muted">Осталось еще <span ng-bind="state.hidden"></span>...</label>
          </h1>
          <div class="row">
             <div class="col-xs-12 select wide-lines">
-                <ng-model-set include="fullName birthDate drivers company isNotFirst withConsult tarif comment lastPolicy mileage expYear expMonth serviceGuarantee theftProtection autoStarter isMarried hasKids email prolongation" template="/calcute/templates/fields/tag.html" after="<span> </span>" />
+                <ng-model-set include="expYear expMonth company isNotFirst isMarried hasKids mileage serviceGuarantee prolongation lastPolicy theftProtection autoStarter withConsult tarif birthDate fullName email comment" template="/calcute/templates/fields/tag.html" after="<span> </span>" />
             </div>
          </div>
          <p>&nbsp;</p>
@@ -108,8 +108,8 @@
     <div class="row success-row">
         <div class="col-xs-7"></div>
         <div class="col-xs-5">
-            <h1>&ndash; Юхууу!</h1>
-            <p>Ваша заявка принята в обработку, в ближайшее время с вами свяжется специально обученный человек :)<br/></p>
+            <h1>&ndash; Спасибо!</h1>
+            <p>Ваша заявка принята в обработку, в ближайшее время с вами свяжется специалист с готовыми расчетами.<br/></p>
             <button class="btn btn-lg btn-success-submit" ng-click="reInitAll()">Сделать еще один расчет</button>
         </div>
     </div>

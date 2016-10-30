@@ -331,7 +331,7 @@
             }
         }
         .well.kasko-calculator {
-            &.initially-open {
+            &.initially-open:not(.bg-success) {
                 height: 691px;
                 &.carbrand-selected {
                     height: 100px;
