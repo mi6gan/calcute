@@ -15,6 +15,7 @@
                 <small ng-bind="( item.title || item.label ) ? ( item.title || item.label ) : item"></small>
             </a>
         </query>
+        <a name="{{ field.name }}" role="button" ng-class="{'active': field.$viewValue===null }" ng-click="field.setRef(null)"><small>Другая</small></a>
     </span>
 </div>
 </div>

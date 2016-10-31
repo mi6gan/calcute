@@ -46,15 +46,29 @@
                 $scope.reInitAll(true);
             }
         });
-        /*
-        $scope.$watch('initialBrandLabel', function(newLabel){
-            if(newLabel){
-                CarBrand.query({label: newLabel}, function(brands){
-                    console.log(brands);
-                });
+        var reachGoal = function(id){
+            if(window&&window.yaCounter19745419){
+                yaCounter19745419.reachGoal(id);
             }
-        });*/
+        };
+        $scope.$watch('feedback._id', function(v){
+            if(v){
+                reachGoal('half_sent');
+            }
+        });
+        $scope.$watch('discountInfo._id', function(v){
+            if(v){
+                reachGoal('full_sent');
+            }
+        });
+        $scope.startCalc = function(){
+            reachGoal('start_calc');
+            $scope.feedbackForm = true;
+        }
         $scope.reInitAll = function(formExists){
+            if($scope.discountInfo){
+                reachGoal('calc_again');
+            }
             $scope.discountForm = false;
             $scope.feedbackForm = Boolean(formExists);
             $scope.discountInfo = new DiscountInfo();
