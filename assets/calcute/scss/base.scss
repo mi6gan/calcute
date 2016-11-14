@@ -132,7 +132,7 @@
             padding: $padding-base-vertical 0;
             box-sizing: border-box;
             &.ng-invalid {
-                &.ng-touched {
+                &.ng-touched:not(.ng-pristine) {
                     border-bottom-color: $brand-danger;
                     color: $brand-danger;
                 }
@@ -185,7 +185,7 @@
                     }
                 }
              }
-             &.ng-invalid {
+             &.ng-invalid:not(.ng-pristine) {
                 #{$class} {
                     label {
                         color: $brand-danger !important;

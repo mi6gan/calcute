@@ -4,9 +4,11 @@
         <p class="help-text" ng-if="field.path.options.helpText && !field.$viewValue && field.$pristine">
             <ng-bind ng-bind="field.path.options.helpText"></ng-bind>
         </p>
-        <ul class="list-unstyled error-messages" ng-if="!field.$valid && field.$dirty" role="alert" multiple>
-            <li class="text-danger"><small ng-bind="field.path.options.errorText"></small></li>
+        <ng-repeat ng-repeat="item in field.$viewValue">
+        <ul class="list-unstyled error-messages" role="alert" multiple>
+            <li ng-if="form['driverForm' + $index].$invalid && form['driverForm' + $index].$dirty" class="text-danger"><small>Введите данные водителя {{ $index + 1 }}</small></li>
         </ul>
+        </ng-repeat>
     </div>
     <div class="col-xs-22">
         <div class="select">

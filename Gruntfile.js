@@ -4,7 +4,7 @@ module.exports = function(grunt, settings) {
     settings = settings || require('./settings/index.js');
   } catch(e) {
     settings = {
-        DEBUG: false,
+        DEBUG: true,
         name: 'local'
     };
   }
@@ -84,7 +84,7 @@ module.exports = function(grunt, settings) {
 	    },
     	js: {
 		    files: ['assets/**/js/**', 'settings/' + settings.name + '.js', 'apps/calcute.js', 'lib/**/*.js'],
-		    tasks: ['browserify:calcute', 'uglify:calcuteminjs']
+		    tasks: settings.DEBUG ? ['browserify:calcute'] : ['browserify:calcute', 'uglify:calcuteminjs'] 
         },
         gruntfile: {
             files: ['Gruntfile.js'],
