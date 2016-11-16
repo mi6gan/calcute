@@ -5,5 +5,6 @@ module.exports = {
         host: '0.0.0.0'
     },
     GATEWAY_URL: 'http://crm:8000/',
-    DEBUG: false
+    DEBUG: false,
+    POST_AFTER_MS: 60*1000
 }
