@@ -90,5 +90,8 @@
         else {
             $scope.reInitAll();
         }
+        $scope.$watch('utms', function(v){
+            $scope.feedback.utms = JSON.stringify(v);
+        });
     });
 })();
