@@ -4,6 +4,6 @@ module.exports = {
         port: 8080,
         host: '0.0.0.0'
     },
-    DEBUG: false,
+    DEBUG: true,
     POST_AFTER_MS: 10
 }

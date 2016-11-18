@@ -38,7 +38,7 @@
             }};
         });
     });
-    app.controller('KKController', function($scope, $timeout, Feedback, Car, CarBrand, DiscountInfo){
+    app.controller('KKController', function($scope, $document, $timeout, Feedback, Car, CarBrand, DiscountInfo){
         var car = undefined;
         $scope.$watch('initialCar', function(newCar){
             if(newCar){
@@ -65,6 +65,17 @@
             reachGoal('start_calc');
             $scope.feedbackForm = true;
         }
+        function getUtms(){
+            var params = $document[0].location.href.split(/(\?#1)|\?/),
+                utms = {};
+            if(params.length>1){
+                decodeURIComponent(params[2]).split('&').forEach(function(sub){
+                    var pv = sub.split('=');
+                    utms[pv[0]] = [pv[1].replace(/\+/g, ' ')];
+                });
+            }
+            return utms;
+        }
         $scope.reInitAll = function(formExists){
             if($scope.discountInfo){
                 reachGoal('calc_again');
@@ -72,7 +83,7 @@
             $scope.discountForm = false;
             $scope.feedbackForm = Boolean(formExists);
             $scope.discountInfo = new DiscountInfo();
-            $scope.feedback = new Feedback({car: car});
+            $scope.feedback = new Feedback({car: car, utms: getUtms()});
         };
         if(settings.DEBUG){
           $scope.feedback = new Feedback({
@@ -84,14 +95,15 @@
             price: Feedback.prototype.schema.paths.price.options.enum[0],
             credit: Feedback.prototype.schema.paths.credit.options.enum[0],
             city: Feedback.prototype.schema.paths.city.options.enum[0],
+            utms: JSON.stringify(getUtms())
           });
           $scope.feedbackForm = true;
         }
         else {
             $scope.reInitAll();
         }
-        $scope.$watch('utms', function(v){
-            $scope.feedback.utms = JSON.stringify(v);
-        });
+        //$scope.$watch('utms', function(v){
+            //$scope.feedback.utms = JSON.stringify(v);
+        //});
     });
 })();
