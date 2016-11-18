@@ -83,7 +83,7 @@
             $scope.discountForm = false;
             $scope.feedbackForm = Boolean(formExists);
             $scope.discountInfo = new DiscountInfo();
-            $scope.feedback = new Feedback({car: car, utms: getUtms()});
+            $scope.feedback = new Feedback({car: car, utms: JSON.stringify(getUtms())});
         };
         if(settings.DEBUG){
           $scope.feedback = new Feedback({
