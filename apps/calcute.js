@@ -127,7 +127,7 @@
                 if(angular.isObject(utms.utm_source)&&utms.utm_source.length){
                     $scope.feedback.utmSource = utms.utm_source[0]; 
                     $scope.feedback.utmSourceId = utmIds[utms.utm_source[0]]; 
-                } else if(angular.isObject(utms.keyword)&&utms.keyword.length){
+                } else if(!$scope.feedback.seoQuery&&angular.isObject(utms.keyword)&&utms.keyword.length){
                     $scope.feedback.seoQuery = utms.keyword[0]; 
                 } 
             });
