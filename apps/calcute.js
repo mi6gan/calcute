@@ -105,7 +105,9 @@
         $scope.$watch('initial', function(initial){
             if(initial){
                 angular.forEach(initial, function(v, k){
-                    $scope.feedback[k] = v;
+                    if(k!='utms'){
+                        $scope.feedback[k] = v;
+                    }
                 });
             }
         });
