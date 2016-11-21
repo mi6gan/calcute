@@ -103,17 +103,35 @@
             $scope.reInitAll();
         }
         $scope.$watch('initial', function(initial){
+            var utmIds = {
+                'YandexDirect': 1,
+                'GoogleAdwords': 2,
+                'Рекламная сеть Яндекса': 3,
+                'Google adsence': 4
+            };
             if(initial){
                 angular.forEach(initial, function(v, k){
-                    if(k!='utms'){
+                    switch(k){
+                      case 'utms':
+                        if (angular.isObject($scope.feedback.utms)){
+                            $scope.feedback.utms = Object.assign($scope.feedback.utms, v);
+                            break;
+                        }
+                      default:
                         $scope.feedback[k] = v;
-                    } else if (angular.isObject($scope.feedback.utms)){
-                        $scope.feedback.utms = Object.assign($scope.feedback.utms, v);
-                    } else {
-                        $scope.feedback.utms = v;
                     }
                 });
             }
+            if(angular.isObject($scope.feedback.utms){
+                var utms = $scope.feedback.utms;
+                if(angular.isObject(utms.utm_source)&&utms.utm_source.length){
+                    $scope.feedback.utmSource = utms.utm_source[0]; 
+                    $scope.feedback.utmSourceId = utmIds[utms.utm_source[0]]; 
+                } else if(angular.isObject(utms.keyword)&&utms.keyword.length){
+                    $scope.feedback.seoQuery = utms.keyword[0]; 
+                } 
+            });
+            console.log($scope.feedback);
         });
     });
 })();
