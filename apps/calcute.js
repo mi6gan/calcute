@@ -129,8 +129,8 @@
                     $scope.feedback.utmSourceId = utmIds[utms.utm_source[0]]; 
                 } else if(!$scope.feedback.seoQuery&&angular.isObject(utms.keyword)&&utms.keyword.length){
                     $scope.feedback.seoQuery = utms.keyword[0]; 
-                } 
-            });
+                }
+            }
             console.log($scope.feedback);
         });
     });
