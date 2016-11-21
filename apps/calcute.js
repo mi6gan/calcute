@@ -122,7 +122,7 @@
                     }
                 });
             }
-            if(angular.isObject($scope.feedback.utms){
+            if(angular.isObject($scope.feedback.utms)){
                 var utms = $scope.feedback.utms;
                 if(angular.isObject(utms.utm_source)&&utms.utm_source.length){
                     $scope.feedback.utmSource = utms.utm_source[0]; 
