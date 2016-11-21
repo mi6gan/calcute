@@ -102,8 +102,12 @@
         else {
             $scope.reInitAll();
         }
-        //$scope.$watch('utms', function(v){
-            //$scope.feedback.utms = JSON.stringify(v);
-        //});
+        $scope.$watch('initial', function(initial){
+            if(initial){
+                angular.forEach(initial, function(v, k){
+                    $scope.feedback[k] = v;
+                });
+            }
+        });
     });
 })();
