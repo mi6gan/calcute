@@ -124,7 +124,7 @@
             }
             if(angular.isObject($scope.feedback.utms)){
                 var utms = $scope.feedback.utms;
-                if(angular.isObject(utms.utm_source)&&utms.utm_source.length){
+                if(!$scope.feedback.utmSource&&angular.isObject(utms.utm_source)&&utms.utm_source.length){
                     $scope.feedback.utmSource = utms.utm_source[0]; 
                     $scope.feedback.utmSourceId = utmIds[utms.utm_source[0]]; 
                 } else if(!$scope.feedback.seoQuery&&angular.isObject(utms.keyword)&&utms.keyword.length){
