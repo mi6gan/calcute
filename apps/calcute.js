@@ -95,7 +95,7 @@
             price: Feedback.prototype.schema.paths.price.options.enum[0],
             credit: Feedback.prototype.schema.paths.credit.options.enum[0],
             city: Feedback.prototype.schema.paths.city.options.enum[0],
-            utms: JSON.stringify(getUtms())
+            utms: getUtms()
           });
           $scope.feedbackForm = true;
         }
@@ -107,6 +107,10 @@
                 angular.forEach(initial, function(v, k){
                     if(k!='utms'){
                         $scope.feedback[k] = v;
+                    } else if (angular.isObject($scope.feedback.utms)){
+                        $scope.feedback.utms = Object.assign($scope.feedback.utms, v);
+                    } else {
+                        $scope.feedback.utms = v;
                     }
                 });
             }
